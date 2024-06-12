@@ -2,7 +2,6 @@
 
 namespace Garage.Model.Garage;
 
-
 internal static class GarageUtility<ParkingLotType>
     where ParkingLotType : IParkingLot
 {

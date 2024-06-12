@@ -4,8 +4,7 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-public class Garage<ParkingLotType> : IEnumerable<ParkingLotType> 
-    where ParkingLotType : IParkingLot
+public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>, IGarage<ParkingLotType> where ParkingLotType : IParkingLot
 {
     private readonly uint _capacity;
 
@@ -25,7 +24,8 @@ public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>
 
     public uint Capacity => _capacity;
 
-    public ParkingLotType[] ParkingLots {
+    public ParkingLotType[] ParkingLots
+    {
         get => _parkingLots;
         init => _parkingLots = value;
     }
@@ -66,7 +66,7 @@ public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>
             vehicle = null;
             return false;
         }
-        
+
         vehicle = parkingLot.CurrentVehicle;
         if (vehicle != null)
         {
@@ -84,7 +84,7 @@ public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>
             if (ParkingLots[i] != null)
             {
                 yield return ParkingLots[i];
-            } 
+            }
         }
     }
 

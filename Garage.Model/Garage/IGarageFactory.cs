@@ -1,12 +1,11 @@
-﻿
-using Garage.Model.ParkingLot;
+﻿using Garage.Model.ParkingLot;
 
 namespace Garage.Model.Garage;
 
 public interface IGarageFactory<ParkingLotType>
     where ParkingLotType : IParkingLot
 {
-    Garage<ParkingLotType> CreateGarage(HashSet<ParkingLotType> parkingLots);
+    IGarage<ParkingLotType> CreateGarage(HashSet<ParkingLotType> parkingLots);
 
-    Garage<ParkingLotType> CreateGarage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory);
+    IGarage<ParkingLotType> CreateGarage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory);
 }
