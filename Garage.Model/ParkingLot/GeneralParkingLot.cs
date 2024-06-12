@@ -1,13 +1,13 @@
 ﻿using Garage.Model.Vehicle;
-using System.Diagnostics.CodeAnalysis;
 
-namespace Garage.Model.Garage;
+namespace Garage.Model.ParkingLot;
 
-public class ParkingLot : IParkingLot
+public class GeneralParkingLot : IParkingLot
 {
     private readonly uint _id;
 
-    public uint ID { 
+    public uint ID
+    {
         get => _id;
         init => _id = value;
     }
@@ -27,5 +27,15 @@ public class ParkingLot : IParkingLot
         }
 
         return _id == other.ID;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as GeneralParkingLot);
+    }
+
+    public override int GetHashCode()
+    {
+        return _id.GetHashCode();
     }
 }

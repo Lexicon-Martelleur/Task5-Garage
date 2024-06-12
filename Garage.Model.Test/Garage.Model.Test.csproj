@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Garage.Model\Garage.Model.csproj" />
   </ItemGroup>
 
+
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>

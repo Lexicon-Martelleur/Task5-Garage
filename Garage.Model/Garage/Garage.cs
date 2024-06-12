@@ -1,19 +1,20 @@
-﻿using Garage.Model.Vehicle;
+﻿using Garage.Model.ParkingLot;
+using Garage.Model.Vehicle;
 using System.Collections;
 
 namespace Garage.Model.Garage;
 
 public class Garage<ParkingLotType> : IEnumerable<ParkingLotType> 
-    where ParkingLotType : IParkingLot, new()
+    where ParkingLotType : IParkingLot
 {
     private readonly uint _capacity;
 
-    private ParkingLotType[] _parkingLots; 
+    private ParkingLotType[] _parkingLots;
 
-    public Garage(uint capacity)
+    public Garage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory)
     {
         _capacity = capacity;
-        _parkingLots = GarageUtility<ParkingLotType>.CreateParkingLots(capacity);
+        _parkingLots = GarageUtility<ParkingLotType>.CreateParkingLots(capacity, parkingLotFactory);
     }
 
     public Garage(HashSet<ParkingLotType> parkingLots)
@@ -31,18 +32,49 @@ public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>
 
     public bool TryAddVehicle(uint parkingLotId, IVehicle vehicle, out ParkingLotType? parkingLot)
     {
-        parkingLot = this.FirstOrDefault(item => item.ID  == parkingLotId);
+        parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
         if (parkingLot == null)
         {
             return false;
         }
+
+        if (IsOccupiedLot(parkingLot) || IsFullGarage())
+        {
+            return false;
+        }
+
+        parkingLot.CurrentVehicle = vehicle;
         return true;
+    }
+
+    public bool IsFullGarage()
+    {
+        var occupiedParkingLots = this.Where(parkingLot => parkingLot.CurrentVehicle != null);
+        return occupiedParkingLots.Count() == Capacity;
+    }
+
+    public bool IsOccupiedLot(ParkingLotType parkingLot)
+    {
+        return parkingLot.CurrentVehicle != null;
     }
 
     public bool TryRemoveVehicle(uint parkingLotId, out IVehicle? vehicle)
     {
-        vehicle = this.FirstOrDefault(item => item.ID == parkingLotId)?.CurrentVehicle;
-        return vehicle != null;
+        var parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
+        if (parkingLot == null)
+        {
+            vehicle = null;
+            return false;
+        }
+        
+        vehicle = parkingLot.CurrentVehicle;
+        if (vehicle != null)
+        {
+            parkingLot.CurrentVehicle = null;
+            return true;
+        }
+
+        return false;
     }
 
     public IEnumerator<ParkingLotType> GetEnumerator()
