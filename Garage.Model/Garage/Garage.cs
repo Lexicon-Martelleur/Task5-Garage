@@ -4,19 +4,30 @@ using System.Collections;
 namespace Garage.Model.Garage;
 
 public class Garage<ParkingLotType> : IEnumerable<ParkingLotType> 
-    where ParkingLotType : IParkingLot
+    where ParkingLotType : IParkingLot, new()
 {
-    private readonly int _capacity;
+    private readonly uint _capacity;
 
     private ParkingLotType[] _parkingLots; 
 
-    public Garage(ParkingLotType[] parkingLots)
+    public Garage(uint capacity)
     {
-        _capacity = parkingLots.Length;
-        _parkingLots = parkingLots;
+        _capacity = capacity;
+        _parkingLots = GarageUtility<ParkingLotType>.CreateParkingLots(capacity);
     }
 
-    public int Capacity => _capacity;
+    public Garage(HashSet<ParkingLotType> parkingLots)
+    {
+        _capacity = (uint)parkingLots.Count;
+        _parkingLots = parkingLots.ToArray();
+    }
+
+    public uint Capacity => _capacity;
+
+    public ParkingLotType[] ParkingLots {
+        get => _parkingLots;
+        init => _parkingLots = value;
+    }
 
     public bool TryAddVehicle(uint parkingLotId, IVehicle vehicle, out ParkingLotType? parkingLot)
     {
@@ -38,9 +49,9 @@ public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>
     {
         for (int i = 0; i < _capacity; i++)
         {
-            if (_parkingLots[i] != null)
+            if (ParkingLots[i] != null)
             {
-                yield return _parkingLots[i];
+                yield return ParkingLots[i];
             } 
         }
     }

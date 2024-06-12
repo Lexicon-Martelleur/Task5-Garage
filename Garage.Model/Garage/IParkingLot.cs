@@ -1,10 +1,10 @@
 ﻿using Garage.Model.Vehicle;
 
-namespace Garage.Model.Garage
+namespace Garage.Model.Garage;
+
+public interface IParkingLot: IEquatable<IParkingLot>
 {
-    public interface IParkingLot
-    {
-        IVehicle? CurrentVehicle { get; set; }
-        uint ID { get; }
-    }
+    uint ID { get; init; }
+    IVehicle? CurrentVehicle { get; set; }
+
 }
