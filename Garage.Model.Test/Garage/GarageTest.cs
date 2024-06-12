@@ -1,6 +1,6 @@
 ﻿using Garage.Model.Garage;
 using Garage.Model.Vehicle;
-using System;
+
 
 namespace Garage.Model.Test.Garage;
 
@@ -18,16 +18,6 @@ public class GarageTest
             GarageFactory = new GarageFactory<ParkingLot>();
             MockVehicle = new Mock<IVehicle>();
         }
-    }
-
-    public class MockVehicle : IVehicle
-    {
-        public RegistrationNumber RegistrationNumber => throw new NotImplementedException();
-
-        public Brand Brand => throw new NotImplementedException();
-
-        public string Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public PowerSource PowerSource { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
     public class StaffEntityConstructor()
@@ -200,23 +190,23 @@ public class GarageTest
         public static IEnumerable<object[]> FailureTestData = [
             [ 4, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ],
             [ 4, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ],
             [ 4, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ]
         ];
@@ -231,6 +221,10 @@ public class GarageTest
             HashSet<ParkingLot> parkingLots
             )
         {
+            foreach (var lot in parkingLots)
+            {
+                lot.CurrentVehicle = _f.MockVehicle.Object;
+            }
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
@@ -251,8 +245,11 @@ public class GarageTest
             HashSet<ParkingLot> parkingLots
             )
         {
-            var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots);
+            foreach (var lot in parkingLots)
+            {
+                lot.CurrentVehicle = _f.MockVehicle.Object;
+            }
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
             var removeCarResult = garage.TryRemoveVehicle(
@@ -265,23 +262,23 @@ public class GarageTest
         public static IEnumerable<object[]> SuccessTestData = [
             [ 1, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ],
             [ 2, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ],
             [ 3, new HashSet<ParkingLot>
                 {
-                    new ParkingLot() { ID = 1, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 2, CurrentVehicle = new MockVehicle() },
-                    new ParkingLot() { ID = 3, CurrentVehicle = new MockVehicle() }
+                    new ParkingLot() { ID = 1 },
+                    new ParkingLot() { ID = 2 },
+                    new ParkingLot() { ID = 3 }
                 }
             ]
         ];
@@ -296,8 +293,11 @@ public class GarageTest
             HashSet<ParkingLot> parkingLots
             )
         {
-            var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots);
+            foreach (var lot in parkingLots)
+            {
+                lot.CurrentVehicle = _f.MockVehicle.Object;
+            }
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
             var removeCarResult = garage.TryRemoveVehicle(
@@ -317,8 +317,11 @@ public class GarageTest
             HashSet<ParkingLot> parkingLots
             )
         {
-            var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots);
+            foreach (var lot in parkingLots)
+            {
+                lot.CurrentVehicle = _f.MockVehicle.Object;
+            }
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
             var removeCarResult = garage.TryRemoveVehicle(
