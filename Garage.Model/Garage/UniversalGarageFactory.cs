@@ -3,21 +3,24 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
-public class UniversalGarageFactory<ParkingLotType, VehicleType> :
-    IGarageFactory<ParkingLotType, VehicleType>
-    where VehicleType : IVehicle
-    where ParkingLotType : IParkingLot<VehicleType>
+public class UniversalGarageFactory :
+    IGarageFactory<IParkingLot<IVehicle>, IVehicle>
 {
-    public IGarage<ParkingLotType, VehicleType> CreateGarage(
-        HashSet<ParkingLotType> parkingLots)
+    public IGarage<IParkingLot<IVehicle>, IVehicle> CreateGarage(
+        HashSet<IParkingLot<IVehicle>> parkingLots)
     {
-        return new UniversalGarage<ParkingLotType, VehicleType>(parkingLots);
+        return new UniversalGarage<
+            IParkingLot<IVehicle>,
+            IVehicle
+        >(parkingLots);
     }
 
-    public IGarage<ParkingLotType, VehicleType> CreateGarage(
-        uint capacity,
-        IParkingLotFactory<ParkingLotType, VehicleType> parkingLotFactory)
+    public IGarage<IParkingLot<IVehicle>, IVehicle> CreateGarage(uint capacity)
     {
-        return new UniversalGarage<ParkingLotType, VehicleType>(capacity, parkingLotFactory);
+        var parkingLotFactory = new UniversalParkingLotFactory();
+        return new UniversalGarage<
+            IParkingLot<IVehicle>,
+            IVehicle
+        >(capacity, parkingLotFactory);
     }
 }

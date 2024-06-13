@@ -1,7 +1,7 @@
 ﻿using Garage.Model.Vehicle;
 namespace Garage.Model.ParkingLot;
 
-internal class CarParkingLot : IParkingLot<ICar>
+public class CarParkingLot : IParkingLot<ICar>
 {
     private readonly uint _id;
 

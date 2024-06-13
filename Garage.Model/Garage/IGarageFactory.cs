@@ -10,7 +10,5 @@ public interface IGarageFactory<ParkingLotType, VehicleType>
     IGarage<ParkingLotType, VehicleType> CreateGarage(
         HashSet<ParkingLotType> parkingLots);
 
-    IGarage<ParkingLotType, VehicleType> CreateGarage(
-        uint capacity,
-        IParkingLotFactory<ParkingLotType, VehicleType> parkingLotFactory);
+    IGarage<ParkingLotType, VehicleType> CreateGarage(uint capacity);
 }

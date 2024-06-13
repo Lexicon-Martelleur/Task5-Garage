@@ -27,10 +27,7 @@ public class GarageTest
 
         public Fixture()
         {
-            GarageFactory = new UniversalGarageFactory<
-                IParkingLot<IVehicle>,
-                IVehicle
-            >();
+            GarageFactory = new UniversalGarageFactory();
             MockVehicle = new Mock<IVehicle>();
         }
     }
@@ -54,11 +51,16 @@ public class GarageTest
             uint expectedCapacity
             )
         {
-            IParkingLotFactory<IParkingLot<IVehicle>, IVehicle> parkingLotFactory = new UniversalParkingLotFactory();
+            IParkingLotFactory<
+                IParkingLot<IVehicle>,
+                IVehicle
+            > parkingLotFactory = new UniversalParkingLotFactory();
+            
             var garage = new UniversalGarage<
                 IParkingLot<IVehicle>,
                 IVehicle
             >(inCapacity, parkingLotFactory);
+            
             var actualCapacity = garage.Capacity;
             Assert.Equal(expectedCapacity, actualCapacity);
         }

@@ -5,7 +5,7 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
-internal interface IGarageService<ParkingLotType, VehicleType>
+public interface IGarageService<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>
 {

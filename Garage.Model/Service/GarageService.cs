@@ -5,7 +5,7 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
-internal class GarageService<ParkingLotType, VehicleType>(
+public class GarageService<ParkingLotType, VehicleType>(
     IGarage<ParkingLotType, VehicleType> garage
 ) :
     IGarageService<ParkingLotType, VehicleType>

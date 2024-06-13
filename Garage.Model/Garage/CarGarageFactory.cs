@@ -3,7 +3,7 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
-internal class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
+public class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
 {
     public IGarage<CarParkingLot, ICar> CreateGarage(
         HashSet<CarParkingLot> parkingLots)
@@ -11,10 +11,9 @@ internal class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
         return new CarGarage(parkingLots);
     }
 
-    public IGarage<CarParkingLot, ICar> CreateGarage(
-        uint capacity,
-        IParkingLotFactory<CarParkingLot, ICar> parkingLotFactory)
+    public IGarage<CarParkingLot, ICar> CreateGarage(uint capacity)
     {
+        var parkingLotFactory = new CarParkingLotFactory();
         return new CarGarage(capacity, parkingLotFactory);
     }
 }
