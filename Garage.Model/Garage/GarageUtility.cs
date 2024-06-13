@@ -3,6 +3,8 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
+// TODO! Maybe can move to parking lot module and 
+// by so remove the need of factory classes in that module.
 internal static class GarageUtility<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>

@@ -2,11 +2,10 @@
 
 namespace Garage.Model.ParkingLot;
 
-public class UniversalParkingLot : BaseParkingLot<IVehicle>
-{
+internal class ECarParkingLot : BaseParkingLot<ECar> {
     public override bool Equals(object? obj)
     {
-        return Equals(obj as UniversalParkingLot);
+        return Equals(obj as ECarParkingLot);
     }
 
     public override int GetHashCode()

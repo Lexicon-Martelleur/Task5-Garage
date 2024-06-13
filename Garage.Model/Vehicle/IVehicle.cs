@@ -6,5 +6,5 @@ public interface IVehicle
 {
     public string Color { get; set; }
 
-    public PowerSource PowerSource { get; set; }
+    public PowerSource PowerSource { get; }
 }

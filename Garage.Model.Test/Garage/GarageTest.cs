@@ -7,109 +7,10 @@ namespace Garage.Model.Test.Garage;
 
 public class GarageTest
 {
-    private static Mock<IParkingLot<IVehicle>> CreateMockParkingLot(uint id)
+    # region Helpers Region
+    private static IEnumerable<object[]> CreateFailureTestData()
     {
-        var parkingLotMock = new Mock<IParkingLot<IVehicle>>();
-        var vehicleMock = new Mock<IVehicle>();
-        parkingLotMock.Setup(lot => lot.ID).Returns(id);
-        parkingLotMock.SetupProperty(lot => lot.CurrentVehicle, vehicleMock.Object);
-        return parkingLotMock;
-    }
-
-    public class Fixture
-    {
-        internal IGarageFactory<IParkingLot<IVehicle>,IVehicle> GarageFactory {
-            get;
-            private init;
-        }
-
-        internal Mock<IVehicle> MockVehicle { get; private init; }
-
-        public Fixture()
-        {
-            GarageFactory = new UniversalGarageFactory();
-            MockVehicle = new Mock<IVehicle>();
-        }
-    }
-
-    public class Constructor()
-    {
-        public static IEnumerable<object[]> TestDataUintAsCapacity = [
-            [1, 1],
-            [100, 100],
-            [1000, 1000],
-            [0, 0],
-        ];
-
-        [Theory(DisplayName = """
-        🧪 Create a garage instance
-        with same number of parking lots as the in capacity.
-        """)]
-        [MemberData(nameof(TestDataUintAsCapacity))]
-        internal void T1(
-            uint inCapacity,
-            uint expectedCapacity
-            )
-        {
-            IParkingLotFactory<
-                IParkingLot<IVehicle>,
-                IVehicle
-            > parkingLotFactory = new UniversalParkingLotFactory();
-            
-            var garage = new UniversalGarage<
-                IParkingLot<IVehicle>,
-                IVehicle
-            >(inCapacity, parkingLotFactory);
-            
-            var actualCapacity = garage.Capacity;
-            Assert.Equal(expectedCapacity, actualCapacity);
-        }
-
-        public static IEnumerable<object[]> TestDataSetAsCapacity = [
-            [ new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ],
-            [ new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ],
-            [ new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ]
-        ];
-
-        [Theory(DisplayName = """
-        🧪 Create a garage instance
-        with same parking lots as the input parking lots.
-        """)]
-        [MemberData(nameof(TestDataSetAsCapacity))]
-        internal void T2(HashSet<IParkingLot<IVehicle>> inParkingLots)
-        {
-            var garage = new UniversalGarage<
-                IParkingLot<IVehicle>,
-                IVehicle
-            >(inParkingLots);
-            var actualCapacity = garage.Capacity;
-            Assert.Equal((uint)inParkingLots.Count, actualCapacity);
-        }
-    }
-
-    public class TryAddVehicle(Fixture fixture) : IClassFixture<Fixture>, IDisposable
-    {
-        private readonly Fixture _f = fixture;
-
-        public static IEnumerable<object[]> FailureTestData = [
+        return [
             [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
@@ -132,49 +33,11 @@ public class GarageTest
                 }
             ]
         ];
+    }
 
-        [Theory(DisplayName = """
-        🧪 Output null value for parking lot
-        when try parking in none existing parking lot id.
-        """)]
-        [MemberData(nameof(FailureTestData))]
-        internal void T1_Failure(
-            uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
-        {
-            var garage = _f.GarageFactory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
-            garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
-            );
-
-            Assert.Null(parkingLot);
-        }
-
-        [Theory(DisplayName = """
-        🧪 Return false
-        when try parking in none existing parking lot id.
-        """)]
-        [MemberData(nameof(FailureTestData))]
-        internal void T2_Failure(
-            uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
-        {
-            var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
-            var parkingResult = garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
-            );
-
-            Assert.False(parkingResult);
-        }
-
-        public static IEnumerable<object[]> SuccessTestData = [
+    private static IEnumerable<object[]> CreateSuccessTestData()
+    {
+        return [
             [ 1, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
@@ -197,23 +60,204 @@ public class GarageTest
                 }
             ]
         ];
+    }
 
+    private static Mock<IParkingLot<IVehicle>> CreateMockParkingLot(uint id)
+    {
+        var parkingLotMock = new Mock<IParkingLot<IVehicle>>();
+        var vehicleMock = new Mock<IVehicle>();
+        parkingLotMock.Setup(lot => lot.ID).Returns(id);
+        parkingLotMock.SetupProperty(lot => lot.CurrentVehicle, vehicleMock.Object);
+        return parkingLotMock;
+    }
+
+    private static IEnumerable<object[]> CreateTestDataWithUintAsCapacity() {
+        return [
+            [1, 1],
+            [100, 100],
+            [1000, 1000],
+            [0, 0],
+        ];
+    }
+
+    private static IEnumerable<object[]> CreateTestDataWithHashSetAsCapacity()
+    {
+        return [
+            [ new HashSet<IParkingLot<IVehicle>>
+                {
+                    CreateMockParkingLot(1).Object,
+                    CreateMockParkingLot(2).Object,
+                    CreateMockParkingLot(3).Object
+                }
+            ],
+            [ new HashSet<IParkingLot<IVehicle>>
+                {
+                    CreateMockParkingLot(1).Object,
+                    CreateMockParkingLot(2).Object,
+                    CreateMockParkingLot(3).Object
+                }
+            ],
+            [ new HashSet<IParkingLot<IVehicle>>
+                {
+                    CreateMockParkingLot(1).Object,
+                    CreateMockParkingLot(2).Object,
+                    CreateMockParkingLot(3).Object
+                }
+            ]
+        ];
+    }
+
+    private static void CleanDefaultGarageVehiclesBeforeTest(HashSet<IParkingLot<IVehicle>> parkingLots)
+    {
+        foreach (var lot in parkingLots)
+        {
+            lot.CurrentVehicle = null;
+        }
+    }
+
+    private static void AddGarageVehiclesBeforeTest(
+        HashSet<IParkingLot<IVehicle>> parkingLots,
+        IVehicle vehicle
+        )
+    {
+        foreach (var lot in parkingLots)
+        {
+            lot.CurrentVehicle = vehicle;
+        }
+    }
+
+    #endregion
+
+    #region Setup Region
+    public class Fixture
+    {
+        internal IGarageFactory<IParkingLot<IVehicle>, IVehicle> GarageFactory
+        {
+            get;
+            private init;
+        }
+
+        internal Mock<IVehicle> MockVehicle { get; private init; }
+
+        public Fixture()
+        {
+            GarageFactory = new UniversalGarageFactory();
+            MockVehicle = new Mock<IVehicle>();
+        }
+    }
+    # endregion
+
+    # region Test Region
+    public class Constructor()
+    {
+
+        public static IEnumerable<object[]> TestDataWithUintAsCapacity = CreateTestDataWithUintAsCapacity();
+
+        public static IEnumerable<object[]> TestDataWithHashSetAsCapacity = CreateTestDataWithHashSetAsCapacity();
+
+        [Theory(DisplayName = """
+        🧪 Create a garage instance
+        with same number of parking lots as the in capacity.
+        """)]
+        [MemberData(nameof(TestDataWithUintAsCapacity))]
+        internal void T1_Constructor(
+            uint inCapacity,
+            uint expectedCapacity)
+        {
+            IParkingLotFactory<
+                IParkingLot<IVehicle>,
+                IVehicle
+            > parkingLotFactory = new UniversalParkingLotFactory();
+            
+            var garage = new UniversalGarage<
+                IParkingLot<IVehicle>,
+                IVehicle
+            >(inCapacity, parkingLotFactory);
+            
+            var actualCapacity = garage.Capacity;
+            Assert.Equal(expectedCapacity, actualCapacity);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Create a garage instance
+        with same parking lots as the input parking lots.
+        """)]
+        [MemberData(nameof(TestDataWithHashSetAsCapacity))]
+        internal void T2_Constructor(HashSet<IParkingLot<IVehicle>> inParkingLots)
+        {
+            var garage = new UniversalGarage<
+                IParkingLot<IVehicle>,
+                IVehicle
+            >(inParkingLots);
+            var actualCapacity = garage.Capacity;
+            Assert.Equal((uint)inParkingLots.Count, actualCapacity);
+        }
+    }
+
+    public class TryAddVehicle(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
+
+        [Theory(DisplayName = """
+        🧪 Output null value for parking lot
+        when try parking in none existing parking lot id.
+        """)]
+        [MemberData(nameof(FailureTestData))]
+        internal void T1_TryAddVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
+            
+            garage.TryAddVehicle(
+                parkingLotId,
+                _f.MockVehicle.Object,
+                out IParkingLot<IVehicle>? parkingLot
+            );
+
+            Assert.Null(parkingLot);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Return false
+        when try parking in none existing parking lot id.
+        """)]
+        [MemberData(nameof(FailureTestData))]
+        internal void T2_TryAddVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
+            
+            var parkingResult = garage.TryAddVehicle(
+                parkingLotId,
+                _f.MockVehicle.Object,
+                out IParkingLot<IVehicle>? parkingLot
+            );
+
+            Assert.False(parkingResult);
+        }
+        
         [Theory(DisplayName = """
         🧪 Output existing parking lot
         when try parking in existing parking lot id.
         """)]
         [MemberData(nameof(SuccessTestData))]
-        internal void T1_Success(
+        internal void T3_TryAddVehicle(
             uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             var factory = _f.GarageFactory;
             var garage = factory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;  
-
+         
             garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
+                parkingLotId,
+                _f.MockVehicle.Object,
+                out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.Equal(parkingLot!.ID, parkingLotId);
@@ -225,22 +269,18 @@ public class GarageTest
         with no current vehicle.
         """)]
         [MemberData(nameof(SuccessTestData))]
-        internal void T2_Success(
+        internal void T4_TryAddVehicle(
             uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            // Remove all default vehicles.
-            foreach (var lot in parkingLots)
-            {
-                lot.CurrentVehicle = null;
-            }
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var factory = _f.GarageFactory;
             var garage = factory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
+            
             var parkingResult = garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
+                parkingLotId,
+                _f.MockVehicle.Object,
+                out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.True(parkingResult);
@@ -252,15 +292,12 @@ public class GarageTest
         with a current vehicle.
         """)]
         [MemberData(nameof(SuccessTestData))]
-        internal void T3_Success(
+        internal void T5_TryAddVehicle(
             uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
+            var garage = _f.GarageFactory.CreateGarage(parkingLots);
+            
             var parkingResult = garage.TryAddVehicle(
                 parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
@@ -278,49 +315,25 @@ public class GarageTest
     {
         private readonly Fixture _f = fixture;
 
-        public static IEnumerable<object[]> FailureTestData = [
-            [ 4, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ],
-            [ 4, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ],
-            [ 4, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            ]
-        ];
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
 
         [Theory(DisplayName = """
         🧪 Output null value for vehicle
         when try to remove vehicle from none existing parking lot id.
         """)]
         [MemberData(nameof(FailureTestData))]
-        internal void T1_Failure(
+        internal void T1_TryRemoveVehicle(
             uint parkingLotId,
-            HashSet<IParkingLot<IVehicle>> parkingLots
-            )
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            foreach (var lot in parkingLots)
-            {
-                lot.CurrentVehicle = _f.MockVehicle.Object;
-            }
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
 
             garage.TryRemoveVehicle(
-                parkingLotId, out IVehicle? vehicle
+                parkingLotId,
+                out IVehicle? vehicle
             );
 
             Assert.Null(vehicle);
@@ -331,63 +344,36 @@ public class GarageTest
         when try to remove vehicle from none existing parking lot id.
         """)]
         [MemberData(nameof(FailureTestData))]
-        internal void T2_Failure(
+        internal void T2_TryRemoveVehicle(
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            foreach (var lot in parkingLots)
-            {
-                lot.CurrentVehicle = _f.MockVehicle.Object;
-            }
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
+            
             var removeCarResult = garage.TryRemoveVehicle(
-                parkingLotId, out IVehicle? vehicle
+                parkingLotId,
+                out IVehicle? vehicle
             );
 
             Assert.False(removeCarResult);
         }
 
-        public static IEnumerable<object[]> SuccessTestData = new List<object[]>
-        {
-            new object[] { 1, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            },
-            new object[] { 2, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            },
-            new object[] { 3, new HashSet<IParkingLot<IVehicle>>
-                {
-                    CreateMockParkingLot(1).Object,
-                    CreateMockParkingLot(2).Object,
-                    CreateMockParkingLot(3).Object
-                }
-            }
-        };
-
+        
         [Theory(DisplayName = """
         🧪 Output value for vehicle
         when try to remove vehicle from existing parking lot id.
         """)]
         [MemberData(nameof(SuccessTestData))]
-        internal void T1_Success(
+        internal void T3_TryRemoveVehicle(
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
+            // TODO! Why do not default vehicle work here?
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
+            
             var removeCarResult = garage.TryRemoveVehicle(parkingLotId, out IVehicle? vehicle);
-
             Assert.NotNull(vehicle);
         }
 
@@ -396,17 +382,12 @@ public class GarageTest
         when try to remove vehicle from existing parking lot id.
         """)]
         [MemberData(nameof(SuccessTestData))]
-        internal void T2_Success(
+        internal void T4_TryRemoveVehicle(
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            foreach (var lot in parkingLots)
-            {
-                lot.CurrentVehicle = _f.MockVehicle.Object;
-            }
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
-            var actualCapacity = garage.Capacity;
-
+            
             var removeCarResult = garage.TryRemoveVehicle(parkingLotId, out IVehicle? vehicle);
 
             Assert.True(removeCarResult);
@@ -417,4 +398,131 @@ public class GarageTest
             _f.MockVehicle.Reset();
         }
     }
+
+    public class AddVehicle(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> FailureTestData = CreateSuccessTestData();
+
+        public static IEnumerable<object[]> SuccessTestData = CreateFailureTestData();
+
+        [Theory(DisplayName = """
+        🧪 Return parking lot with vehicle
+        when parking in existing parking lot.
+        """)]
+        [MemberData(nameof(FailureTestData))]
+        internal void T1_AddVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots);
+            
+            var parkingLot = garage.AddVehicle(
+                parkingLotId, _f.MockVehicle.Object
+            );
+            
+            Assert.NotNull(parkingLot);
+            Assert.Equal(_f.MockVehicle.Object, parkingLot.CurrentVehicle);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Throw custom model exception
+        when try parking in existing parking lot
+        with existing car.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T2_AddVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots);
+            
+            Assert.Throws<InvalidGarageStateException>(() => garage.AddVehicle(
+                parkingLotId, _f.MockVehicle.Object
+            ));
+        }
+
+        [Theory(DisplayName = """
+        🧪 Throw custome exception 
+        when try parking in none existing parking lot.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T3_AddVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
+            var factory = _f.GarageFactory;
+
+            var garage = factory.CreateGarage(parkingLots);
+
+            Assert.Throws<InvalidGarageStateException>(() => garage.AddVehicle(
+                parkingLotId, _f.MockVehicle.Object
+            ));
+        }
+
+        public void Dispose()
+        {
+            _f.MockVehicle.Reset();
+        }
+    }
+
+    public class RemoveVehicle(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
+
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        [Theory(DisplayName = """
+        🧪 Return vehicle
+        when remove vehicle from
+        existing parking lot.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T1_RemoveVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots);
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+            
+            var reomvedVehicle = garage.RemoveVehicle(parkingLotId);
+            Assert.NotNull(reomvedVehicle);
+            Assert.Equal(_f.MockVehicle.Object, reomvedVehicle);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Throw custom model exception
+        when remove vehicle from 
+        none existing parking lot.
+        """)]
+        [MemberData(nameof(FailureTestData))]
+        internal void T2_RemoveVehicle(
+            uint parkingLotId,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots);
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+
+            Assert.Throws<InvalidGarageStateException>(() => garage.RemoveVehicle(
+                parkingLotId
+            ));            
+        }
+
+
+        public void Dispose()
+        {
+            _f.MockVehicle.Reset();
+        }
+    }
+
+    #endregion
 }
