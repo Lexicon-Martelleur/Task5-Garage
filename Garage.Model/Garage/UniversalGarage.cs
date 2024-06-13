@@ -4,19 +4,20 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-public class Garage<ParkingLotType> : IEnumerable<ParkingLotType>, IGarage<ParkingLotType> where ParkingLotType : IParkingLot
+public class UniversalGarage<ParkingLotType> : IGarage<ParkingLotType>
+    where ParkingLotType : IParkingLot
 {
     private readonly uint _capacity;
 
     private ParkingLotType[] _parkingLots;
 
-    public Garage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory)
+    public UniversalGarage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory)
     {
         _capacity = capacity;
         _parkingLots = GarageUtility<ParkingLotType>.CreateParkingLots(capacity, parkingLotFactory);
     }
 
-    public Garage(HashSet<ParkingLotType> parkingLots)
+    public UniversalGarage(HashSet<ParkingLotType> parkingLots)
     {
         _capacity = (uint)parkingLots.Count;
         _parkingLots = parkingLots.ToArray();

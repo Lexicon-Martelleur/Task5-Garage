@@ -2,7 +2,7 @@
 
 namespace Garage.Model.ParkingLot;
 
-public class GeneralParkingLot : IParkingLot
+public class UniversalParkingLot : IParkingLot
 {
     private readonly uint _id;
 
@@ -31,7 +31,7 @@ public class GeneralParkingLot : IParkingLot
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as GeneralParkingLot);
+        return Equals(obj as UniversalParkingLot);
     }
 
     public override int GetHashCode()

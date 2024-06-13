@@ -2,16 +2,16 @@
 
 namespace Garage.Model.Garage;
 
-public class BasicGarageFactory<ParkingLotType> : IGarageFactory<ParkingLotType>
+public class UniversalGarageFactory<ParkingLotType> : IGarageFactory<ParkingLotType>
    where ParkingLotType : IParkingLot
 {
     public IGarage<ParkingLotType> CreateGarage(HashSet<ParkingLotType> parkingLots)
     {
-        return new Garage<ParkingLotType>(parkingLots);
+        return new UniversalGarage<ParkingLotType>(parkingLots);
     }
 
     public IGarage<ParkingLotType> CreateGarage(uint capacity, IParkingLotFactory<ParkingLotType> parkingLotFactory)
     {
-        return new Garage<ParkingLotType>(capacity, parkingLotFactory);
+        return new UniversalGarage<ParkingLotType>(capacity, parkingLotFactory);
     }
 }

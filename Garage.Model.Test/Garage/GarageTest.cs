@@ -18,13 +18,13 @@ public class GarageTest
 
     public class Fixture
     {
-        internal BasicGarageFactory<IParkingLot> GarageFactory { get; private init; }
+        internal IGarageFactory<IParkingLot> GarageFactory { get; private init; }
 
         internal Mock<IVehicle> MockVehicle { get; private init; }
 
         public Fixture()
         {
-            GarageFactory = new BasicGarageFactory<IParkingLot>();
+            GarageFactory = new UniversalGarageFactory<IParkingLot>();
             MockVehicle = new Mock<IVehicle>();
         }
     }
@@ -48,8 +48,8 @@ public class GarageTest
             uint expectedCapacity
             )
         {
-            var parkingLotFactory = new ParkingLotFactory();
-            var garage = new Garage<GeneralParkingLot>(inCapacity, parkingLotFactory);
+            var parkingLotFactory = new UniversalParkingLotFactory();
+            var garage = new UniversalGarage<UniversalParkingLot>(inCapacity, parkingLotFactory);
             var actualCapacity = garage.Capacity;
             Assert.Equal(expectedCapacity, actualCapacity);
         }
@@ -85,7 +85,7 @@ public class GarageTest
         [MemberData(nameof(TestDataSetAsCapacity))]
         internal void T2(HashSet<IParkingLot> inParkingLots)
         {
-            var garage = new Garage<IParkingLot>(inParkingLots);
+            var garage = new UniversalGarage<IParkingLot>(inParkingLots);
             var actualCapacity = garage.Capacity;
             Assert.Equal((uint)inParkingLots.Count, actualCapacity);
         }
