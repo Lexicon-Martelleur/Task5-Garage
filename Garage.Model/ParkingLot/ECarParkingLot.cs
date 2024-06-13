@@ -2,7 +2,7 @@
 
 namespace Garage.Model.ParkingLot;
 
-internal class ECarParkingLot : BaseParkingLot<ECar> {
+public class ECarParkingLot : BaseParkingLot<ECar> {
     public override bool Equals(object? obj)
     {
         return Equals(obj as ECarParkingLot);

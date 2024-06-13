@@ -1,6 +1,6 @@
 ﻿namespace Garage.Model.Vehicle;
 
-internal class ECar : ICar
+public class ECar : ICar
 {
     public RegistrationNumber RegistrationNumber => throw new NotImplementedException();
 

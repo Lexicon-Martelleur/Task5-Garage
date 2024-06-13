@@ -8,7 +8,7 @@ public class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
     public IGarage<CarParkingLot, ICar> CreateGarage(
         HashSet<CarParkingLot> parkingLots)
     {
-        return new CarGarage(parkingLots);
+        return new BaseGarage<CarParkingLot, ICar>(parkingLots);
     }
 
     public IGarage<CarParkingLot, ICar> CreateGarage(uint capacity)
@@ -18,6 +18,6 @@ public class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
             CarParkingLot,
             ICar
         >.CreateParkingLots(capacity, parkingLotFactory);
-        return new CarGarage(parkingLots);
+        return new BaseGarage<CarParkingLot, ICar>(parkingLots);
     }
 }

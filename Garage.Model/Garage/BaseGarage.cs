@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-public abstract class BaseGarage<ParkingLotType, VehicleType> :
+public class BaseGarage<ParkingLotType, VehicleType> :
     IGarage<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>

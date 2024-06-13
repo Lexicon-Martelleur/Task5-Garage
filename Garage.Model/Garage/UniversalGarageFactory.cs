@@ -9,7 +9,7 @@ public class UniversalGarageFactory :
     public IGarage<IParkingLot<IVehicle>, IVehicle> CreateGarage(
         HashSet<IParkingLot<IVehicle>> parkingLots)
     {
-        return new UniversalGarage<
+        return new BaseGarage<
             IParkingLot<IVehicle>,
             IVehicle
         >(parkingLots);
@@ -22,7 +22,7 @@ public class UniversalGarageFactory :
             IParkingLot<IVehicle>,
             IVehicle
         >.CreateParkingLots(capacity, parkingLotFactory);
-        return new UniversalGarage<
+        return new BaseGarage<
             IParkingLot<IVehicle>,
             IVehicle
         >(parkingLots);

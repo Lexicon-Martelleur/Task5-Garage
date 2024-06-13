@@ -151,7 +151,7 @@ public class GarageTest
         [MemberData(nameof(TestDataWithHashSetAsCapacity))]
         internal void T2_Constructor(HashSet<IParkingLot<IVehicle>> inParkingLots)
         {
-            var garage = new UniversalGarage<
+            var garage = new BaseGarage<
                 IParkingLot<IVehicle>,
                 IVehicle
             >(inParkingLots);

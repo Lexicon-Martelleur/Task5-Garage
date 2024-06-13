@@ -32,10 +32,19 @@ public class GarageService<ParkingLotType, VehicleType>(
         return garage.TryAddVehicle(parkingLotId, vehicle, out parkingLot);
     }
 
-
     public bool TryRemoveVehicle(uint parkingLotId, out VehicleType? vehicle)
     {
         return garage.TryRemoveVehicle(parkingLotId, out vehicle);
+    }
+
+    public ParkingLotType AddVehicle(uint parkingLotId, VehicleType vehicle)
+    {
+        return garage.AddVehicle(parkingLotId, vehicle);
+    }
+
+    public VehicleType RemoveVehicle(uint parkingLotId)
+    {
+        return garage.RemoveVehicle(parkingLotId);
     }
 }
 
