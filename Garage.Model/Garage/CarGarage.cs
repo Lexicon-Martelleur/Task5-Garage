@@ -1,26 +1,24 @@
 ﻿using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
+using System;
 using System.Collections;
-
 namespace Garage.Model.Garage;
 
-public class UniversalGarage<ParkingLotType, VehicleType> : IGarage<ParkingLotType, VehicleType>
-    where VehicleType : IVehicle
-    where ParkingLotType : IParkingLot<VehicleType>
+internal class CarGarage : IGarage<CarParkingLot, ICar>
 {
     private readonly uint _capacity;
 
-    private ParkingLotType[] _parkingLots;
+    private CarParkingLot[] _parkingLots;
 
-    public UniversalGarage(
+    public CarGarage(
         uint capacity,
-        IParkingLotFactory<ParkingLotType, VehicleType> parkingLotFactory)
+        IParkingLotFactory<CarParkingLot, ICar> parkingLotFactory)
     {
         _capacity = capacity;
-        _parkingLots = GarageUtility<ParkingLotType, VehicleType>.CreateParkingLots(capacity, parkingLotFactory);
+        _parkingLots = GarageUtility<CarParkingLot, ICar>.CreateParkingLots(capacity, parkingLotFactory);
     }
 
-    public UniversalGarage(HashSet<ParkingLotType> parkingLots)
+    public CarGarage(HashSet<CarParkingLot> parkingLots)
     {
         _capacity = (uint)parkingLots.Count;
         _parkingLots = parkingLots.ToArray();
@@ -28,13 +26,23 @@ public class UniversalGarage<ParkingLotType, VehicleType> : IGarage<ParkingLotTy
 
     public uint Capacity => _capacity;
 
-    public ParkingLotType[] ParkingLots
-    {
+    public CarParkingLot[] ParkingLots {
         get => _parkingLots;
         init => _parkingLots = value;
     }
 
-    public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out ParkingLotType? parkingLot)
+    public bool IsFullGarage()
+    {
+        var occupiedParkingLots = this.Where(parkingLot => parkingLot.CurrentVehicle != null);
+        return occupiedParkingLots.Count() == Capacity;
+    }
+
+    public bool IsOccupiedLot(CarParkingLot parkingLot)
+    {
+        return parkingLot.CurrentVehicle != null;
+    }
+
+    public bool TryAddVehicle(uint parkingLotId, ICar vehicle, out CarParkingLot? parkingLot)
     {
         parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
         if (parkingLot == null)
@@ -51,18 +59,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> : IGarage<ParkingLotTy
         return true;
     }
 
-    public bool IsFullGarage()
-    {
-        var occupiedParkingLots = this.Where(parkingLot => parkingLot.CurrentVehicle != null);
-        return occupiedParkingLots.Count() == Capacity;
-    }
-
-    public bool IsOccupiedLot(ParkingLotType parkingLot)
-    {
-        return parkingLot.CurrentVehicle != null;
-    }
-
-    public bool TryRemoveVehicle(uint parkingLotId, out VehicleType? vehicle)
+    public bool TryRemoveVehicle(uint parkingLotId, out ICar? vehicle)
     {
         var parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
         if (parkingLot == null)
@@ -81,7 +78,8 @@ public class UniversalGarage<ParkingLotType, VehicleType> : IGarage<ParkingLotTy
         return false;
     }
 
-    public IEnumerator<ParkingLotType> GetEnumerator()
+
+    public IEnumerator<CarParkingLot> GetEnumerator()
     {
         for (int i = 0; i < _capacity; i++)
         {

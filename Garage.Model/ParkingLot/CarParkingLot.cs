@@ -1,8 +1,7 @@
 ﻿using Garage.Model.Vehicle;
-
 namespace Garage.Model.ParkingLot;
 
-public class UniversalParkingLot : IParkingLot<IVehicle>
+internal class CarParkingLot : IParkingLot<ICar>
 {
     private readonly uint _id;
 
@@ -12,9 +11,9 @@ public class UniversalParkingLot : IParkingLot<IVehicle>
         init => _id = value;
     }
 
-    public IVehicle? CurrentVehicle { get; set; }
+    public ICar? CurrentVehicle { get; set; }
 
-    public bool Equals(IParkingLot<IVehicle>? other)
+    public bool Equals(IParkingLot<ICar>? other)
     {
         if (other is null)
         {
@@ -31,7 +30,7 @@ public class UniversalParkingLot : IParkingLot<IVehicle>
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as UniversalParkingLot);
+        return Equals(obj as CarParkingLot);
     }
 
     public override int GetHashCode()

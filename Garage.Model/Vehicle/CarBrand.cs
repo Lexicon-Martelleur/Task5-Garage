@@ -1,6 +1,6 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public enum Brand
+public enum CarBrand
 {
     TOYOTA,
     VOLKSWAGEN,

@@ -1,9 +1,11 @@
 ﻿using Garage.Model.ParkingLot;
+using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
-internal static class GarageUtility<ParkingLotType>
-    where ParkingLotType : IParkingLot
+internal static class GarageUtility<ParkingLotType, VehicleType>
+    where VehicleType : IVehicle
+    where ParkingLotType : IParkingLot<VehicleType>
 {
     private static readonly HashSet<uint> _IDs = new();
 
@@ -18,7 +20,9 @@ internal static class GarageUtility<ParkingLotType>
         return id;
     }
 
-    internal static ParkingLotType[] CreateParkingLots(uint capacity, IParkingLotFactory<ParkingLotType> factory)
+    internal static ParkingLotType[] CreateParkingLots(
+        uint capacity, IParkingLotFactory<ParkingLotType,
+        VehicleType> factory)
     {
         var parkingLots = new ParkingLotType[capacity];
 

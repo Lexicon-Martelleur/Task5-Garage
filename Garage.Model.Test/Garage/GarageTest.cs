@@ -7,9 +7,9 @@ namespace Garage.Model.Test.Garage;
 
 public class GarageTest
 {
-    private static Mock<IParkingLot> CreateMockParkingLot(uint id)
+    private static Mock<IParkingLot<IVehicle>> CreateMockParkingLot(uint id)
     {
-        var parkingLotMock = new Mock<IParkingLot>();
+        var parkingLotMock = new Mock<IParkingLot<IVehicle>>();
         var vehicleMock = new Mock<IVehicle>();
         parkingLotMock.Setup(lot => lot.ID).Returns(id);
         parkingLotMock.SetupProperty(lot => lot.CurrentVehicle, vehicleMock.Object);
@@ -18,13 +18,19 @@ public class GarageTest
 
     public class Fixture
     {
-        internal IGarageFactory<IParkingLot> GarageFactory { get; private init; }
+        internal IGarageFactory<IParkingLot<IVehicle>,IVehicle> GarageFactory {
+            get;
+            private init;
+        }
 
         internal Mock<IVehicle> MockVehicle { get; private init; }
 
         public Fixture()
         {
-            GarageFactory = new UniversalGarageFactory<IParkingLot>();
+            GarageFactory = new UniversalGarageFactory<
+                IParkingLot<IVehicle>,
+                IVehicle
+            >();
             MockVehicle = new Mock<IVehicle>();
         }
     }
@@ -48,28 +54,31 @@ public class GarageTest
             uint expectedCapacity
             )
         {
-            var parkingLotFactory = new UniversalParkingLotFactory();
-            var garage = new UniversalGarage<UniversalParkingLot>(inCapacity, parkingLotFactory);
+            IParkingLotFactory<IParkingLot<IVehicle>, IVehicle> parkingLotFactory = new UniversalParkingLotFactory();
+            var garage = new UniversalGarage<
+                IParkingLot<IVehicle>,
+                IVehicle
+            >(inCapacity, parkingLotFactory);
             var actualCapacity = garage.Capacity;
             Assert.Equal(expectedCapacity, actualCapacity);
         }
 
         public static IEnumerable<object[]> TestDataSetAsCapacity = [
-            [ new HashSet<IParkingLot>
+            [ new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ new HashSet<IParkingLot>
+            [ new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ new HashSet<IParkingLot>
+            [ new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
@@ -83,9 +92,12 @@ public class GarageTest
         with same parking lots as the input parking lots.
         """)]
         [MemberData(nameof(TestDataSetAsCapacity))]
-        internal void T2(HashSet<IParkingLot> inParkingLots)
+        internal void T2(HashSet<IParkingLot<IVehicle>> inParkingLots)
         {
-            var garage = new UniversalGarage<IParkingLot>(inParkingLots);
+            var garage = new UniversalGarage<
+                IParkingLot<IVehicle>,
+                IVehicle
+            >(inParkingLots);
             var actualCapacity = garage.Capacity;
             Assert.Equal((uint)inParkingLots.Count, actualCapacity);
         }
@@ -96,21 +108,21 @@ public class GarageTest
         private readonly Fixture _f = fixture;
 
         public static IEnumerable<object[]> FailureTestData = [
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
@@ -126,14 +138,14 @@ public class GarageTest
         [MemberData(nameof(FailureTestData))]
         internal void T1_Failure(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
             garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot? parkingLot
+                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.Null(parkingLot);
@@ -146,7 +158,7 @@ public class GarageTest
         [MemberData(nameof(FailureTestData))]
         internal void T2_Failure(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             var factory = _f.GarageFactory;
@@ -154,28 +166,28 @@ public class GarageTest
             var actualCapacity = garage.Capacity;
 
             var parkingResult = garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot? parkingLot
+                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.False(parkingResult);
         }
 
         public static IEnumerable<object[]> SuccessTestData = [
-            [ 1, new HashSet<IParkingLot>
+            [ 1, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 2, new HashSet<IParkingLot>
+            [ 2, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 3, new HashSet<IParkingLot>
+            [ 3, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
@@ -191,7 +203,7 @@ public class GarageTest
         [MemberData(nameof(SuccessTestData))]
         internal void T1_Success(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             var factory = _f.GarageFactory;
@@ -199,7 +211,7 @@ public class GarageTest
             var actualCapacity = garage.Capacity;  
 
             garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot? parkingLot
+                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.Equal(parkingLot!.ID, parkingLotId);
@@ -213,7 +225,7 @@ public class GarageTest
         [MemberData(nameof(SuccessTestData))]
         internal void T2_Success(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             // Remove all default vehicles.
@@ -226,7 +238,7 @@ public class GarageTest
             var actualCapacity = garage.Capacity;
 
             var parkingResult = garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot? parkingLot
+                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.True(parkingResult);
@@ -240,7 +252,7 @@ public class GarageTest
         [MemberData(nameof(SuccessTestData))]
         internal void T3_Success(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             var factory = _f.GarageFactory;
@@ -248,7 +260,7 @@ public class GarageTest
             var actualCapacity = garage.Capacity;
 
             var parkingResult = garage.TryAddVehicle(
-                parkingLotId, _f.MockVehicle.Object, out IParkingLot? parkingLot
+                parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
             );
 
             Assert.False(parkingResult);
@@ -265,21 +277,21 @@ public class GarageTest
         private readonly Fixture _f = fixture;
 
         public static IEnumerable<object[]> FailureTestData = [
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             ],
-            [ 4, new HashSet<IParkingLot>
+            [ 4, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
@@ -295,7 +307,7 @@ public class GarageTest
         [MemberData(nameof(FailureTestData))]
         internal void T1_Failure(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots
+            HashSet<IParkingLot<IVehicle>> parkingLots
             )
         {
             foreach (var lot in parkingLots)
@@ -319,7 +331,7 @@ public class GarageTest
         [MemberData(nameof(FailureTestData))]
         internal void T2_Failure(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots)
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             foreach (var lot in parkingLots)
             {
@@ -337,21 +349,21 @@ public class GarageTest
 
         public static IEnumerable<object[]> SuccessTestData = new List<object[]>
         {
-            new object[] { 1, new HashSet<IParkingLot>
+            new object[] { 1, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             },
-            new object[] { 2, new HashSet<IParkingLot>
+            new object[] { 2, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
                     CreateMockParkingLot(3).Object
                 }
             },
-            new object[] { 3, new HashSet<IParkingLot>
+            new object[] { 3, new HashSet<IParkingLot<IVehicle>>
                 {
                     CreateMockParkingLot(1).Object,
                     CreateMockParkingLot(2).Object,
@@ -367,12 +379,8 @@ public class GarageTest
         [MemberData(nameof(SuccessTestData))]
         internal void T1_Success(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots)
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            //foreach (var lot in parkingLots)
-            //{
-            //    lot.CurrentVehicle = _f.MockVehicle.Object;
-            //}
             var garage = _f.GarageFactory.CreateGarage(parkingLots);
             var actualCapacity = garage.Capacity;
 
@@ -388,7 +396,7 @@ public class GarageTest
         [MemberData(nameof(SuccessTestData))]
         internal void T2_Success(
             uint parkingLotId,
-            HashSet<IParkingLot> parkingLots)
+            HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             foreach (var lot in parkingLots)
             {

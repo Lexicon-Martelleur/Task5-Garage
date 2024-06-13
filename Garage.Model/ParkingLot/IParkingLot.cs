@@ -2,8 +2,8 @@
 
 namespace Garage.Model.ParkingLot;
 
-public interface IParkingLot : IEquatable<IParkingLot>
+public interface IParkingLot<VehicleType> : IEquatable<IParkingLot<VehicleType>>
 {
     uint ID { get; init; }
-    IVehicle? CurrentVehicle { get; set; }
+    VehicleType? CurrentVehicle { get; set; }
 }

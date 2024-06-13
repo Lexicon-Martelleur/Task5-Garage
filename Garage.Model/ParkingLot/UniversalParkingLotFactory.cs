@@ -1,8 +1,11 @@
-﻿namespace Garage.Model.ParkingLot;
+﻿using Garage.Model.Vehicle;
 
-public class UniversalParkingLotFactory : IParkingLotFactory<UniversalParkingLot>
+namespace Garage.Model.ParkingLot;
+
+public class UniversalParkingLotFactory :
+    IParkingLotFactory<IParkingLot<IVehicle>, IVehicle>
 {
-    public UniversalParkingLot Create(uint id)
+    public IParkingLot<IVehicle> Create(uint id)
     {
         return new UniversalParkingLot { ID = id };
     }
