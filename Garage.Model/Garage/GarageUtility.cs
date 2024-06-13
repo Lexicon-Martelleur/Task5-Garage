@@ -3,8 +3,6 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
-// TODO! Maybe can move to parking lot module and 
-// by so remove the need of factory classes in that module.
 internal static class GarageUtility<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>
@@ -22,9 +20,9 @@ internal static class GarageUtility<ParkingLotType, VehicleType>
         return id;
     }
 
-    internal static ParkingLotType[] CreateParkingLots(
-        uint capacity, IParkingLotFactory<ParkingLotType,
-        VehicleType> factory)
+    internal static HashSet<ParkingLotType> CreateParkingLots(
+        uint capacity,
+        IParkingLotFactory<ParkingLotType, VehicleType> factory)
     {
         var parkingLots = new ParkingLotType[capacity];
 
@@ -33,6 +31,6 @@ internal static class GarageUtility<ParkingLotType, VehicleType>
             var id = GetUniqueID();
             parkingLots[i] = factory.Create(id);
         }
-        return parkingLots;
+        return parkingLots.ToHashSet();
     }
 }

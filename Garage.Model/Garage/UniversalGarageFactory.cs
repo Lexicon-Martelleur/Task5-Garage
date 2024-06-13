@@ -18,9 +18,13 @@ public class UniversalGarageFactory :
     public IGarage<IParkingLot<IVehicle>, IVehicle> CreateGarage(uint capacity)
     {
         var parkingLotFactory = new UniversalParkingLotFactory();
+        var parkingLots = GarageUtility<
+            IParkingLot<IVehicle>,
+            IVehicle
+        >.CreateParkingLots(capacity, parkingLotFactory);
         return new UniversalGarage<
             IParkingLot<IVehicle>,
             IVehicle
-        >(capacity, parkingLotFactory);
+        >(parkingLots);
     }
 }

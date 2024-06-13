@@ -14,6 +14,10 @@ public class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
     public IGarage<CarParkingLot, ICar> CreateGarage(uint capacity)
     {
         var parkingLotFactory = new CarParkingLotFactory();
-        return new CarGarage(capacity, parkingLotFactory);
+        var parkingLots = GarageUtility<
+            CarParkingLot,
+            ICar
+        >.CreateParkingLots(capacity, parkingLotFactory);
+        return new CarGarage(parkingLots);
     }
 }

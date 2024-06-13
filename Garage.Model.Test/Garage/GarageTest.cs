@@ -71,16 +71,7 @@ public class GarageTest
         return parkingLotMock;
     }
 
-    private static IEnumerable<object[]> CreateTestDataWithUintAsCapacity() {
-        return [
-            [1, 1],
-            [100, 100],
-            [1000, 1000],
-            [0, 0],
-        ];
-    }
-
-    private static IEnumerable<object[]> CreateTestDataWithHashSetAsCapacity()
+    private static IEnumerable<object[]> CreateGarageWithHashSetTestData()
     {
         return [
             [ new HashSet<IParkingLot<IVehicle>>
@@ -151,32 +142,7 @@ public class GarageTest
     public class Constructor()
     {
 
-        public static IEnumerable<object[]> TestDataWithUintAsCapacity = CreateTestDataWithUintAsCapacity();
-
-        public static IEnumerable<object[]> TestDataWithHashSetAsCapacity = CreateTestDataWithHashSetAsCapacity();
-
-        [Theory(DisplayName = """
-        🧪 Create a garage instance
-        with same number of parking lots as the in capacity.
-        """)]
-        [MemberData(nameof(TestDataWithUintAsCapacity))]
-        internal void T1_Constructor(
-            uint inCapacity,
-            uint expectedCapacity)
-        {
-            IParkingLotFactory<
-                IParkingLot<IVehicle>,
-                IVehicle
-            > parkingLotFactory = new UniversalParkingLotFactory();
-            
-            var garage = new UniversalGarage<
-                IParkingLot<IVehicle>,
-                IVehicle
-            >(inCapacity, parkingLotFactory);
-            
-            var actualCapacity = garage.Capacity;
-            Assert.Equal(expectedCapacity, actualCapacity);
-        }
+        public static IEnumerable<object[]> TestDataWithHashSetAsCapacity = CreateGarageWithHashSetTestData();
 
         [Theory(DisplayName = """
         🧪 Create a garage instance

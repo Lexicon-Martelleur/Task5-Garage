@@ -4,7 +4,8 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-public abstract class BaseGarage<ParkingLotType, VehicleType> : IGarage<ParkingLotType, VehicleType>
+public abstract class BaseGarage<ParkingLotType, VehicleType> :
+    IGarage<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>
 {
@@ -13,14 +14,6 @@ public abstract class BaseGarage<ParkingLotType, VehicleType> : IGarage<ParkingL
     private ParkingLotType[] _parkingLots;
 
     private static readonly HashSet<uint> _IDs = new();
-
-    public BaseGarage(
-        uint capacity,
-        IParkingLotFactory<ParkingLotType, VehicleType> parkingLotFactory)
-    {
-        _capacity = capacity;
-        _parkingLots = GarageUtility<ParkingLotType, VehicleType>.CreateParkingLots(capacity, parkingLotFactory);
-    }
 
     public BaseGarage(HashSet<ParkingLotType> parkingLots)
     {
