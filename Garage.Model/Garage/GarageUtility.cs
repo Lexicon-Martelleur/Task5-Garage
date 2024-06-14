@@ -22,14 +22,14 @@ internal static class GarageUtility<ParkingLotType, VehicleType>
 
     internal static HashSet<ParkingLotType> CreateParkingLots(
         uint capacity,
-        IParkingLotFactory<ParkingLotType, VehicleType> factory)
+        Func<uint, ParkingLotType> parkingLotCreator)
     {
         var parkingLots = new ParkingLotType[capacity];
 
         for (int i = 0; i < capacity; i++)
         {
             var id = GetUniqueID();
-            parkingLots[i] = factory.Create(id);
+            parkingLots[i] = parkingLotCreator(id);
         }
         return parkingLots.ToHashSet();
     }
