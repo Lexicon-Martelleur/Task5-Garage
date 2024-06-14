@@ -5,12 +5,11 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
-public class GarageService<ParkingLotType, VehicleType>(
-    IGarage<ParkingLotType, VehicleType> garage
+public class GarageService<VehicleType>(
+    IGarage<IParkingLot<VehicleType>, VehicleType> garage
 ) :
-    IGarageService<ParkingLotType, VehicleType>
+    IGarageService<IParkingLot<VehicleType>, VehicleType>
     where VehicleType : IVehicle
-    where ParkingLotType : IParkingLot<VehicleType>
 {
     public uint Capacity => garage.Capacity;
 
@@ -19,7 +18,7 @@ public class GarageService<ParkingLotType, VehicleType>(
         return garage.IsFullGarage();
     }
 
-    public bool IsOccupiedLot(ParkingLotType parkingLot)
+    public bool IsOccupiedLot(IParkingLot<VehicleType> parkingLot)
     {
         return garage.IsOccupiedLot(parkingLot);
     }
@@ -27,7 +26,7 @@ public class GarageService<ParkingLotType, VehicleType>(
     public bool TryAddVehicle(
         uint parkingLotId,
         VehicleType vehicle,
-        out ParkingLotType? parkingLot)
+        out IParkingLot<VehicleType>? parkingLot)
     {
         return garage.TryAddVehicle(parkingLotId, vehicle, out parkingLot);
     }
@@ -37,7 +36,7 @@ public class GarageService<ParkingLotType, VehicleType>(
         return garage.TryRemoveVehicle(parkingLotId, out vehicle);
     }
 
-    public ParkingLotType AddVehicle(uint parkingLotId, VehicleType vehicle)
+    public IParkingLot<VehicleType> AddVehicle(uint parkingLotId, VehicleType vehicle)
     {
         return garage.AddVehicle(parkingLotId, vehicle);
     }

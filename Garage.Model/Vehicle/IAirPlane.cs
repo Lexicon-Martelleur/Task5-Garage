@@ -1,6 +1,6 @@
 ﻿namespace Garage.Model.Vehicle;
 
-internal interface IAirPlane : IVehicle
+internal interface IAirplane : IVehicle
 {
     uint WingSpan { get; }
 

@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-public class BaseGarage<ParkingLotType, VehicleType> :
+public class UniversalGarage<ParkingLotType, VehicleType> :
     IGarage<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>
@@ -15,7 +15,7 @@ public class BaseGarage<ParkingLotType, VehicleType> :
 
     private static readonly HashSet<uint> _IDs = new();
 
-    public BaseGarage(HashSet<ParkingLotType> parkingLots)
+    public UniversalGarage(HashSet<ParkingLotType> parkingLots)
     {
         _capacity = (uint)parkingLots.Count;
         _parkingLots = parkingLots.ToArray();

@@ -132,7 +132,7 @@ public class GarageTest
 
         public Fixture()
         {
-            GarageFactory = new UniversalGarageFactory();
+            GarageFactory = new GarageFactory<IVehicle>();
             MockVehicle = new Mock<IVehicle>();
         }
     }
@@ -151,7 +151,7 @@ public class GarageTest
         [MemberData(nameof(TestDataWithHashSetAsCapacity))]
         internal void T2_Constructor(HashSet<IParkingLot<IVehicle>> inParkingLots)
         {
-            var garage = new BaseGarage<
+            var garage = new UniversalGarage<
                 IParkingLot<IVehicle>,
                 IVehicle
             >(inParkingLots);
