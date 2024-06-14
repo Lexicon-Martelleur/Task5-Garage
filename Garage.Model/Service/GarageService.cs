@@ -6,12 +6,12 @@ namespace Garage.Model.Service;
 
 public class GarageService(IGarageRepository repository) : IGarageService
 {
-    public GarageHolder GetAllGarages()
+    public GarageKeeper GetAllGarages()
     {
         return ValidateGarages(repository.GetAllGarages());
     }
 
-    private GarageHolder ValidateGarages(GarageHolder garages)
+    private GarageKeeper ValidateGarages(GarageKeeper garages)
     {
         if (!IsUniqueGarageAddresses(garages))
         {
@@ -20,7 +20,7 @@ public class GarageService(IGarageRepository repository) : IGarageService
         return garages;
     }
 
-    private bool IsUniqueGarageAddresses(GarageHolder garages)
+    private bool IsUniqueGarageAddresses(GarageKeeper garages)
     {
         var uniqueAddresses = new HashSet<string>();
         uint counter = 0;

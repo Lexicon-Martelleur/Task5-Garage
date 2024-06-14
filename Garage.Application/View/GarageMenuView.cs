@@ -4,7 +4,7 @@ namespace Garage.Application.View;
 
 internal class GarageMenuView
 {
-    internal (List<GarageInfo> GarageInfoItems, string UserInput) PrintMainMenu(GarageHolder garages)
+    internal (List<GarageInfo> GarageInfoItems, string UserInput) PrintMainMenu(GarageKeeper garages)
     {
         List<GarageInfo> garageInfoItems = []; 
         uint counter = 0;
@@ -36,27 +36,32 @@ internal class GarageMenuView
         var updatedCounter = counter;
         foreach (var garage in carGarages) 
         {
-            Console.WriteLine(GetGarageInfo(garage, updatedCounter));
+            Console.WriteLine(GetGarageInfo(garage, updatedCounter, "\t"));
             updatedCounter++;
         }
         return updatedCounter;
     }
 
-    private string GetGarageInfo(GarageInfo info, uint menuRow)
+    private string GetGarageInfo(GarageInfo info, uint menuRow, string preFix)
     {
-        return $"\t{menuRow}) Garage [{info.address}]: {info.description} with capacity of {info.capacity}.";
+        return $"{preFix}{menuRow}) Garage [{info.address}]: {info.description} with capacity of {info.capacity} vehicles.";
+    }
+
+    private string GetGarageInfo(GarageInfo info)
+    {
+        return $"Garage [{info.address}]: {info.description} with capacity of {info.capacity} vehicles.";
     }
 
     public string PrintGarageMenu(GarageInfo garageInfo)
     {
-        Console.WriteLine($"\n\nSelect ops for garage at address {garageInfo.address}");
-        Console.WriteLine("\t 1) View info about garage");
-        Console.WriteLine("\t 2) List all parked vehicles");
-        Console.WriteLine("\t 3) Add car");
-        Console.WriteLine("\t 4) Remove car");
-        Console.WriteLine("\t 5) Search after car registration number");
-        Console.WriteLine("\t 6) Filter cars");
-        Console.WriteLine("\t (q/Q) Back to main menu");
+        Console.WriteLine($"\n\nSelect operation for {GetGarageInfo(garageInfo)}");
+        Console.WriteLine("\t1) View info about garage");
+        Console.WriteLine("\t2) List all parked vehicles");
+        Console.WriteLine("\t3) Add vehicle");
+        Console.WriteLine("\t4) Remove vehicle");
+        Console.WriteLine("\t5) Search after vehicle registration number");
+        Console.WriteLine("\t6) Filter vehicle");
+        Console.WriteLine("\t(q/Q) Back to main menu");
         return Console.ReadLine() ?? "";
     }
 }

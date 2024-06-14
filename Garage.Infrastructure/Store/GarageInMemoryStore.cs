@@ -8,19 +8,19 @@ namespace Garage.Infrastructure.Store;
 
 public class GarageInMemoryStore : IGarageRepository
 {
-    private GarageHolder _garages;
+    private GarageKeeper _garages;
 
     public GarageInMemoryStore()
     {
         _garages = CreateGarages();
     }
 
-    public GarageHolder GetAllGarages()
+    public GarageKeeper GetAllGarages()
     {
         return CreateGarages();
     }
 
-    private GarageHolder CreateGarages()
+    private GarageKeeper CreateGarages()
     {
         //var universalGarageFactory = new GarageFactory<IVehicle>();
         //var univarsalGarage = universalGarageFactory.CreateGarage(20);
@@ -49,7 +49,7 @@ public class GarageInMemoryStore : IGarageRepository
         PopulateAirplaneGarage(airplaneHangar);
 
 
-        return new GarageHolder()
+        return new GarageKeeper()
         {
             CarGarages = [carGarage],
             BusGarages = [busGarage],

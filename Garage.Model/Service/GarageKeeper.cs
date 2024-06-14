@@ -4,7 +4,7 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
-public class GarageHolder
+public class GarageKeeper
 {
     private IEnumerable<IGarage<IParkingLot<ICar>, ICar>> _carGarages = [];
     
