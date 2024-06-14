@@ -55,7 +55,7 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         do
         {
             var resultGarageMenuInput = view.PrintGarageMenu(garageInfo);
-            if (resultGarageMenuInput == "4")
+            if (IsQuit(resultGarageMenuInput))
             {
                 quitMenu = true;
             }

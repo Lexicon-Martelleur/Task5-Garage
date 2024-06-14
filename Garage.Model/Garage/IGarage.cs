@@ -3,7 +3,8 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage
 {
-    public interface IGarage<ParkingLotType, VehicleType> : IEnumerable<ParkingLotType>
+    public interface IGarage<ParkingLotType, VehicleType> :
+        IEnumerable<ParkingLotType>, IEquatable<IGarage<ParkingLotType, VehicleType>>
         where VehicleType : IVehicle
         where ParkingLotType : IParkingLot<VehicleType>
     {

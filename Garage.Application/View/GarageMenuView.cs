@@ -1,5 +1,4 @@
 ﻿using Garage.Model.Service;
-using System.Collections.Generic;
 
 namespace Garage.Application.View;
 
@@ -45,16 +44,19 @@ internal class GarageMenuView
 
     private string GetGarageInfo(GarageInfo info, uint menuRow)
     {
-        return $"\t{menuRow}) Garage at {info.address}: {info.description} with capacity of {info.capacity}.";
+        return $"\t{menuRow}) Garage [{info.address}]: {info.description} with capacity of {info.capacity}.";
     }
 
     public string PrintGarageMenu(GarageInfo garageInfo)
     {
         Console.WriteLine($"\n\nSelect ops for garage at address {garageInfo.address}");
-        Console.WriteLine("\t 1) View info");
-        Console.WriteLine("\t 2) Add car");
-        Console.WriteLine("\t 3) Remove car");
-        Console.WriteLine("\t 4) Back to main menu");
+        Console.WriteLine("\t 1) View info about garage");
+        Console.WriteLine("\t 2) List all parked vehicles");
+        Console.WriteLine("\t 3) Add car");
+        Console.WriteLine("\t 4) Remove car");
+        Console.WriteLine("\t 5) Search after car registration number");
+        Console.WriteLine("\t 6) Filter cars");
+        Console.WriteLine("\t (q/Q) Back to main menu");
         return Console.ReadLine() ?? "";
     }
 }

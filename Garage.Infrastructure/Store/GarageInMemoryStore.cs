@@ -4,7 +4,6 @@ using Garage.Model.Repository;
 using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
-
 namespace Garage.Infrastructure.Store;
 
 public class GarageInMemoryStore : IGarageRepository
@@ -27,26 +26,26 @@ public class GarageInMemoryStore : IGarageRepository
         //var univarsalGarage = universalGarageFactory.CreateGarage(20);
 
         var carGarageFactory = new GarageFactory<ICar>();
-        var carGarage = carGarageFactory.CreateGarage(20, "ADDRESS", GarageDescription.CAR);
+        var carGarage = carGarageFactory.CreateGarage(20, "Garage Street 1A", GarageDescription.CAR);
         PopulateCarGarage(carGarage);
 
         //var eCarGarageFactory = new GarageFactory<ECar>();
         //var eCarGarage = eCarGarageFactory.CreateGarage(20);
 
         var busFactory = new GarageFactory<IBus>();
-        var busGarage = busFactory.CreateGarage(20, "ADDRESS", GarageDescription.BUS);
+        var busGarage = busFactory.CreateGarage(20, "Garage Street 1B", GarageDescription.BUS);
         PopulateBusGarage(busGarage);
 
         var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
-        var motorCycleGarage = motorCycleGarageFactory.CreateGarage(20, "ADDRESS", GarageDescription.MC);
+        var motorCycleGarage = motorCycleGarageFactory.CreateGarage(20, "Garage Street 1C", GarageDescription.MC);
         PopulateMCGarage(motorCycleGarage);
 
         var boatHarbourFactory = new GarageFactory<IBoat>();
-        var boatHarbour = boatHarbourFactory.CreateGarage(20, "ADDRESS", GarageDescription.BOAT);
+        var boatHarbour = boatHarbourFactory.CreateGarage(20, "Garage Street 1D", GarageDescription.BOAT);
         PopulateBoatGarage(boatHarbour);
 
         var airplaneHangarFactory = new GarageFactory<IAirplane>();
-        var airplaneHangar = airplaneHangarFactory.CreateGarage(20, "ADDRESS", GarageDescription.AIRPLANE);
+        var airplaneHangar = airplaneHangarFactory.CreateGarage(20, "Garage Street 1E", GarageDescription.AIRPLANE);
         PopulateAirplaneGarage(airplaneHangar);
 
 

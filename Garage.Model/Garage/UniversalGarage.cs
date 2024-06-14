@@ -132,4 +132,29 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         }
         return vehicle;
     }
+
+    public bool Equals(IGarage<ParkingLotType, VehicleType>? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return _address == other.Address;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as IGarage<ParkingLotType, VehicleType>);
+    }
+
+    public override int GetHashCode()
+    {
+        return Address.GetHashCode();
+    }
 }

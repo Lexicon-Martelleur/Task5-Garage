@@ -2,10 +2,10 @@
 
 public class InvalidGarageStateException : InvalidOperationException
 {
-    internal InvalidGarageStateException() { }
+    public InvalidGarageStateException() { }
 
-    internal InvalidGarageStateException(string message) : base(message) { }
+    public InvalidGarageStateException(string message) : base(message) { }
 
-    internal InvalidGarageStateException(string message, Exception innerException)
+    public InvalidGarageStateException(string message, Exception innerException)
         : base(message, innerException) { }
 }
