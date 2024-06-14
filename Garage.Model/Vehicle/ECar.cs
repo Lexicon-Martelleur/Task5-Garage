@@ -1,11 +1,15 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public class ECar : ICar
+public abstract class ECar : ICar
 {
-    public RegistrationNumber RegistrationNumber => throw new NotImplementedException();
+    public abstract RegistrationNumber RegistrationNumber { get; }
 
-    public CarBrand Brand => throw new NotImplementedException();
+    public abstract CarBrand Brand { get; }
 
-    public string Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public abstract string Color { get; set;  }
     public PowerSource PowerSource => PowerSource.ELECTRIC;
+
+    public abstract uint Weight { get; }
+
+    public abstract Dimension Dimension { get; }
 }

@@ -14,4 +14,8 @@ public class Car : ICar
 
     public string Color { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     public PowerSource PowerSource { get => throw new NotImplementedException(); }
+
+    public uint Weight => throw new NotImplementedException();
+
+    public Dimension Dimension => throw new NotImplementedException();
 }

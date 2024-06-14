@@ -18,3 +18,11 @@ var carGarageService = new GarageService<
     CarParkingLot,
     ICar
 >(carGarage);
+
+
+var eCarGarageFactory = new ECarGarageFactory();
+var eCarGarage = eCarGarageFactory.CreateGarage(20);
+var eCarGarageService = new GarageService<
+    ECarParkingLot,
+    ECar
+>(eCarGarage);

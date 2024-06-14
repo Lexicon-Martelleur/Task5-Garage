@@ -3,25 +3,25 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
-public class CarGarageFactory : IGarageFactory<CarParkingLot, ICar>
+public class CarGarageFactory : IGarageFactory<ParkingLot<ICar>, ICar>
 {
-    public IGarage<CarParkingLot, ICar> CreateGarage(
-        HashSet<CarParkingLot> parkingLots)
+    public IGarage<ParkingLot<ICar>, ICar> CreateGarage(
+        HashSet<ParkingLot<ICar>> parkingLots)
     {
-        return new BaseGarage<CarParkingLot, ICar>(parkingLots);
+        return new BaseGarage<ParkingLot<ICar>, ICar>(parkingLots);
     }
 
-    public IGarage<CarParkingLot, ICar> CreateGarage(uint capacity)
+    public IGarage<ParkingLot<ICar>, ICar> CreateGarage(uint capacity)
     {
         var parkingLots = GarageUtility<
-            CarParkingLot,
+            ParkingLot<ICar>,
             ICar
-        >.CreateParkingLots(capacity, CreateCarParkingLot);
-        return new BaseGarage<CarParkingLot, ICar>(parkingLots);
+        >.CreateParkingLots(capacity, CreateParkingLot);
+        return new BaseGarage<ParkingLot<ICar>, ICar>(parkingLots);
     }
 
-    private CarParkingLot CreateCarParkingLot(uint id)
+    private ParkingLot<ICar> CreateParkingLot(uint id)
     {
-        return new CarParkingLot() { ID = id };
+        return new ParkingLot<ICar>() { ID = id };
     }
 }

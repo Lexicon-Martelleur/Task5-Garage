@@ -3,7 +3,7 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.ParkingLot;
 
-public abstract class BaseParkingLot<VehicleType> : IParkingLot<VehicleType>
+public class ParkingLot<VehicleType> : IParkingLot<VehicleType>
     where VehicleType : IVehicle
 {
     private readonly uint _id;
@@ -31,7 +31,13 @@ public abstract class BaseParkingLot<VehicleType> : IParkingLot<VehicleType>
         return _id == other.ID;
     }
 
-    public abstract override bool Equals(object? obj);
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as IParkingLot<VehicleType>);
+    }
 
-    public abstract override int GetHashCode();
+    public override int GetHashCode()
+    {
+        return ID.GetHashCode();
+    }
 }

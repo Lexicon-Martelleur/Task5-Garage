@@ -7,7 +7,7 @@ internal static class GarageUtility<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>
 {
-    private static readonly HashSet<uint> _IDs = new();
+    private static readonly HashSet<uint> _IDs = [];
 
     internal static uint GetUniqueID()
     {
