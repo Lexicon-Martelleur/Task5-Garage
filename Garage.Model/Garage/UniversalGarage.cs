@@ -37,7 +37,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         set => _address = value;
     }
 
-    public string GarageType {
+    public string Description {
         get => _garageType;
         set => _garageType = value;
     }

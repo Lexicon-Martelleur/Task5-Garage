@@ -1,76 +1,63 @@
 ﻿using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
+using Garage.Model.Repository;
+using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
-namespace Garage.Application.controller;
 
-public class GarageInMemoryStore
+namespace Garage.Infrastructure.Store;
+
+public class GarageInMemoryStore : IGarageRepository
 {
-    private (
-        IGarage<IParkingLot<ICar>, ICar> CarGarage,
-        IGarage<IParkingLot<IBus>, IBus> BusGarage,
-        IGarage<IParkingLot<IMotorcycle>, IMotorcycle> MCGarage,
-        IGarage<IParkingLot<IBoat>, IBoat> BoatHarbour,
-        IGarage<IParkingLot<IAirplane>, IAirplane> AirplaneHangar
-    ) _garages;
+    private GarageHolder _garages;
 
-    public GarageInMemoryStore() {
+    public GarageInMemoryStore()
+    {
         _garages = CreateGarages();
-    }   
+    }
 
-    public (
-        IGarage<IParkingLot<ICar>, ICar> CarGarage,
-        IGarage<IParkingLot<IBus>, IBus> BusGarage,
-        IGarage<IParkingLot<IMotorcycle>, IMotorcycle> MCGarage,
-        IGarage<IParkingLot<IBoat>, IBoat> BoatHarbour,
-        IGarage<IParkingLot<IAirplane>, IAirplane> AirplaneHangar
-    ) GetAllGarages()
+    public GarageHolder GetAllGarages()
     {
         return CreateGarages();
     }
-    
-    private (
-        IGarage<IParkingLot<ICar>, ICar> CarGarage,
-        IGarage<IParkingLot<IBus>, IBus> BusGarage,
-        IGarage<IParkingLot<IMotorcycle>, IMotorcycle> MCGarage,
-        IGarage<IParkingLot<IBoat>, IBoat> BoatHarbour,
-        IGarage<IParkingLot<IAirplane>, IAirplane> AirplaneHangar
-    ) CreateGarages()
+
+    private GarageHolder CreateGarages()
     {
         //var universalGarageFactory = new GarageFactory<IVehicle>();
         //var univarsalGarage = universalGarageFactory.CreateGarage(20);
-        
+
         var carGarageFactory = new GarageFactory<ICar>();
-        var carGarage = carGarageFactory.CreateGarage(20, "ADDRESS", GarageType.CAR);
+        var carGarage = carGarageFactory.CreateGarage(20, "ADDRESS", GarageDescription.CAR);
         PopulateCarGarage(carGarage);
-        
+
         //var eCarGarageFactory = new GarageFactory<ECar>();
         //var eCarGarage = eCarGarageFactory.CreateGarage(20);
-        
+
         var busFactory = new GarageFactory<IBus>();
-        var busGarage = busFactory.CreateGarage(20, "ADDRESS", GarageType.BUS);
+        var busGarage = busFactory.CreateGarage(20, "ADDRESS", GarageDescription.BUS);
         PopulateBusGarage(busGarage);
 
         var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
-        var motorCycleGarage = motorCycleGarageFactory.CreateGarage(20, "ADDRESS", GarageType.MC);
+        var motorCycleGarage = motorCycleGarageFactory.CreateGarage(20, "ADDRESS", GarageDescription.MC);
         PopulateMCGarage(motorCycleGarage);
 
         var boatHarbourFactory = new GarageFactory<IBoat>();
-        var boatHarbour = boatHarbourFactory.CreateGarage(20, "ADDRESS", GarageType.BOAT);
+        var boatHarbour = boatHarbourFactory.CreateGarage(20, "ADDRESS", GarageDescription.BOAT);
         PopulateBoatGarage(boatHarbour);
 
         var airplaneHangarFactory = new GarageFactory<IAirplane>();
-        var airplaneHangar = airplaneHangarFactory.CreateGarage(20, "ADDRESS", GarageType.AIRPLANE);
+        var airplaneHangar = airplaneHangarFactory.CreateGarage(20, "ADDRESS", GarageDescription.AIRPLANE);
         PopulateAirplaneGarage(airplaneHangar);
 
 
-        return (
-            CarGarage: carGarage,
-            BusGarage: busGarage,
-            MCGarage: motorCycleGarage,
-            BoatHarbour: boatHarbour,
-            AirplaneHangar: airplaneHangar
-        );
+        return new GarageHolder()
+        {
+            CarGarages = [carGarage],
+            BusGarages = [busGarage],
+            MCGarages = [motorCycleGarage],
+            BoatHarbors = [boatHarbour],
+            AirplaneHangars = [airplaneHangar]
+        };
     }
     private void PopulateCarGarage(
         IGarage<IParkingLot<ICar>, ICar> garage)
@@ -85,7 +72,7 @@ public class GarageInMemoryStore
                 PowerSource.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
-         
+
         }
     }
 
@@ -127,7 +114,7 @@ public class GarageInMemoryStore
         var parkingLots = garage.ParkingLots;
         foreach (var lot in parkingLots)
         {
-            
+
             garage.AddVehicle(lot.ID, new Boat(
                 new RegistrationNumber("XXX"),
                 BoatSteeringMechanism.WHEEL,
@@ -150,7 +137,7 @@ public class GarageInMemoryStore
                 VehicleColor.GREY,
                 PowerSource.GASOLINE,
                 1000,
-                new Dimension(10, 10, 10)));   
+                new Dimension(10, 10, 10)));
         }
     }
 }
