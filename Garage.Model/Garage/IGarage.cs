@@ -8,6 +8,9 @@ namespace Garage.Model.Garage
         where ParkingLotType : IParkingLot<VehicleType>
     {
         uint Capacity { get; }
+        string Address { get; set; }
+        string GarageType { get; set; }
+
         ParkingLotType[] ParkingLots { get; init; }
         bool IsFullGarage();
         bool IsOccupiedLot(ParkingLotType parkingLot);

@@ -8,7 +8,12 @@ public interface IGarageFactory<ParkingLotType, VehicleType>
     where ParkingLotType : IParkingLot<VehicleType>
 {
     IGarage<ParkingLotType, VehicleType> CreateGarage(
-        HashSet<ParkingLotType> parkingLots);
+        HashSet<ParkingLotType> parkingLots,
+        string address,
+        string garageType);
 
-    IGarage<ParkingLotType, VehicleType> CreateGarage(uint capacity);
+    IGarage<ParkingLotType, VehicleType> CreateGarage(
+        uint capacity,
+        string address,
+        string garageType);
 }

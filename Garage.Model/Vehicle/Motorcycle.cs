@@ -1,12 +1,13 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public class Car : Vehicle, ICar
+
+public class Motorcycle : Vehicle, IMotorcycle
 {
-    private readonly CarBrand _brand;
-    
-    public Car(
+    private uint _noiseLevel;
+
+    public Motorcycle(
         RegistrationNumber registrationNumber,
-        CarBrand brand,
+        uint noiseLevel,
         string color,
         PowerSource powerSource,
         uint weight,
@@ -17,10 +18,14 @@ public class Car : Vehicle, ICar
         powerSource,
         weight,
         dimension
-    ) {
-        _brand = brand;
+    )
+    {
+        _noiseLevel = noiseLevel;
     }
 
-    public CarBrand Brand => _brand;
+    public uint NoiseLevel {
+        get => _noiseLevel;
+        set => _noiseLevel = value;
+    }
 }
 

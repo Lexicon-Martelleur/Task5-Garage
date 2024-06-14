@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Garage.Model.Vehicle;
+﻿namespace Garage.Model.Vehicle;
 
 public interface IVehicle
 {

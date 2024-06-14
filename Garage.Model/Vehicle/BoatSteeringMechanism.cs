@@ -1,10 +1,10 @@
 ﻿
 namespace Garage.Model.Vehicle;
 
-internal static class BoatSteeringMechanism
+public static class BoatSteeringMechanism
 {
-    const string TILLER = "TILLER";
-    const string WHEEL = "WHEEL";
-    const string JOYSTICK = "JOYSTICK";
-    const string OARS = "OARS";
+    public const string TILLER = "TILLER";
+    public const string WHEEL = "WHEEL";
+    public const string JOYSTICK = "JOYSTICK";
+    public const string OARS = "OARS";
 }

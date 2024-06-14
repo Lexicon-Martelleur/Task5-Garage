@@ -11,24 +11,43 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
 {
     private readonly uint _capacity;
 
+    private string _address;
+
+    private string _garageType;
+
     private ParkingLotType[] _parkingLots;
 
     private static readonly HashSet<uint> _IDs = new();
 
-    public UniversalGarage(HashSet<ParkingLotType> parkingLots)
+    public UniversalGarage(
+        HashSet<ParkingLotType> parkingLots,
+        string address,
+        string garageType)
     {
         _capacity = (uint)parkingLots.Count;
+        _address = address;
+        _garageType = garageType;
         _parkingLots = parkingLots.ToArray();
     }
 
     public uint Capacity => _capacity;
+
+    public string Address {
+        get => _address;
+        set => _address = value;
+    }
+
+    public string GarageType {
+        get => _garageType;
+        set => _garageType = value;
+    }
 
     public ParkingLotType[] ParkingLots
     {
         get => _parkingLots;
         init => _parkingLots = value;
     }
-
+ 
     public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out ParkingLotType? parkingLot)
     {
         parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);

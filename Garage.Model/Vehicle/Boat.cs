@@ -1,12 +1,12 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public class Car : Vehicle, ICar
+public class Boat : Vehicle, IBoat
 {
-    private readonly CarBrand _brand;
-    
-    public Car(
+    private readonly string _steeringMechanism;
+
+    public Boat(
         RegistrationNumber registrationNumber,
-        CarBrand brand,
+        string steeringMechanism,
         string color,
         PowerSource powerSource,
         uint weight,
@@ -17,10 +17,11 @@ public class Car : Vehicle, ICar
         powerSource,
         weight,
         dimension
-    ) {
-        _brand = brand;
+    )
+    {
+        _steeringMechanism = steeringMechanism;
     }
 
-    public CarBrand Brand => _brand;
+    public string SteeringMechanism => _steeringMechanism;
 }
 

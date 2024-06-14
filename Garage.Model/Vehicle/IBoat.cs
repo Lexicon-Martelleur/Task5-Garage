@@ -1,6 +1,6 @@
 ﻿namespace Garage.Model.Vehicle;
 
-internal interface IBoat : IVehicle
+public interface IBoat : IVehicle
 {
-    string StearingMechanism { get; }
+    string SteeringMechanism { get; }
 }
