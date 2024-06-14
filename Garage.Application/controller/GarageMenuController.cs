@@ -12,12 +12,11 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         do
         {
             var resultMainMenuInput = view.PrintMainMenu(garages);
+            quitMenu = IsQuit(resultMainMenuInput.UserInput);
+            if (quitMenu) { continue; }
+
             var parsedResult = ParseMainMenuInput(resultMainMenuInput);
-            if (IsQuit(resultMainMenuInput.UserInput))
-            {
-                quitMenu = true;
-            }
-            else if (parsedResult != null)
+            if (parsedResult != null && !quitMenu)
             {
                 StartGarageMenu(parsedResult);
             }
@@ -55,10 +54,11 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         do
         {
             var resultGarageMenuInput = view.PrintGarageMenu(garageInfo);
-            if (IsQuit(resultGarageMenuInput))
-            {
-                quitMenu = true;
-            }
+            quitMenu = IsQuit(resultGarageMenuInput);
+            if (quitMenu) { continue; }
+
+            // TODO! Parse menu result selection
+            
 
         } while (!quitMenu);
     }
