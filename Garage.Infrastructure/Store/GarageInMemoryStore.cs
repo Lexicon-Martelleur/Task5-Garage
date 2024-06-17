@@ -3,7 +3,6 @@ using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
 using Garage.Model.Service;
 using Garage.Model.Vehicle;
-using System.Diagnostics.Metrics;
 
 namespace Garage.Infrastructure.Store;
 
@@ -24,9 +23,9 @@ public class GarageInMemoryStore : IGarageRepository
     private GarageKeeper CreateGarages()
     {
         
-        var carGarageFactory = new GarageFactory<ICar>();
+        var carGarageFactory = new GarageFactory<Car>();
         var carGarage = carGarageFactory.CreateGarage(
-            20, "Garage Street 1A", GarageDescription.CAR);
+            20, "Garage Street 1A", GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
         PopulateCarGarage(carGarage);
 
         var busFactory = new GarageFactory<IBus>();
@@ -54,28 +53,29 @@ public class GarageInMemoryStore : IGarageRepository
             20, "Garage Street 1F", GarageDescription.E_CAR);
         PopulateECarGarage(eCarGarage);
 
-        var multiCarGarageFactory = new GarageFactory<ICar>();
+        var universalGarageFactory = new GarageFactory<IVehicle>();
+        var univarsalGarage = universalGarageFactory.CreateGarage(
+            20, "Garage Street 1G", GarageDescription.MULTI);
+        PopulateMultiGarage(univarsalGarage);
+
+        var multiCarGarageFactory = new GarageFactory<IVehicle>();
         var multiCarGarage = multiCarGarageFactory.CreateGarage(
-            20, "Garage Street 1G", GarageDescription.CAR);
+            20, "Garage Street 1H", GarageDescription.CAR);
         PopulateMultiCarGarage(multiCarGarage);
-
-
-        //var universalGarageFactory = new GarageFactory<IVehicle>();
-        //var univarsalGarage = universalGarageFactory.CreateGarage(
-        //    20, "Garage Street 1H", GarageDescription.MULTI);
 
         return new GarageKeeper()
         {
-            CarGarages = [carGarage, multiCarGarage],
+            CarGarages = [carGarage],
             BusGarages = [busGarage],
             MCGarages = [motorCycleGarage],
             BoatHarbors = [boatHarbour],
             AirplaneHangars = [airplaneHangar],
-            ECarGarages = [eCarGarage]
+            ECarGarages = [eCarGarage],
+            MultiGarages = [univarsalGarage, multiCarGarage]
         };
     }
     private void PopulateCarGarage(
-        IGarage<IParkingLot<ICar>, ICar> garage)
+        IGarage<IParkingLot<Car>, Car> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -179,13 +179,14 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateMultiCarGarage(
-        IGarage<IParkingLot<ICar>, ICar> garage)
+        IGarage<IParkingLot<IVehicle>, IVehicle> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
         uint counter = 0;
         foreach (var lot in parkingLots)
         {
+            counter++;
             if (counter % 2 == 0)
             {
                 garage.AddVehicle(lot.ID, new Car(
@@ -206,6 +207,57 @@ public class GarageInMemoryStore : IGarageRepository
                     new Dimension(10, 10, 10)));
             }
             
+        }
+    }
+
+    private void PopulateMultiGarage(
+        IGarage<IParkingLot<IVehicle>, IVehicle> garage)
+    {
+        var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
+        for (int i = 0; i < 4; i++)
+        {
+            garage.AddVehicle(parkingLots[i].ID, new Car(
+                new RegistrationNumber($"HBC {++numberRegPart}"),
+                CarBrand.FORD,
+                VehicleColor.GREY,
+                PowerSource.GASOLINE,
+                1000,
+                new Dimension(10, 10, 10))
+            );
+        }
+        for (int i = 4; i < 8; i++)
+        {
+            garage.AddVehicle(parkingLots[i].ID, new Bus(
+                new RegistrationNumber($"HBC {++numberRegPart}"),
+                10,
+                10,
+                VehicleColor.GREY,
+                PowerSource.GASOLINE,
+                1000,
+                new Dimension(10, 10, 10))
+            );
+        }
+        for (int i = 8; i < 12; i++)
+        {
+            garage.AddVehicle(parkingLots[i].ID, new ECar(
+                new RegistrationNumber($"HBC {++numberRegPart}"),
+                CarBrand.FORD,
+                VehicleColor.GREY,
+                1000,
+                new Dimension(10, 10, 10))
+            );
+        }
+        for (int i = 12; i < 20; i++)
+        {
+            garage.AddVehicle(parkingLots[i].ID, new Motorcycle(
+                new RegistrationNumber($"HBC {++numberRegPart}"),
+                100,
+                VehicleColor.GREY,
+                PowerSource.GASOLINE,
+                1000,
+                new Dimension(10, 10, 10))
+            );
         }
     }
 }

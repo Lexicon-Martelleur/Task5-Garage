@@ -16,21 +16,6 @@ public class ParkingLot<VehicleType> : IParkingLot<VehicleType>
 
     public VehicleType? CurrentVehicle { get; set; }
 
-    public string Description => GetFriendlyTypeName(this.GetType());
-
-    private string GetFriendlyTypeName(Type type)
-    {
-        if (type.IsGenericType)
-        {
-            var genericType = type.GetGenericTypeDefinition();
-            var genericArguments = type.GetGenericArguments();
-            var genericArgumentsString = string.Join(", ", genericArguments.Select(GetFriendlyTypeName));
-            return $"{genericType.Name.Substring(0, genericType.Name.IndexOf('`'))}<{genericArgumentsString}>";
-        }
-
-        return type.Name;
-    }
-
     public bool Equals(IParkingLot<VehicleType>? other)
     {
         if (other is null)

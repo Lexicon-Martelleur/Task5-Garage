@@ -65,7 +65,7 @@ internal class GarageMenuView
     private string GetParkingLotInfo(ParkingLotInfo info)
     {
         return $"\t➡️ {info.vehicleType} [{info.vehicleRegNr}]: " +
-            $"Parked at '{info.garageAddress}' in '{info.ParkinLotId}' of type {info.parkingLotType}";
+            $"Parked at '{info.garageAddress}' in lot '{info.ParkinLotId}' made for {info.parkingLotType}";
     }
 
     internal void PrintCorruptedData(string selection)

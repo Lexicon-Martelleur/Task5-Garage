@@ -6,8 +6,8 @@ namespace Garage.Model.Service;
 
 public class GarageKeeper
 {
-    private IEnumerable<IGarage<IParkingLot<ICar>, ICar>> _carGarages = [];
-    
+    private IEnumerable<IGarage<IParkingLot<Car>, Car>> _carGarages = [];
+
     private IEnumerable<IGarage<IParkingLot<IBus>, IBus>> _busGarages = [];
 
     private IEnumerable<IGarage<IParkingLot<IMotorcycle>, IMotorcycle>> _mcGarages = [];
@@ -20,7 +20,7 @@ public class GarageKeeper
 
     private IEnumerable<IGarage<IParkingLot<IVehicle>, IVehicle>> _multiGarages = [];
 
-    public IEnumerable<IGarage<IParkingLot<ICar>, ICar>> CarGarages {
+    public IEnumerable<IGarage<IParkingLot<Car>, Car>> CarGarages {
         get => _carGarages;
         init => _carGarages = value;
     }
@@ -65,25 +65,25 @@ public class GarageKeeper
     {
         List<GarageInfo> garageInfoItems = [];
         garageInfoItems.AddRange(CarGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(BusGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(MCGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(BoatHarbors.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(AirplaneHangars.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(ECarGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         garageInfoItems.AddRange(MultiGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
+            garage.Address, garage.Capacity, garage.GarageDescription)));
 
         return garageInfoItems;
     }
@@ -147,7 +147,7 @@ public class GarageKeeper
                 garage.Address,
                 lot.ID,
                 lot.CurrentVehicle.RegistrationNumber.value,
-                lot.Description,
+                garage.ParkingLotDescription,
                 lot.CurrentVehicle.Description
             )); 
         }

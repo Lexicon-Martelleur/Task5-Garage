@@ -2,12 +2,44 @@
 
 public class GarageDescription
 {
-    public const string CAR = "A standard car garage for all cars";
-    public const string E_CAR = "A car garage only for e-cars";
-    public const string CAR_NO_ELECTRICAL_PARKING_LOTS = "A car garage (OBS! No electrical parking lots)";
-    public const string BUS = "A standard bus garage";
-    public const string MC = "A standard motorcycle garage";
-    public const string BOAT = "A standard boat harbor";
-    public const string AIRPLANE = "A standard airplane hangar";
-    public const string MULTI = "A standard multi garage";
+    public static readonly (string Garage, string Lot) CAR = (
+        Garage: "A standard car garage for all cars",
+        Lot: "all cars"
+    );
+
+    public static readonly (string Garage, string Lot) E_CAR = (
+        Garage: "A car garage only for e-cars",
+        Lot: "electrical cars"
+    );
+
+    public static readonly (string Garage, string Lot) CAR_NO_ELECTRICAL_PARKING_LOTS = (
+        Garage: "A car garage (OBS! No electrical parking lots)",
+        Lot: "cars (OBS! No electrical parking lots)"
+    );
+
+    public static readonly (string Garage, string Lot) BUS = (
+        Garage: "A standard bus garage",
+        Lot: "buses"
+    );
+
+    public static readonly (string Garage, string Lot) MC = (
+        Garage: "A standard motorcycle garage",
+        Lot: "motorcycles" 
+    );
+
+    public static readonly (string Garage, string Lot) BOAT = 
+    (
+        Garage: "A standard boat harbor",
+        Lot: "boats"
+    );
+
+    public static readonly (string Garage, string Lot) AIRPLANE = (
+        Garage: "A standard airplane hangar",
+        Lot: "airplanes"
+    );
+
+    public static readonly (string Garage, string Lot) MULTI = (
+        Garage: "A standard multi garage",
+        Lot: "all types of vehicles"
+    );
 }
