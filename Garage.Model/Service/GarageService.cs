@@ -8,9 +8,8 @@ public class GarageService(IGarageRepository repository) : IGarageService
 {
     public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
     {
-        var garageKepper = ValidateGarages(repository.GetGarageKeeper());
-        // TODO validate unique reg numbers;
-        return garageKepper.GetAllParkingLotsWithVehicles();
+        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
+        return garageKeeper.GetAllParkingLotsWithVehicles();
     }
 
     public IEnumerable<GarageInfo> GetAllGarages()
@@ -25,6 +24,10 @@ public class GarageService(IGarageRepository repository) : IGarageService
         {
             throw new InvalidGarageStateException("Address must be unique for each garage.");
         }
+        if (!IsUniqueCarRegistrationNumbers(garageKeeper))
+        {
+            throw new InvalidGarageStateException("Car registration number must be unique for each garage.");
+        }
         return garageKeeper;
     }
 
@@ -33,6 +36,15 @@ public class GarageService(IGarageRepository repository) : IGarageService
         var totalAddresses = garageKeeper.GetAllGarageAddresses();
         var uniqueAddresses = totalAddresses.ToHashSet();
         return totalAddresses.Count() == uniqueAddresses.Count;
+    }
+
+    private bool IsUniqueCarRegistrationNumbers(GarageKeeper garageKeeper)
+    {
+        var parkingLotsWithVehicles = garageKeeper.GetAllParkingLotsWithVehicles();
+        var uniqueCars = parkingLotsWithVehicles
+            .Select(lot => lot.regNr)
+            .ToHashSet();
+        return parkingLotsWithVehicles.Count() == uniqueCars.Count;
     }
 }
 

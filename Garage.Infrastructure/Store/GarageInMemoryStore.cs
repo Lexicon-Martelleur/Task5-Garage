@@ -62,10 +62,11 @@ public class GarageInMemoryStore : IGarageRepository
         IGarage<IParkingLot<ICar>, ICar> garage)
     {
         var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
         foreach (var lot in parkingLots)
         {
             garage.AddVehicle(lot.ID, new Car(
-                new RegistrationNumber("XXX"),
+                new RegistrationNumber($"ABC {++numberRegPart}"),
                 CarBrand.FORD,
                 VehicleColor.GREY,
                 PowerSource.GASOLINE,
@@ -79,10 +80,11 @@ public class GarageInMemoryStore : IGarageRepository
         IGarage<IParkingLot<IBus>, IBus> garage)
     {
         var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
         foreach (var lot in parkingLots)
         {
             garage.AddVehicle(lot.ID, new Bus(
-                new RegistrationNumber("XXX"),
+                new RegistrationNumber($"BBC {++numberRegPart}"),
                 10,
                 10,
                 VehicleColor.GREY,
@@ -95,10 +97,11 @@ public class GarageInMemoryStore : IGarageRepository
         IGarage<IParkingLot<IMotorcycle>, IMotorcycle> garage)
     {
         var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
         foreach (var lot in parkingLots)
         {
             garage.AddVehicle(lot.ID, new Motorcycle(
-                new RegistrationNumber("XXX"),
+                new RegistrationNumber($"CBC {++numberRegPart}"),
                 100,
                 VehicleColor.GREY,
                 PowerSource.GASOLINE,
@@ -111,11 +114,11 @@ public class GarageInMemoryStore : IGarageRepository
         IGarage<IParkingLot<IBoat>, IBoat> garage)
     {
         var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
         foreach (var lot in parkingLots)
         {
-
             garage.AddVehicle(lot.ID, new Boat(
-                new RegistrationNumber("XXX"),
+                new RegistrationNumber($"DBC {++numberRegPart}"),
                 BoatSteeringMechanism.WHEEL,
                 VehicleColor.GREY,
                 PowerSource.GASOLINE,
@@ -127,10 +130,11 @@ public class GarageInMemoryStore : IGarageRepository
         IGarage<IParkingLot<IAirplane>, IAirplane> garage)
     {
         var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
         foreach (var lot in parkingLots)
         {
             garage.AddVehicle(lot.ID, new Airplane(
-                new RegistrationNumber("XXX"),
+                new RegistrationNumber($"EBC {++numberRegPart}"),
                 400,
                 40,
                 VehicleColor.GREY,

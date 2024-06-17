@@ -23,25 +23,35 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
        switch (userInput)
         {
             case GarageMenu.EXIT:
-                HandleExit(); break;
+                HandleExit();
+                break;
             case GarageMenu.LIST_ALL_GARAGES:
-                HandleListAllGarages(); break;
+                HandleListAllGarages(GarageMenu.LIST_ALL_GARAGES);
+                break;
             case GarageMenu.LIST_ALL_VEHICLES:
-                HandleListAllVehicles(); break;
+                HandleListAllVehicles(GarageMenu.LIST_ALL_VEHICLES);
+                break;
             case GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE:
-                HandleListVehiclesInfoInGarage(); break;
+                HandleListVehiclesInfoInGarage();
+                break;
             case GarageMenu.ADD_VEHICLE_TO_GARAGE:
-                HandleAddVehicleToGarage(); break;
+                HandleAddVehicleToGarage();
+                break;
             case GarageMenu.REMOVE_VEHICLE_FROM_GARAGE:
-                HandleRemoveVehicleFromGarage(); break;
+                HandleRemoveVehicleFromGarage();
+                break;
             case GarageMenu.CREATE_GARAGE:
-                HandleCreateGarage(); break;
+                HandleCreateGarage();
+                break;
             case GarageMenu.SEARCH_VEHICLE_BY_REGNR:
-                HandleSearchVehicleByRegNr(); break;
+                HandleSearchVehicleByRegNr();
+                break;
             case GarageMenu.FILTER_VEHICLES:
-                HandleFilterVehicle(); break;
+                HandleFilterVehicle();
+                break;
             default:
-                HandleIncorrectMenuSelection(userInput); break;
+                HandleIncorrectMenuSelection(userInput);
+                break;
         }
     }
 
@@ -50,16 +60,26 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         _quitGarageMainMenu = true;
     }
 
-    private void HandleListAllGarages()
+    private void HandleListAllGarages(string menuSelection)
     {
-        var garages = service.GetAllGarages();
-        view.PrintAllGarages(garages);
+        try {
+            view.PrintAllGarages(service.GetAllGarages());
+        }
+        catch {
+            view.PrintCorruptedData(menuSelection);
+        }
     }
 
-    private void HandleListAllVehicles()
+    private void HandleListAllVehicles(string menuSelection)
     {
-        var parkingLotsInfos = service.GetAllParkingLotsWithVehicles();
-        view.PrintAllParkingLotsWithVehicles(parkingLotsInfos);
+        try {
+            var parkingLotInfos = service.GetAllParkingLotsWithVehicles();
+            view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
+        }
+        catch
+        {
+            view.PrintCorruptedData(menuSelection);
+        }
     }
 
     private void HandleListVehiclesInfoInGarage()

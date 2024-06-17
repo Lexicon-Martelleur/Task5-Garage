@@ -69,4 +69,9 @@ internal class GarageMenuView
         return $"\t➡️ Car [{info.regNr}]: " +
             $"Parked in garage '{info.garageAddress}' at parking lot '{info.ParkinLotId}'";
     }
+
+    internal void PrintCorruptedData(string selection)
+    {
+        Console.WriteLine($"\n⚠️ Could not handle selection '{selection}' due possible data corruption in the system.");
+    }
 }
