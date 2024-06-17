@@ -6,4 +6,6 @@ public interface IParkingLot<VehicleType> : IEquatable<IParkingLot<VehicleType>>
 {
     uint ID { get; init; }
     VehicleType? CurrentVehicle { get; set; }
+
+    string Description {  get; } 
 }

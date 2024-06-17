@@ -21,4 +21,6 @@ public abstract class Vehicle(
     public uint Weight => weight;
 
     public Dimension Dimension => dimension;
+
+    public virtual string Description => this.GetType().Name;
 }

@@ -79,6 +79,12 @@ public class GarageKeeper
         garageInfoItems.AddRange(AirplaneHangars.Select(garage => new GarageInfo(
             garage.Address, garage.Capacity, garage.Description)));
 
+        garageInfoItems.AddRange(ECarGarages.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        garageInfoItems.AddRange(MultiGarages.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
         return garageInfoItems;
     }
 
@@ -89,7 +95,9 @@ public class GarageKeeper
         totalAddresses.AddRange(BusGarages.Select(garage => garage.Address));
         totalAddresses.AddRange(MCGarages.Select(garage => garage.Address));
         totalAddresses.AddRange(BoatHarbors.Select(garage => garage.Address));
-        totalAddresses.AddRange(AirplaneHangars.Select(garage => garage.Address));        
+        totalAddresses.AddRange(AirplaneHangars.Select(garage => garage.Address));
+        totalAddresses.AddRange(ECarGarages.Select(garage => garage.Address));
+        totalAddresses.AddRange(MultiGarages.Select(garage => garage.Address));
         return totalAddresses;
     }
 
@@ -101,6 +109,8 @@ public class GarageKeeper
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(MCGarages));
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(BoatHarbors));
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(AirplaneHangars));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(ECarGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(MultiGarages));
         return parkingLotsInfo;
     }
 
@@ -131,14 +141,15 @@ public class GarageKeeper
         List<ParkingLotInfo> parkingLotsInfo = [];
         foreach (var lot in garage.ParkingLots)
         {
-            if (lot.CurrentVehicle != null)
-            {
-                parkingLotsInfo.Add(new ParkingLotInfo(
-                    garage.Address,
-                    lot.ID,
-                    lot.CurrentVehicle.RegistrationNumber.value
-                ));
-            }
+            if (lot.CurrentVehicle == null) { continue; }
+            
+            parkingLotsInfo.Add(new ParkingLotInfo(
+                garage.Address,
+                lot.ID,
+                lot.CurrentVehicle.RegistrationNumber.value,
+                lot.Description,
+                lot.CurrentVehicle.Description
+            )); 
         }
         return parkingLotsInfo;
     }

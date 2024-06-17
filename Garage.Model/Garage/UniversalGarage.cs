@@ -4,6 +4,7 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
+// TODO! Rename to garage.
 public class UniversalGarage<ParkingLotType, VehicleType> :
     IGarage<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
@@ -13,7 +14,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
 
     private string _address;
 
-    private string _garageType;
+    private string _garageDescription;
 
     private ParkingLotType[] _parkingLots;
 
@@ -22,11 +23,11 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
     public UniversalGarage(
         HashSet<ParkingLotType> parkingLots,
         string address,
-        string garageType)
+        string garageDescription)
     {
         _capacity = (uint)parkingLots.Count;
         _address = address;
-        _garageType = garageType;
+        _garageDescription = garageDescription;
         _parkingLots = parkingLots.ToArray();
     }
 
@@ -38,8 +39,8 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
     }
 
     public string Description {
-        get => _garageType;
-        set => _garageType = value;
+        get => _garageDescription;
+        init => _garageDescription = value;
     }
 
     public ParkingLotType[] ParkingLots

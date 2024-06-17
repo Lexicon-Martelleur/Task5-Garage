@@ -10,7 +10,7 @@ namespace Garage.Model.Garage
     {
         uint Capacity { get; }
         string Address { get; set; }
-        string Description { get; set; }
+        string Description { get; init; }
         ParkingLotType[] ParkingLots { get; init; }
         bool IsFullGarage();
         bool IsOccupiedLot(ParkingLotType parkingLot);

@@ -8,8 +8,9 @@ public class GarageService(IGarageRepository repository) : IGarageService
 {
     public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
     {
-        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
-        return garageKeeper.GetAllParkingLotsWithVehicles();
+        var garageKeeper = repository.GetGarageKeeper();
+        var validatedGarageKeeper = ValidateGarages(garageKeeper);
+        return validatedGarageKeeper.GetAllParkingLotsWithVehicles();
     }
 
     public IEnumerable<GarageInfo> GetAllGarages()
@@ -42,9 +43,16 @@ public class GarageService(IGarageRepository repository) : IGarageService
     {
         var parkingLotsWithVehicles = garageKeeper.GetAllParkingLotsWithVehicles();
         var uniqueCars = parkingLotsWithVehicles
-            .Select(lot => lot.regNr)
+            .Select(lot => lot.vehicleRegNr)
             .ToHashSet();
         return parkingLotsWithVehicles.Count() == uniqueCars.Count;
+    }
+
+    public IEnumerable<ParkingLotInfo> GetGroupedVehiclesByType(string garageAddress)
+    {
+        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
+
+        throw new NotImplementedException();
     }
 }
 

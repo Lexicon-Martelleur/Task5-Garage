@@ -1,7 +1,5 @@
 ﻿using Garage.Application.Constant;
-using Garage.Model.Garage;
 using Garage.Model.Service;
-using Garage.Model.Vehicle;
 
 namespace Garage.Application.View;
 
@@ -18,8 +16,8 @@ internal class GarageMenuView
                 {GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE}) List vehicles types and number in specified garage
                 {GarageMenu.ADD_VEHICLE_TO_GARAGE}) Add vehicle from specified garage
                 {GarageMenu.REMOVE_VEHICLE_FROM_GARAGE}) Remove vehicle from specified garage
-                {GarageMenu.CREATE_GARAGE}) Search after vehicle registration number in all garages.
-                {GarageMenu.SEARCH_VEHICLE_BY_REGNR}) Search after vehicle registration number in all garages.
+                {GarageMenu.CREATE_GARAGE}) Create new garage
+                {GarageMenu.SEARCH_VEHICLE_BY_REGNR}) Search after vehicle by registration number in all garages
                 {GarageMenu.FILTER_VEHICLES}) Filter vehicles by (<common properties>) in all garages
         Select option ({GarageMenu.LIST_ALL_GARAGES}-{GarageMenu.FILTER_VEHICLES}) or {GarageMenu.EXIT} to quit: 
         """;
@@ -66,8 +64,8 @@ internal class GarageMenuView
 
     private string GetParkingLotInfo(ParkingLotInfo info)
     {
-        return $"\t➡️ Car [{info.regNr}]: " +
-            $"Parked in garage '{info.garageAddress}' at parking lot '{info.ParkinLotId}'";
+        return $"\t➡️ {info.vehicleType} [{info.vehicleRegNr}]: " +
+            $"Parked at '{info.garageAddress}' in '{info.ParkinLotId}' of type {info.parkingLotType}";
     }
 
     internal void PrintCorruptedData(string selection)

@@ -1,15 +1,27 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public abstract class ECar : ICar
+public class ECar : Vehicle, ICar
 {
-    public abstract RegistrationNumber RegistrationNumber { get; }
+    private readonly CarBrand _brand;
 
-    public abstract CarBrand Brand { get; }
+    public ECar(
+        RegistrationNumber registrationNumber,
+        CarBrand brand,
+        string color,
+        uint weight,
+        Dimension dimension
+    ) : base(
+        registrationNumber,
+        color,
+        PowerSource.ELECTRIC,
+        weight,
+        dimension
+    )
+    {
+        _brand = brand;
+    }
 
-    public abstract string Color { get; set;  }
-    public PowerSource PowerSource => PowerSource.ELECTRIC;
+    public CarBrand Brand => _brand;
 
-    public abstract uint Weight { get; }
-
-    public abstract Dimension Dimension { get; }
+    public override string Description => "Electrical Car";
 }

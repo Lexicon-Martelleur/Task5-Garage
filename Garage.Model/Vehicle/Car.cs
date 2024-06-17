@@ -23,4 +23,3 @@ public class Car : Vehicle, ICar
 
     public CarBrand Brand => _brand;
 }
-
