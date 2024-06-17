@@ -31,8 +31,8 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
             case GarageMenu.LIST_ALL_VEHICLES:
                 HandleListAllVehicles(GarageMenu.LIST_ALL_VEHICLES);
                 break;
-            case GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE:
-                HandleListVehiclesInfoInGarage();
+            case GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE:
+                HandleListGroupedVehiclesByType(GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE);
                 break;
             case GarageMenu.ADD_VEHICLE_TO_GARAGE:
                 HandleAddVehicleToGarage();
@@ -82,8 +82,25 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         }
     }
 
-    private void HandleListVehiclesInfoInGarage()
+    private void HandleListGroupedVehiclesByType(string menuSelection)
     {
+        try
+        {
+            var address = view.ReadGarageAddress();
+            if (address.Equals(String.Empty))
+            {
+                view.PrintNoGarageFoundForAddress(address);
+            }
+            else
+            {
+                var groupedVehicles = service.GetGroupedVehiclesByVehicleType(address);
+                view.PrintGroupedVehicles(groupedVehicles, address);
+            }
+        }
+        catch
+        {
+            view.PrintCorruptedData(menuSelection);
+        }
     }
 
     private void HandleAddVehicleToGarage()

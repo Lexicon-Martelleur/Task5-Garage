@@ -1,5 +1,6 @@
 ﻿using Garage.Application.Constant;
 using Garage.Model.Service;
+using System.Net;
 
 namespace Garage.Application.View;
 
@@ -13,7 +14,7 @@ internal class GarageMenuView
                 {GarageMenu.EXIT}) Quit application
                 {GarageMenu.LIST_ALL_GARAGES}) List all garages
                 {GarageMenu.LIST_ALL_VEHICLES}) List all vehicles in all garages
-                {GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE}) List vehicles types and number in specified garage
+                {GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE}) List grouped vehicles by type
                 {GarageMenu.ADD_VEHICLE_TO_GARAGE}) Add vehicle from specified garage
                 {GarageMenu.REMOVE_VEHICLE_FROM_GARAGE}) Remove vehicle from specified garage
                 {GarageMenu.CREATE_GARAGE}) Create new garage
@@ -30,7 +31,7 @@ internal class GarageMenuView
         GarageMenu.EXIT or
         GarageMenu.LIST_ALL_GARAGES or
         GarageMenu.LIST_ALL_VEHICLES or
-        GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE or
+        GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE or
         GarageMenu.ADD_VEHICLE_TO_GARAGE or
         GarageMenu.REMOVE_VEHICLE_FROM_GARAGE or
         GarageMenu.CREATE_GARAGE or
@@ -71,5 +72,41 @@ internal class GarageMenuView
     internal void PrintCorruptedData(string selection)
     {
         Console.WriteLine($"\n⚠️ Could not handle selection '{selection}' due possible data corruption in the system.");
+    }
+
+    internal string ReadGarageAddress()
+    {
+        Console.Write("\nEnter garage address: ");
+        return Console.ReadLine() ?? String.Empty;
+    }
+
+    internal void PrintNoGarageFoundForAddress(string address)
+    {
+        Console.WriteLine($"\n⚠️ No garage exist in the system with address: '{address}'");
+    }
+
+    internal void PrintGroupedVehicles(
+        IEnumerable<GroupedVehicle>? groupedVehicles,
+        string address)
+    {
+        if (groupedVehicles == null)
+        {
+            PrintNoGarageFoundForAddress(address);
+        }
+        else
+        {
+            PrintGroupedVehiclesEntries(groupedVehicles, address);
+        }
+    }
+
+    private void PrintGroupedVehiclesEntries(
+        IEnumerable<GroupedVehicle> groupedVehiclesEntries,
+        string address)
+    {
+        Console.WriteLine($"\nGarage with address {address} consist of:");
+        foreach (var item in groupedVehiclesEntries)
+        {
+            Console.WriteLine($"\t➡️ {item.Count} {item.VehicleType} entries");
+        }
     }
 }

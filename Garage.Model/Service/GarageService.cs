@@ -1,5 +1,6 @@
 ﻿using Garage.Model.Garage;
 using Garage.Model.Repository;
+using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
@@ -8,51 +9,41 @@ public class GarageService(IGarageRepository repository) : IGarageService
 {
     public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
     {
-        var garageKeeper = repository.GetGarageKeeper();
-        var validatedGarageKeeper = ValidateGarages(garageKeeper);
-        return validatedGarageKeeper.GetAllParkingLotsWithVehicles();
+        var parkingLotInfo = repository.GetAllParkingLotsWithVehicles();
+        if (!IsUniqueCarRegistrationNumbers(parkingLotInfo))
+        {
+            throw new InvalidGarageStateException("Car registration number must be unique for each garage.");
+        }
+        return parkingLotInfo;
     }
 
     public IEnumerable<GarageInfo> GetAllGarages()
     {
-        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
-        return garageKeeper.GetAllGarages();
-    }
-
-    private GarageKeeper ValidateGarages(GarageKeeper garageKeeper)
-    {
-        if (!IsUniqueGarageAddresses(garageKeeper))
+        var garages = repository.GetAllGarages();
+        if (!IsUniqueGarageAddresses(garages))
         {
             throw new InvalidGarageStateException("Address must be unique for each garage.");
         }
-        if (!IsUniqueCarRegistrationNumbers(garageKeeper))
-        {
-            throw new InvalidGarageStateException("Car registration number must be unique for each garage.");
-        }
-        return garageKeeper;
+        return garages;
     }
 
-    private bool IsUniqueGarageAddresses(GarageKeeper garageKeeper)
+    private bool IsUniqueGarageAddresses(IEnumerable<GarageInfo> garages)
     {
-        var totalAddresses = garageKeeper.GetAllGarageAddresses();
-        var uniqueAddresses = totalAddresses.ToHashSet();
-        return totalAddresses.Count() == uniqueAddresses.Count;
+        var uniqueAddresses = garages.ToHashSet();
+        return garages.Count() == uniqueAddresses.Count;
     }
 
-    private bool IsUniqueCarRegistrationNumbers(GarageKeeper garageKeeper)
+    private bool IsUniqueCarRegistrationNumbers(IEnumerable<ParkingLotInfo> parkingLotInfos)
     {
-        var parkingLotsWithVehicles = garageKeeper.GetAllParkingLotsWithVehicles();
-        var uniqueCars = parkingLotsWithVehicles
+        var uniqueCars = parkingLotInfos
             .Select(lot => lot.vehicleRegNr)
             .ToHashSet();
-        return parkingLotsWithVehicles.Count() == uniqueCars.Count;
+        return parkingLotInfos.Count() == uniqueCars.Count;
     }
 
-    public IEnumerable<ParkingLotInfo> GetGroupedVehiclesByType(string garageAddress)
+    public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress)
     {
-        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
-
-        throw new NotImplementedException();
+        return repository.GetGroupedVehiclesByVehicleType(garageAddress);
     }
 }
 

@@ -5,5 +5,5 @@ public interface IGarageService
 {
     public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles();
     public IEnumerable<GarageInfo> GetAllGarages();
-    public IEnumerable<ParkingLotInfo> GetGroupedVehiclesByType(string garageAddress);
+    public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress);
 }

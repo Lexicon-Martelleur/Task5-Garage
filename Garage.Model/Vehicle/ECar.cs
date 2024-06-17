@@ -22,6 +22,4 @@ public class ECar : Vehicle, ICar
     }
 
     public CarBrand Brand => _brand;
-
-    public override string Description => "Electrical Car";
 }

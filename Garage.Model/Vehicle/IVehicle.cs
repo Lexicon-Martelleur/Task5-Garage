@@ -2,7 +2,7 @@
 
 public interface IVehicle
 {
-    string Description { get; }
+    string Type { get; }
     public RegistrationNumber RegistrationNumber { get; }
 
     public string Color { get; set; }

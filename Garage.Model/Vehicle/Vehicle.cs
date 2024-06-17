@@ -22,5 +22,5 @@ public abstract class Vehicle(
 
     public Dimension Dimension => dimension;
 
-    public virtual string Description => this.GetType().Name;
+    public string Type => this.GetType().Name;
 }

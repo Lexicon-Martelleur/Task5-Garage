@@ -4,7 +4,7 @@ using Garage.Model.Vehicle;
 namespace Garage.Model.Garage;
 
 /// <summary>
-/// An interface describing a generics garage
+/// An interface describing a generics garage.
 /// </summary>
 /// <typeparam name="VehicleType">The type of vehicle</typeparam>
 public interface IGarage<VehicleType> :
