@@ -1,65 +1,93 @@
-﻿using Garage.Application.View;
+﻿using Garage.Application.Constant;
+using Garage.Application.View;
+using Garage.Model.Garage;
 using Garage.Model.Service;
 
 namespace Garage.Application.controller;
 
 internal class GarageMenuController(GarageMenuView view, IGarageService service)
 {
-    internal void StartMainMenu()
+    private bool _quitGarageMainMenu = false;
+
+    internal void StartGarageMainMenu()
     {
-        var quitMenu = false;
-        var garages = service.GetAllGarages();
         do
         {
-            var resultMainMenuInput = view.PrintMainMenu(garages);
-            quitMenu = IsQuit(resultMainMenuInput.UserInput);
-            if (quitMenu) { continue; }
+            HandleMainMenuSelection(view.PrintGarageMainMenu());
 
-            var parsedResult = ParseMainMenuInput(resultMainMenuInput);
-            if (parsedResult != null && !quitMenu)
-            {
-                StartGarageMenu(parsedResult);
-            }
-
-        } while (!quitMenu);
+        } while (!_quitGarageMainMenu);
     }
 
-    private bool IsQuit(string userInput)
+    private void HandleMainMenuSelection(string userInput)
     {
-        return userInput == "q" || userInput == "Q";
-    }
-
-    private GarageInfo? ParseMainMenuInput((
-        List<GarageInfo> GarageInfoItems,
-        string UserInput) result)
-    {
-        try {
-            var userInput = int.Parse(result.UserInput);
-            var numerOfGarages = result.GarageInfoItems.ToList().Count();
-
-            if (userInput > numerOfGarages || userInput < 0)
-            {
-                throw new InvalidOperationException("_");
-            }
-            return result.GarageInfoItems.ToList()[userInput];
-        } catch (Exception ex) {
-            Console.WriteLine(ex);
-            return null;
+       switch (userInput)
+        {
+            case GarageMenu.EXIT:
+                HandleExit(); break;
+            case GarageMenu.LIST_ALL_GARAGES:
+                HandleListAllGarages(); break;
+            case GarageMenu.LIST_ALL_VEHICLES:
+                HandleListAllVehicles(); break;
+            case GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE:
+                HandleListVehiclesInfoInGarage(); break;
+            case GarageMenu.ADD_VEHICLE_TO_GARAGE:
+                HandleAddVehicleToGarage(); break;
+            case GarageMenu.REMOVE_VEHICLE_FROM_GARAGE:
+                HandleRemoveVehicleFromGarage(); break;
+            case GarageMenu.CREATE_GARAGE:
+                HandleCreateGarage(); break;
+            case GarageMenu.SEARCH_VEHICLE_BY_REGNR:
+                HandleSearchVehicleByRegNr(); break;
+            case GarageMenu.FILTER_VEHICLES:
+                HandleFilterVehicle(); break;
+            default:
+                HandleIncorrectMenuSelection(userInput); break;
         }
     }
 
-    internal void StartGarageMenu(GarageInfo garageInfo)
+    private void HandleExit()
     {
-        var quitMenu = false;
-        do
-        {
-            var resultGarageMenuInput = view.PrintGarageMenu(garageInfo);
-            quitMenu = IsQuit(resultGarageMenuInput);
-            if (quitMenu) { continue; }
+        _quitGarageMainMenu = true;
+    }
 
-            // TODO! Parse menu result selection
-            
+    private void HandleListAllGarages()
+    {
+        var garages = service.GetAllGarages();
+        view.PrintAllGarages(garages);
+    }
 
-        } while (!quitMenu);
+    private void HandleListAllVehicles()
+    {
+        var parkingLotsInfos = service.GetAllParkingLotsWithVehicles();
+        view.PrintAllParkingLotsWithVehicles(parkingLotsInfos);
+    }
+
+    private void HandleListVehiclesInfoInGarage()
+    {
+    }
+
+    private void HandleAddVehicleToGarage()
+    {
+    }
+
+    private void HandleRemoveVehicleFromGarage()
+    {
+    }
+
+    private void HandleCreateGarage()
+    {
+    }
+
+    private void HandleSearchVehicleByRegNr()
+    {
+    }
+
+    private void HandleFilterVehicle()
+    {
+    }
+
+    private void HandleIncorrectMenuSelection(string userInput)
+    {
+        view.PrintIncorrectMenuSelection(userInput);
     }
 }

@@ -6,75 +6,33 @@ namespace Garage.Model.Service;
 
 public class GarageService(IGarageRepository repository) : IGarageService
 {
-    public GarageKeeper GetAllGarages()
+    public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
     {
-        return ValidateGarages(repository.GetAllGarages());
+        var garageKepper = ValidateGarages(repository.GetGarageKeeper());
+        // TODO validate unique reg numbers;
+        return garageKepper.GetAllParkingLotsWithVehicles();
     }
 
-    private GarageKeeper ValidateGarages(GarageKeeper garages)
+    public IEnumerable<GarageInfo> GetAllGarages()
     {
-        if (!IsUniqueGarageAddresses(garages))
+        var garageKeeper = ValidateGarages(repository.GetGarageKeeper());
+        return garageKeeper.GetAllGarages();
+    }
+
+    private GarageKeeper ValidateGarages(GarageKeeper garageKeeper)
+    {
+        if (!IsUniqueGarageAddresses(garageKeeper))
         {
             throw new InvalidGarageStateException("Address must be unique for each garage.");
         }
-        return garages;
+        return garageKeeper;
     }
 
-    private bool IsUniqueGarageAddresses(GarageKeeper garages)
+    private bool IsUniqueGarageAddresses(GarageKeeper garageKeeper)
     {
-        var uniqueAddresses = new HashSet<string>();
-        uint counter = 0;
-        counter = AddUniqueAddresses(
-            garages.CarGarages.Select(garage => garage.Address),
-            counter,
-            uniqueAddresses
-        );
-        if (uniqueAddresses.Count() != counter) { return false; }
-
-        counter = AddUniqueAddresses(
-            garages.BusGarages.Select(garage => garage.Address),
-            counter,
-            uniqueAddresses
-        );
-        if (uniqueAddresses.Count() != counter) { return false; }
-
-        counter = AddUniqueAddresses(
-            garages.MCGarages.Select(garage => garage.Address),
-            counter,
-            uniqueAddresses
-        );
-        if (uniqueAddresses.Count() != counter) { return false; }
-
-        counter = AddUniqueAddresses(
-            garages.BoatHarbors.Select(garage => garage.Address),
-            counter,
-            uniqueAddresses
-        );
-        if (uniqueAddresses.Count() != counter) { return false; }
-
-        counter = AddUniqueAddresses(
-            garages.AirplaneHangars.Select(garage => garage.Address),
-            counter,
-            uniqueAddresses
-        );
-        if (uniqueAddresses.Count() != counter) { return false; }
-
-        return true;
-    }
-
-    private uint AddUniqueAddresses(
-        IEnumerable<string> addresses,
-        uint counter,
-        HashSet<string> uniqueAddresses
-    )
-    {
-        uint updatedCounter = counter;
-        foreach (var addrress in addresses)
-        {
-            updatedCounter++;
-            uniqueAddresses.Add(addrress);
-        }
-        return updatedCounter;
+        var totalAddresses = garageKeeper.GetAllGarageAddresses();
+        var uniqueAddresses = totalAddresses.ToHashSet();
+        return totalAddresses.Count() == uniqueAddresses.Count;
     }
 }
 

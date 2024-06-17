@@ -4,5 +4,5 @@ namespace Garage.Model.Repository;
 
 public interface IGarageRepository
 {
-    public GarageKeeper GetAllGarages();
+    public GarageKeeper GetGarageKeeper();
 }

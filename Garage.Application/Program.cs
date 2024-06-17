@@ -14,4 +14,4 @@ var garageMenuController = new GarageMenuController(
     garageMenuView,
     garageService);
 
-garageMenuController.StartMainMenu();
+garageMenuController.StartGarageMainMenu();

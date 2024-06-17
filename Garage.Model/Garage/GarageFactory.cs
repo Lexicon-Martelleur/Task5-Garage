@@ -10,19 +10,19 @@ public class GarageFactory<VehicleType> :
     public IGarage<IParkingLot<VehicleType>, VehicleType> CreateGarage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
         string address,
-        string garageType
+        string description
     )
     {
         return new UniversalGarage<IParkingLot<VehicleType>, VehicleType>(
             parkingLots,
             address,
-            garageType);
+            description);
     }
 
     public IGarage<IParkingLot<VehicleType>, VehicleType> CreateGarage(
         uint capacity,
         string address,
-        string garageType)
+        string description)
     {
         var parkingLots = GarageUtility<
             IParkingLot<VehicleType>,
@@ -31,7 +31,7 @@ public class GarageFactory<VehicleType> :
         return new UniversalGarage<IParkingLot<VehicleType>, VehicleType>(
             parkingLots,
             address,
-            garageType);
+            description);
     }
 
     private IParkingLot<VehicleType> CreateParkingLot(uint id)

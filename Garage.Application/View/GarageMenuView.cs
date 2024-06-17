@@ -1,67 +1,72 @@
-﻿using Garage.Model.Service;
+﻿using Garage.Application.Constant;
+using Garage.Model.Garage;
+using Garage.Model.Service;
+using Garage.Model.Vehicle;
 
 namespace Garage.Application.View;
 
 internal class GarageMenuView
 {
-    internal (List<GarageInfo> GarageInfoItems, string UserInput) PrintMainMenu(GarageKeeper garages)
+    public string PrintGarageMainMenu()
     {
-        List<GarageInfo> garageInfoItems = []; 
-        uint counter = 0;
+        var garageMenu = $"""
+        
+        Garage main menu:
+                {GarageMenu.EXIT}) Quit application
+                {GarageMenu.LIST_ALL_GARAGES}) List all garages
+                {GarageMenu.LIST_ALL_VEHICLES}) List all vehicles in all garages
+                {GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE}) List vehicles types and number in specified garage
+                {GarageMenu.ADD_VEHICLE_TO_GARAGE}) Add vehicle from specified garage
+                {GarageMenu.REMOVE_VEHICLE_FROM_GARAGE}) Remove vehicle from specified garage
+                {GarageMenu.CREATE_GARAGE}) Search after vehicle registration number in all garages.
+                {GarageMenu.SEARCH_VEHICLE_BY_REGNR}) Search after vehicle registration number in all garages.
+                {GarageMenu.FILTER_VEHICLES}) Filter vehicles by (<common properties>) in all garages
+        Select option ({GarageMenu.LIST_ALL_GARAGES}-{GarageMenu.FILTER_VEHICLES}) or {GarageMenu.EXIT} to quit: 
+        """;
+        Console.Write(garageMenu);
+        return GetSelectedGarageMenuEntry(Console.ReadLine() ?? "");
+    }
+
+    private string GetSelectedGarageMenuEntry(string selectedMenu) => selectedMenu switch
+    {
+        GarageMenu.EXIT or
+        GarageMenu.LIST_ALL_GARAGES or
+        GarageMenu.LIST_ALL_VEHICLES or
+        GarageMenu.LIST_VEHICLES_INFO_IN_GARAGE or
+        GarageMenu.ADD_VEHICLE_TO_GARAGE or
+        GarageMenu.REMOVE_VEHICLE_FROM_GARAGE or
+        GarageMenu.CREATE_GARAGE or
+        GarageMenu.SEARCH_VEHICLE_BY_REGNR or
+        GarageMenu.FILTER_VEHICLES => selectedMenu,
+        _ => GarageMenu.DEFAULT
+    };
+
+    internal void PrintAllGarages(IEnumerable<GarageInfo> garages)
+    {
         Console.WriteLine("\nStored garages in the system:");
-        garageInfoItems.AddRange(garages.CarGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
-
-        garageInfoItems.AddRange(garages.BusGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
-
-        garageInfoItems.AddRange(garages.MCGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
-
-        garageInfoItems.AddRange(garages.BoatHarbors.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
-
-        garageInfoItems.AddRange(garages.AirplaneHangars.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.Description)));
-
-        counter = PrintAllGarages(garageInfoItems, counter + 1);
-
-        Console.WriteLine($"Select garage by selecting menu 1-{counter} or enter (q/Q) to quit.");
-        var userInput = Console.ReadLine() ?? "";
-        return (GarageInfoItems: garageInfoItems, UserInput: userInput);
-    }
-
-    private uint PrintAllGarages(IEnumerable<GarageInfo> carGarages, uint counter)
-    {
-        var updatedCounter = counter;
-        foreach (var garage in carGarages) 
-        {
-            Console.WriteLine(GetGarageInfo(garage, updatedCounter, "\t"));
-            updatedCounter++;
-        }
-        return updatedCounter;
-    }
-
-    private string GetGarageInfo(GarageInfo info, uint menuRow, string preFix)
-    {
-        return $"{preFix}{menuRow}) Garage [{info.address}]: {info.description} with capacity of {info.capacity} vehicles.";
+        garages.ToList().ForEach(i => Console.WriteLine(GetGarageInfo(i)));
     }
 
     private string GetGarageInfo(GarageInfo info)
     {
-        return $"Garage [{info.address}]: {info.description} with capacity of {info.capacity} vehicles.";
+        return $"\t➡️ Garage [{info.address}]: " +
+            $"{info.description} with capacity of {info.capacity} vehicles.";
     }
 
-    public string PrintGarageMenu(GarageInfo garageInfo)
+    internal void PrintIncorrectMenuSelection(string selection)
     {
-        Console.WriteLine($"\n\nSelect operation for {GetGarageInfo(garageInfo)}");
-        Console.WriteLine("\t1) View info about garage");
-        Console.WriteLine("\t2) List all parked vehicles");
-        Console.WriteLine("\t3) Add vehicle");
-        Console.WriteLine("\t4) Remove vehicle");
-        Console.WriteLine("\t5) Search after vehicle registration number");
-        Console.WriteLine("\t6) Filter vehicle");
-        Console.WriteLine("\t(q/Q) Back to main menu");
-        return Console.ReadLine() ?? "";
+        Console.WriteLine($"\n⚠️ '{selection}' is not a valid menu selection.");
+    }
+
+    internal void PrintAllParkingLotsWithVehicles(IEnumerable<ParkingLotInfo> parkingLotsInfos)
+    {
+        Console.WriteLine("\nStored vehicles in the system:");
+        parkingLotsInfos.ToList().ForEach(i => Console.WriteLine(GetParkingLotInfo(i)));
+    }
+
+    private string GetParkingLotInfo(ParkingLotInfo info)
+    {
+        return $"\t➡️ Car [{info.regNr}]: " +
+            $"Parked in garage '{info.garageAddress}' at parking lot '{info.ParkinLotId}'";
     }
 }

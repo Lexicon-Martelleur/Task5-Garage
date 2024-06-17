@@ -3,6 +3,6 @@ namespace Garage.Model.Service;
 
 public interface IGarageService
 {
-
-    public GarageKeeper GetAllGarages();
+    public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles();
+    public IEnumerable<GarageInfo> GetAllGarages();
 }

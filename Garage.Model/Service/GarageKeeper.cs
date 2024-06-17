@@ -60,4 +60,86 @@ public class GarageKeeper
         get => _multiGarages;
         init => _multiGarages = value;
     }
+
+    public IEnumerable<GarageInfo> GetAllGarages()
+    {
+        List<GarageInfo> garageInfoItems = [];
+        garageInfoItems.AddRange(CarGarages.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        garageInfoItems.AddRange(BusGarages.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        garageInfoItems.AddRange(MCGarages.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        garageInfoItems.AddRange(BoatHarbors.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        garageInfoItems.AddRange(AirplaneHangars.Select(garage => new GarageInfo(
+            garage.Address, garage.Capacity, garage.Description)));
+
+        return garageInfoItems;
+    }
+
+    public IEnumerable<string> GetAllGarageAddresses()
+    {
+        List<string> totalAddresses = [];
+        totalAddresses.AddRange(CarGarages.Select(garage => garage.Address));
+        totalAddresses.AddRange(BusGarages.Select(garage => garage.Address));
+        totalAddresses.AddRange(MCGarages.Select(garage => garage.Address));
+        totalAddresses.AddRange(BoatHarbors.Select(garage => garage.Address));
+        totalAddresses.AddRange(AirplaneHangars.Select(garage => garage.Address));        
+        return totalAddresses;
+    }
+
+    public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
+    {
+        List<ParkingLotInfo> parkingLotsInfo = [];
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(CarGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(BusGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(MCGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(BoatHarbors));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(AirplaneHangars));
+        return parkingLotsInfo;
+    }
+
+    private List<ParkingLotInfo> GetParkingLotsInfoFromGarages<
+        ParkingLotType,
+        VehicleType
+    >(
+        IEnumerable<IGarage<ParkingLotType, VehicleType>> garages)
+        where VehicleType : IVehicle
+        where ParkingLotType : IParkingLot<VehicleType>
+    {
+        List<ParkingLotInfo> parkingLotsInfo = [];
+        foreach (var garage in garages)
+        {
+            parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarage(garage));
+        }
+        return parkingLotsInfo;
+    }
+
+    private List<ParkingLotInfo> GetParkingLotsInfoFromGarage<
+        ParkingLotType,
+        VehicleType
+    >(
+        IGarage<ParkingLotType, VehicleType> garage)
+        where VehicleType : IVehicle
+        where ParkingLotType : IParkingLot<VehicleType>
+    {
+        List<ParkingLotInfo> parkingLotsInfo = [];
+        foreach (var lot in garage.ParkingLots)
+        {
+            if (lot.CurrentVehicle != null)
+            {
+                parkingLotsInfo.Add(new ParkingLotInfo(
+                    garage.Address,
+                    lot.ID,
+                    lot.CurrentVehicle.RegistrationNumber.value
+                ));
+            }
+        }
+        return parkingLotsInfo;
+    }
 }

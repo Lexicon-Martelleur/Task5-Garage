@@ -17,7 +17,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
 
     private ParkingLotType[] _parkingLots;
 
-    private static readonly HashSet<uint> _IDs = new();
+    private static readonly HashSet<uint> _IDs = [];
 
     public UniversalGarage(
         HashSet<ParkingLotType> parkingLots,

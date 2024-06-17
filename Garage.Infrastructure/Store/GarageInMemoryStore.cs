@@ -15,7 +15,7 @@ public class GarageInMemoryStore : IGarageRepository
         _garages = CreateGarages();
     }
 
-    public GarageKeeper GetAllGarages()
+    public GarageKeeper GetGarageKeeper()
     {
         return CreateGarages();
     }
