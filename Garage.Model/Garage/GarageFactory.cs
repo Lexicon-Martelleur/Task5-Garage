@@ -4,22 +4,22 @@ using Garage.Model.Vehicle;
 namespace Garage.Model.Garage;
 
 public class GarageFactory<VehicleType> :
-    IGarageFactory<IParkingLot<VehicleType>, VehicleType>
+    IGarageFactory<VehicleType>
     where VehicleType : IVehicle
 {
-    public IGarage<IParkingLot<VehicleType>, VehicleType> CreateGarage(
+    public IGarage<VehicleType> CreateGarage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
         string address,
         (string Garage, string Lot) description
     )
     {
-        return new UniversalGarage<IParkingLot<VehicleType>, VehicleType>(
+        return new Garage<VehicleType>(
             parkingLots,
             address,
             description);
     }
 
-    public IGarage<IParkingLot<VehicleType>, VehicleType> CreateGarage(
+    public IGarage<VehicleType> CreateGarage(
         uint capacity,
         string address,
         (string Garage, string Lot) description
@@ -29,7 +29,7 @@ public class GarageFactory<VehicleType> :
             IParkingLot<VehicleType>,
             VehicleType
         >.CreateParkingLots(capacity, CreateParkingLot);
-        return new UniversalGarage<IParkingLot<VehicleType>, VehicleType>(
+        return new Garage<VehicleType>(
             parkingLots,
             address,
             description);

@@ -4,11 +4,9 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
-// TODO! Rename to garage.
-public class UniversalGarage<ParkingLotType, VehicleType> :
-    IGarage<ParkingLotType, VehicleType>
+public class Garage<VehicleType> :
+    IGarage<VehicleType>
     where VehicleType : IVehicle
-    where ParkingLotType : IParkingLot<VehicleType>
 {
     private readonly uint _capacity;
 
@@ -18,12 +16,12 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
 
     private string _parkingLotDescription;
 
-    private ParkingLotType[] _parkingLots;
+    private IParkingLot<VehicleType>[] _parkingLots;
 
     private static readonly HashSet<uint> _IDs = [];
 
-    public UniversalGarage(
-        HashSet<ParkingLotType> parkingLots,
+    public Garage(
+        HashSet<IParkingLot<VehicleType>> parkingLots,
         string address,
         (string Garage, string Lot) description)
     {
@@ -51,13 +49,13 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         init => _parkingLotDescription = value;
     }
 
-    public ParkingLotType[] ParkingLots
+    public IParkingLot<VehicleType>[] ParkingLots
     {
         get => _parkingLots;
         init => _parkingLots = value;
     }
   
-    public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out ParkingLotType? parkingLot)
+    public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out IParkingLot<VehicleType>? parkingLot)
     {
         parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
         if (parkingLot == null)
@@ -80,7 +78,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         return occupiedParkingLots.Count() == Capacity;
     }
 
-    public bool IsOccupiedLot(ParkingLotType parkingLot)
+    public bool IsOccupiedLot(IParkingLot<VehicleType> parkingLot)
     {
         return parkingLot.CurrentVehicle != null;
     }
@@ -104,7 +102,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         return false;
     }
 
-    public IEnumerator<ParkingLotType> GetEnumerator()
+    public IEnumerator<IParkingLot<VehicleType>> GetEnumerator()
     {
         for (int i = 0; i < _capacity; i++)
         {
@@ -120,9 +118,9 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         return GetEnumerator();
     }
 
-    public ParkingLotType AddVehicle(uint parkingLotId, VehicleType vehicle)
+    public IParkingLot<VehicleType> AddVehicle(uint parkingLotId, VehicleType vehicle)
     {
-        var addCarResult = TryAddVehicle(parkingLotId, vehicle, out ParkingLotType? parkingLot);
+        var addCarResult = TryAddVehicle(parkingLotId, vehicle, out IParkingLot<VehicleType>? parkingLot);
 
         if (!addCarResult || parkingLot == null)
         {
@@ -142,7 +140,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
         return vehicle;
     }
 
-    public bool Equals(IGarage<ParkingLotType, VehicleType>? other)
+    public bool Equals(IGarage<VehicleType>? other)
     {
         if (other is null)
         {
@@ -159,7 +157,7 @@ public class UniversalGarage<ParkingLotType, VehicleType> :
 
     public override bool Equals(object? obj)
     {
-        return Equals(obj as IGarage<ParkingLotType, VehicleType>);
+        return Equals(obj as IGarage<VehicleType>);
     }
 
     public override int GetHashCode()

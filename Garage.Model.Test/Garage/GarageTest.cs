@@ -122,7 +122,7 @@ public class GarageTest
     #region Setup Region
     public class Fixture
     {
-        internal IGarageFactory<IParkingLot<IVehicle>, IVehicle> GarageFactory
+        internal IGarageFactory<IVehicle> GarageFactory
         {
             get;
             private init;
@@ -151,10 +151,11 @@ public class GarageTest
         [MemberData(nameof(TestDataWithHashSetAsCapacity))]
         internal void T2_Constructor(HashSet<IParkingLot<IVehicle>> inParkingLots)
         {
-            var garage = new UniversalGarage<
-                IParkingLot<IVehicle>,
-                IVehicle
-            >(inParkingLots, "ADDRESS", GarageDescription.MULTI);
+            var garage = new Garage<IVehicle>(
+                inParkingLots,
+                "ADDRESS",
+                GarageDescription.MULTI
+            );
             var actualCapacity = garage.Capacity;
             Assert.Equal((uint)inParkingLots.Count, actualCapacity);
         }
@@ -413,7 +414,7 @@ public class GarageTest
         }
 
         [Theory(DisplayName = """
-        🧪 Throw custome exception 
+        🧪 Throw custom exception 
         when try parking in none existing parking lot.
         """)]
         [MemberData(nameof(SuccessTestData))]

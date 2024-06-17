@@ -75,7 +75,7 @@ public class GarageInMemoryStore : IGarageRepository
         };
     }
     private void PopulateCarGarage(
-        IGarage<IParkingLot<Car>, Car> garage)
+        IGarage<Car> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -92,7 +92,7 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateBusGarage(
-        IGarage<IParkingLot<IBus>, IBus> garage)
+        IGarage<IBus> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -109,7 +109,7 @@ public class GarageInMemoryStore : IGarageRepository
         }
     }
     private void PopulateMCGarage(
-        IGarage<IParkingLot<IMotorcycle>, IMotorcycle> garage)
+        IGarage<IMotorcycle> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -126,7 +126,7 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateBoatGarage(
-        IGarage<IParkingLot<IBoat>, IBoat> garage)
+        IGarage<IBoat> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -142,7 +142,7 @@ public class GarageInMemoryStore : IGarageRepository
         }
     }
     private void PopulateAirplaneGarage(
-        IGarage<IParkingLot<IAirplane>, IAirplane> garage)
+        IGarage<IAirplane> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -160,7 +160,7 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateECarGarage(
-        IGarage<IParkingLot<ECar>, ECar> garage)
+        IGarage<ECar> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -179,7 +179,7 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateMultiCarGarage(
-        IGarage<IParkingLot<IVehicle>, IVehicle> garage)
+        IGarage<IVehicle> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;
@@ -211,7 +211,7 @@ public class GarageInMemoryStore : IGarageRepository
     }
 
     private void PopulateMultiGarage(
-        IGarage<IParkingLot<IVehicle>, IVehicle> garage)
+        IGarage<IVehicle> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;

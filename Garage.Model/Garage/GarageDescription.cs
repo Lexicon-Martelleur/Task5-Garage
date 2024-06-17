@@ -2,9 +2,9 @@
 
 public class GarageDescription
 {
-    public static readonly (string Garage, string Lot) CAR = (
+    public static readonly (string Garage, string Vehicle) CAR = (
         Garage: "A standard car garage for all cars",
-        Lot: "all cars"
+        Vehicle: "cars"
     );
 
     public static readonly (string Garage, string Lot) E_CAR = (
