@@ -8,19 +8,12 @@ namespace Garage.Infrastructure.Store;
 
 public class GarageInMemoryStore : IGarageRepository
 {
-
     private IEnumerable<IGarage<Car>> _carGarages = [];
-
     private IEnumerable<IGarage<IBus>> _busGarages = [];
-
     private IEnumerable<IGarage<IMotorcycle>> _mcGarages = [];
-
     private IEnumerable<IGarage<IBoat>> _boatHarbors = [];
-
     private IEnumerable<IGarage<IAirplane>> _airplaneHangars = [];
-
     private IEnumerable<IGarage<ECar>> _eCarGarages = [];
-
     private IEnumerable<IGarage<IVehicle>> _multiGarages = [];
 
     public GarageInMemoryStore()
@@ -152,112 +145,45 @@ public class GarageInMemoryStore : IGarageRepository
         return parkingLotsInfo;
     }
 
-    //private void CreateGarages()
-    //{
-        
-    //    var carGarageFactory = new GarageFactory<Car>();
-    //    var carGarage = carGarageFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1A"),
-    //        GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
-    //    // GarageInMemoryPopulator.PopulateCarGarage(carGarage);
-    //    _carGarages = [carGarage];
-
-    //    var busFactory = new GarageFactory<IBus>();
-    //    var busGarage = busFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1B"),
-    //        GarageDescription.BUS);
-    //    // GarageInMemoryPopulator.PopulateBusGarage(busGarage);
-    //    _busGarages = [busGarage];
-
-    //    var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
-    //    var motorCycleGarage = motorCycleGarageFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1C"),
-    //        GarageDescription.MC);
-    //    GarageInMemoryPopulator.PopulateMCGarage(motorCycleGarage);
-    //    _mcGarages = [motorCycleGarage];
-
-    //    var boatHarbourFactory = new GarageFactory<IBoat>();
-    //    var boatHarbour = boatHarbourFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1D"),
-    //        GarageDescription.BOAT);
-    //    GarageInMemoryPopulator.PopulateBoatGarage(boatHarbour);
-    //    _boatHarbors = [boatHarbour];
-
-    //    var airplaneHangarFactory = new GarageFactory<IAirplane>();
-    //    var airplaneHangar = airplaneHangarFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1E"),
-    //        GarageDescription.AIRPLANE);
-    //    GarageInMemoryPopulator.PopulateAirplaneGarage(airplaneHangar);
-    //    _airplaneHangars = [airplaneHangar];
-
-    //    var eCarGarageFactory = new GarageFactory<ECar>();
-    //    var eCarGarage = eCarGarageFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1F"),
-    //        GarageDescription.E_CAR);
-    //    GarageInMemoryPopulator.PopulateECarGarage(eCarGarage);
-    //    _eCarGarages = [eCarGarage];
-
-    //    var universalGarageFactory = new GarageFactory<IVehicle>();
-    //    var univarsalGarage = universalGarageFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1G"),
-    //        GarageDescription.MULTI);
-    //    GarageInMemoryPopulator.PopulateMultiGarage(univarsalGarage);
-
-    //    var multiCarGarageFactory = new GarageFactory<IVehicle>();
-    //    var multiCarGarage = multiCarGarageFactory.CreateGarage(
-    //        20,
-    //        new Address("Garage Street 1H"),
-    //        GarageDescription.CAR);
-    //    GarageInMemoryPopulator.PopulateMultiCarGarage(multiCarGarage);
-    //    _multiGarages = [univarsalGarage, multiCarGarage];
-    //}
-
-
-    public bool AddVehicleToGarage<VehicleType>(
+    public ParkingLotInfoWithAddress? AddVehicleToGarage<VehicleType>(
         string addr,
-        VehicleType vehicle,
-        out ParkingLotInfoWithAddress? info
+        VehicleType vehicle
+        // out ParkingLotInfoWithAddress? info
     )
         where VehicleType : IVehicle
     {
         var vehicleFactory = new VehicleFactory();
 
+        ParkingLotInfoWithAddress? info = null;
         if ((vehicle as Car) != null && TryAddVehicle(
             _carGarages, addr, (vehicle as Car)!, out info))
-        { return true; }
+        { return info; }
 
         if ((vehicle as IBus) != null && TryAddVehicle(
             _busGarages, addr, (vehicle as IBus)!, out info))
-        { return true; }
+        { return info; }
 
         if ((vehicle as IMotorcycle) != null && TryAddVehicle(
             _mcGarages, addr, (vehicle as IMotorcycle)!, out info))
-        { return true; }
+        { return info; }
 
         if ((vehicle as IBoat) != null && TryAddVehicle(
             _boatHarbors, addr, (vehicle as IBoat)!, out info))
-        { return true; }
+        { return info; }
 
         if ((vehicle as IAirplane) != null && TryAddVehicle(
             _airplaneHangars, addr, (vehicle as IAirplane)!, out info))
-        { return true; }
+        { return info; }
 
         if ((vehicle as ECar) != null && TryAddVehicle(
             _eCarGarages, addr, (vehicle as ECar)!, out info))
-        { return true; }
+        { return info; }
 
         if (TryAddVehicle(_multiGarages, addr, (vehicle as IVehicle)!, out info))
-        { return true; }
+        { return info; }
 
-        info = null;
-        return false;
+        // info = null;
+        return info;
     }
 
     public bool TryAddVehicle<VehicleType, GarageType>(
@@ -282,7 +208,8 @@ public class GarageInMemoryStore : IGarageRepository
         var result = garage.TryAddVehicle(
             garage.GetFirstFreeParkingLot().ID,
             vehicle,
-            out var parkingLot);
+            out var parkingLot
+        );
         
         if (parkingLot != null)
         {

@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿namespace Garage.Model.Vehicle;
 
-namespace Garage.Model.Vehicle;
-
+// TODO! Fix static creation of vehicle properties.
+// TODO! Update to write all properties or use unknown to simplify.
 public class VehicleFactory
 {
     public Car CreateGasolineCar(string regNumber)

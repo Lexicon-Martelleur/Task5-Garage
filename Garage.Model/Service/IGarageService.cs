@@ -9,9 +9,8 @@ public interface IGarageService
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles();
     public IEnumerable<GarageInfoWithVehicleTypeName> GetAllGarages();
     public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress);
-    bool AddVehicleToGarage(
+    ParkingLotInfoWithAddress? AddVehicleToGarage(
         string address,
         string regNumber,
-        string vehicleType,
-        out ParkingLotInfoWithAddress? parkingLotInfo);
+        string vehicleType);
 }

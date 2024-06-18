@@ -123,21 +123,21 @@ internal class GarageMenuController
     {
         try
         {
-            if (EmptyString(out string address, _view.ReadGarageAddress) ||
+            if (EmptyString(out string addr, _view.ReadGarageAddress) ||
                 EmptyString(out string regNumber, _view.ReadVehicleRegNr) ||
                 InvalidVehicleType(out string vehicleType))
             {
                 return;
             }
-            var result = _service.AddVehicleToGarage(
-                address,
-                regNumber,
-                vehicleType,
-                out ParkingLotInfoWithAddress? parkingLotInfo);
-            if (result && parkingLotInfo != null)
+            var parkingLot = _service.AddVehicleToGarage(addr, regNumber, vehicleType);
+
+            if (parkingLot != null)
             {
-                _view.PrintVehicleAddedToGarage(
-                    parkingLotInfo, regNumber, vehicleType);
+                _view.PrintVehicleAddedToGarage(parkingLot, regNumber, vehicleType);
+            }
+            else
+            {
+                _view.PrintCanNotAddVehicleToGarage(addr, regNumber, vehicleType);
             }
         }
         catch
@@ -155,18 +155,22 @@ internal class GarageMenuController
             (string value) => value.Equals(VehicleType.DEFAULT));
     }
 
+    // TODO HandleRemoveVehicleFromGarage!
     private void HandleRemoveVehicleFromGarage(string menuSelection)
     {
     }
 
+    // TODO HandleCreateGarage!
     private void HandleCreateGarage(string menuSelection)
     {
     }
 
+    // TODO HandleSearchVehicleByRegNr!
     private void HandleSearchVehicleByRegNr(string menuSelection)
     {
     }
 
+    // TODO HandleFilterVehicle!
     private void HandleFilterVehicle(string menuSelection)
     {
     }

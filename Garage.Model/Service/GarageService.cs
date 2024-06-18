@@ -50,11 +50,11 @@ public class GarageService(IGarageRepository repository) : IGarageService
         return repository.GetGroupedVehiclesByVehicleType(new Address(garageAddress));
     }
 
-    public bool AddVehicleToGarage(
+    // TODO! Return ParkingLotInfoWithAddress? may simplify solution
+    public ParkingLotInfoWithAddress? AddVehicleToGarage(
         string address,
         string regNumber,
-        string vehicleType,
-        out ParkingLotInfoWithAddress? parkingLotInfo)
+        string vehicleType)
     {
         var vehicleFactory = new VehicleFactory();
 
@@ -63,36 +63,29 @@ public class GarageService(IGarageRepository repository) : IGarageService
             case VehicleType.CAR:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateGasolineCar(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateGasolineCar(regNumber));
             case VehicleType.BUS:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateBus(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateBus(regNumber));
             case VehicleType.MOTORCYCLE:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateMC(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateMC(regNumber));
             case VehicleType.BOAT:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateBoat(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateBoat(regNumber));
             case VehicleType.AIRPLANE:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateAirplane(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateAirplane(regNumber));
             case VehicleType.E_CAR:
                 return repository.AddVehicleToGarage(
                     address,
-                    vehicleFactory.CreateECar(regNumber),
-                    out parkingLotInfo);
+                    vehicleFactory.CreateECar(regNumber));
             default:
-                parkingLotInfo = null;
-                return false;
+                return null;
         };
     }
 }

@@ -3,6 +3,7 @@ using Garage.Model.Base;
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
+using System.Security.Cryptography;
 
 namespace Garage.Application.View;
 
@@ -191,4 +192,13 @@ internal class GarageMenuView
             VehicleType.MOTORCYCLE => "MC",
             _ => VehicleType.DEFAULT
         };
+
+    internal void PrintCanNotAddVehicleToGarage(
+        string address,
+        string regNumber,
+        string vehicleType)
+    {
+        Console.WriteLine($"\n⚠️ {GetVehicleTypeName(vehicleType)} [{regNumber}] " +
+            $"could not be parked at garage '{address}'");
+    }
 }
