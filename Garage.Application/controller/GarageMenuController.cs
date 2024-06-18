@@ -6,53 +6,50 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Application.controller;
 
-internal class GarageMenuController(GarageMenuView view, IGarageService service)
+internal class GarageMenuController
 {
     private bool _quitGarageMainMenu = false;
+
+    private readonly Dictionary<string, Action<string>> _mainMenuActions;
+    private readonly GarageMenuView _view;
+    private readonly IGarageService _service;
+
+    public GarageMenuController(GarageMenuView view, IGarageService service)
+    {
+        _view = view;
+        _service = service;
+        _mainMenuActions = new() 
+        {
+            { GarageMenu.EXIT, _ => HandleExit() },
+            { GarageMenu.LIST_ALL_GARAGES, HandleListAllGarages },
+            { GarageMenu.LIST_ALL_VEHICLES, HandleListAllVehicles },
+            { GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE, HandleListGroupedVehiclesByType },
+            { GarageMenu.ADD_VEHICLE_TO_GARAGE, HandleAddVehicleToGarage },
+            { GarageMenu.REMOVE_VEHICLE_FROM_GARAGE, HandleRemoveVehicleFromGarage },
+            { GarageMenu.CREATE_GARAGE, HandleCreateGarage },
+            { GarageMenu.SEARCH_VEHICLE_BY_REGNR, HandleSearchVehicleByRegNr },
+            { GarageMenu.FILTER_VEHICLES, HandleFilterVehicle },
+        };
+    }
 
     internal void StartGarageMainMenu()
     {
         do
         {
-            HandleMainMenuSelection(view.PrintGarageMainMenu());
+            HandleMainMenuSelection(_view.PrintGarageMainMenu());
 
         } while (!_quitGarageMainMenu);
     }
 
     private void HandleMainMenuSelection(string userInput)
     {
-       switch (userInput)
+        if (_mainMenuActions.TryGetValue(userInput, out var MainMenuAction))
         {
-            case GarageMenu.EXIT:
-                HandleExit();
-                break;
-            case GarageMenu.LIST_ALL_GARAGES:
-                HandleListAllGarages(userInput);
-                break;
-            case GarageMenu.LIST_ALL_VEHICLES:
-                HandleListAllVehicles(userInput);
-                break;
-            case GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE:
-                HandleListGroupedVehiclesByType(userInput);
-                break;
-            case GarageMenu.ADD_VEHICLE_TO_GARAGE:
-                HandleAddVehicleToGarage(userInput);
-                break;
-            case GarageMenu.REMOVE_VEHICLE_FROM_GARAGE:
-                HandleRemoveVehicleFromGarage();
-                break;
-            case GarageMenu.CREATE_GARAGE:
-                HandleCreateGarage();
-                break;
-            case GarageMenu.SEARCH_VEHICLE_BY_REGNR:
-                HandleSearchVehicleByRegNr();
-                break;
-            case GarageMenu.FILTER_VEHICLES:
-                HandleFilterVehicle();
-                break;
-            default:
-                HandleIncorrectMenuSelection(userInput);
-                break;
+            MainMenuAction(userInput);
+        }
+        else
+        {
+            HandleIncorrectMenuSelection(userInput);
         }
     }
 
@@ -64,23 +61,23 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
     private void HandleListAllGarages(string menuSelection)
     {
         try {
-            view.PrintAllGarages(service.GetAllGarages());
+            _view.PrintAllGarages(_service.GetAllGarages());
         }
         catch {
-            view.PrintCorruptedData(menuSelection);
+            _view.PrintCorruptedData(menuSelection);
         }
     }
 
     private void HandleListAllVehicles(string menuSelection)
     {
         try {
-            var parkingLotInfos = service.GetAllParkingLotsWithVehicles();
-            view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
+            var parkingLotInfos = _service.GetAllParkingLotsWithVehicles();
+            _view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            view.PrintCorruptedData(menuSelection);
+            _view.PrintCorruptedData(menuSelection);
         }
     }
 
@@ -88,13 +85,13 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
     {
         try
         {
-            if (EmptyString(out string address, view.ReadGarageAddress)) { return; }
-            var groupedVehicles = service.GetGroupedVehiclesByVehicleType(address);
-            view.PrintGroupedVehicles(groupedVehicles, address);
+            if (EmptyString(out string address, _view.ReadGarageAddress)) { return; }
+            var groupedVehicles = _service.GetGroupedVehiclesByVehicleType(address);
+            _view.PrintGroupedVehicles(groupedVehicles, address);
         }
         catch
         {
-            view.PrintCorruptedData(menuSelection);
+            _view.PrintCorruptedData(menuSelection);
         }
     }
 
@@ -103,7 +100,7 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
         return InvalidInput(
             out value,
             ReadFromUser,
-            view.WriteNotValidInput,
+            _view.WriteNotValidInput,
             (string value) => value.Equals(String.Empty));
     }
 
@@ -126,26 +123,26 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
     {
         try
         {
-            if (EmptyString(out string address, view.ReadGarageAddress) ||
-                EmptyString(out string regNumber, view.ReadVehicleRegNr) ||
+            if (EmptyString(out string address, _view.ReadGarageAddress) ||
+                EmptyString(out string regNumber, _view.ReadVehicleRegNr) ||
                 InvalidVehicleType(out string vehicleType))
             {
                 return;
             }
-            var result = service.AddVehicleToGarage(
+            var result = _service.AddVehicleToGarage(
                 address,
                 regNumber,
                 vehicleType,
                 out ParkingLotInfoWithAddress? parkingLotInfo);
             if (result && parkingLotInfo != null)
             {
-                view.PrintVehicleAddedToGarage(
+                _view.PrintVehicleAddedToGarage(
                     parkingLotInfo, regNumber, vehicleType);
             }
         }
         catch
         {
-            view.PrintCorruptedData(menuSelection);
+            _view.PrintCorruptedData(menuSelection);
         }
     }
 
@@ -153,29 +150,29 @@ internal class GarageMenuController(GarageMenuView view, IGarageService service)
     {
         return InvalidInput(
             out vehicleType,
-            view.ReadVehicleType,
-            view.WriteNotValidInput,
+            _view.ReadVehicleType,
+            _view.WriteNotValidInput,
             (string value) => value.Equals(VehicleType.DEFAULT));
     }
 
-    private void HandleRemoveVehicleFromGarage()
+    private void HandleRemoveVehicleFromGarage(string menuSelection)
     {
     }
 
-    private void HandleCreateGarage()
+    private void HandleCreateGarage(string menuSelection)
     {
     }
 
-    private void HandleSearchVehicleByRegNr()
+    private void HandleSearchVehicleByRegNr(string menuSelection)
     {
     }
 
-    private void HandleFilterVehicle()
+    private void HandleFilterVehicle(string menuSelection)
     {
     }
 
     private void HandleIncorrectMenuSelection(string userInput)
     {
-        view.PrintIncorrectMenuSelection(userInput);
+        _view.PrintIncorrectMenuSelection(userInput);
     }
 }
