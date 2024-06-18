@@ -16,6 +16,11 @@ public class ParkingLot<VehicleType> : IParkingLot<VehicleType>
 
     public VehicleType? CurrentVehicle { get; set; }
 
+    public string? VehicleRegistrationNumber => CurrentVehicle?.RegistrationNumber.value;
+    
+
+    public string? VehicleTypeName => CurrentVehicle?.Type;
+
     public bool Equals(IParkingLot<VehicleType>? other)
     {
         if (other is null)

@@ -1,13 +1,14 @@
-﻿using Garage.Model.Garage;
+﻿using Garage.Model.Base;
+using Garage.Model.Garage;
+using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
-using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
 
 public class GarageService(IGarageRepository repository) : IGarageService
 {
-    public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
+    public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
     {
         var parkingLotInfo = repository.GetAllParkingLotsWithVehicles();
         if (!IsUniqueCarRegistrationNumbers(parkingLotInfo))
@@ -17,7 +18,7 @@ public class GarageService(IGarageRepository repository) : IGarageService
         return parkingLotInfo;
     }
 
-    public IEnumerable<GarageInfo> GetAllGarages()
+    public IEnumerable<GarageInfoWithVehicleTypeName> GetAllGarages()
     {
         var garages = repository.GetAllGarages();
         if (!IsUniqueGarageAddresses(garages))
@@ -27,23 +28,24 @@ public class GarageService(IGarageRepository repository) : IGarageService
         return garages;
     }
 
-    private bool IsUniqueGarageAddresses(IEnumerable<GarageInfo> garages)
+    private bool IsUniqueGarageAddresses(IEnumerable<GarageInfoWithVehicleTypeName> garages)
     {
         var uniqueAddresses = garages.ToHashSet();
         return garages.Count() == uniqueAddresses.Count;
     }
 
-    private bool IsUniqueCarRegistrationNumbers(IEnumerable<ParkingLotInfo> parkingLotInfos)
+    private bool IsUniqueCarRegistrationNumbers(
+        IEnumerable<ParkingLotInfoWithAddress> parkingLotInfos)
     {
         var uniqueCars = parkingLotInfos
-            .Select(lot => lot.vehicleRegNr)
+            .Select(lot => lot.ParkingLotInfo.VehicleRegistrationNumber)
             .ToHashSet();
         return parkingLotInfos.Count() == uniqueCars.Count;
     }
 
     public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress)
     {
-        return repository.GetGroupedVehiclesByVehicleType(garageAddress);
+        return repository.GetGroupedVehiclesByVehicleType(new Address(garageAddress));
     }
 }
 

@@ -1,6 +1,9 @@
-﻿using Garage.Model.ParkingLot;
+﻿using Garage.Model.Base;
+using Garage.Model.ParkingLot;
+using Garage.Model.Service;
 using Garage.Model.Vehicle;
 using System.Collections;
+using System.Linq;
 
 namespace Garage.Model.Garage;
 
@@ -10,11 +13,9 @@ public class Garage<VehicleType> :
 {
     private readonly uint _capacity;
 
-    private string _address;
+    private Address _address;
 
     private string _garageDescription;
-
-    private string _parkingLotDescription;
 
     private IParkingLot<VehicleType>[] _parkingLots;
 
@@ -22,32 +23,28 @@ public class Garage<VehicleType> :
 
     public Garage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
-        string address,
-        (string Garage, string Lot) description)
+        Address address,
+        string description)
     {
         _capacity = (uint)parkingLots.Count;
         _address = address;
-        _garageDescription = description.Garage;
-        _parkingLotDescription = description.Lot;
-        _parkingLots = parkingLots.ToArray();
+        _garageDescription = description;
+        _parkingLots = [.. parkingLots];
+    }
+
+    public string VehicleTypeName()
+    {
+        return this.GetType()
+            .GetGenericArguments()
+            .FirstOrDefault()?.Name ?? "IVehicle";
     }
 
     public uint Capacity => _capacity;
 
-    public string Address {
-        get => _address;
-        set => _address = value;
-    }
+    public Address Address => _address;
 
-    public string GarageDescription {
-        get => _garageDescription;
-        init => _garageDescription = value;
-    }
-
-    public string ParkingLotDescription { 
-        get => _parkingLotDescription; 
-        init => _parkingLotDescription = value;
-    }
+    public string Description => _garageDescription;
+  
 
     public IParkingLot<VehicleType>[] ParkingLots
     {
@@ -163,5 +160,14 @@ public class Garage<VehicleType> :
     public override int GetHashCode()
     {
         return Address.GetHashCode();
+    }
+
+    public IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType()
+    {
+        return this
+            .Where(lot => lot.CurrentVehicle != null)
+            .Select(lot => new { VehicleType = lot.CurrentVehicle!.Type })
+            .GroupBy(item => item.VehicleType)
+            .Select(group => new GroupedVehicle(group.Key, group.Count()));
     }
 }

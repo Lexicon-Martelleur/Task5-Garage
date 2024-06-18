@@ -1,6 +1,7 @@
 ﻿using Garage.Application.Constant;
-using Garage.Model.Service;
-using System.Net;
+using Garage.Model.Base;
+using Garage.Model.Garage;
+using Garage.Model.ParkingLot;
 
 namespace Garage.Application.View;
 
@@ -40,16 +41,18 @@ internal class GarageMenuView
         _ => GarageMenu.DEFAULT
     };
 
-    internal void PrintAllGarages(IEnumerable<GarageInfo> garages)
+    internal void PrintAllGarages(IEnumerable<GarageInfoWithVehicleTypeName> garages)
     {
         Console.WriteLine("\nStored garages in the system:");
         garages.ToList().ForEach(i => Console.WriteLine(GetGarageInfo(i)));
     }
 
-    private string GetGarageInfo(GarageInfo info)
+    private string GetGarageInfo(GarageInfoWithVehicleTypeName garage)
     {
-        return $"\t➡️ Garage [{info.address}]: " +
-            $"{info.description} with capacity of {info.capacity} vehicles.";
+        return $"\t➡️ Garage [{garage.GetAddress()}]: " +
+            $"{garage.GetDescription()} " +
+            $"with capacity of {garage.GetCapacity()} vehicles " +
+            $"of type '{garage.VehicleType}'.";
     }
 
     internal void PrintIncorrectMenuSelection(string selection)
@@ -57,16 +60,18 @@ internal class GarageMenuView
         Console.WriteLine($"\n⚠️ '{selection}' is not a valid menu selection.");
     }
 
-    internal void PrintAllParkingLotsWithVehicles(IEnumerable<ParkingLotInfo> parkingLotsInfos)
+    internal void PrintAllParkingLotsWithVehicles(
+        IEnumerable<ParkingLotInfoWithAddress> parkingLotsInfos)
     {
         Console.WriteLine("\nStored vehicles in the system:");
         parkingLotsInfos.ToList().ForEach(i => Console.WriteLine(GetParkingLotInfo(i)));
     }
 
-    private string GetParkingLotInfo(ParkingLotInfo info)
+    private string GetParkingLotInfo(ParkingLotInfoWithAddress lot)
     {
-        return $"\t➡️ {info.vehicleType} [{info.vehicleRegNr}]: " +
-            $"Parked at '{info.garageAddress}' in lot '{info.ParkinLotId}' made for {info.parkingLotType}";
+        return $"\t➡️ {lot.GetVehicleType()} " +
+            $"[{lot.GetVehicleRegistrationNumber()}]: " +
+            $"Parked at '{lot.GetAddress()}' in lot ID '{lot.GetVehicleID()}'";
     }
 
     internal void PrintCorruptedData(string selection)

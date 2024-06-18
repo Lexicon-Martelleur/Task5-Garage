@@ -2,9 +2,10 @@
 
 namespace Garage.Model.ParkingLot;
 
-public interface IParkingLot<VehicleType> : IEquatable<IParkingLot<VehicleType>>
+public interface IParkingLot<VehicleType> :
+    IParkingLotInfo,
+    IEquatable<IParkingLot<VehicleType>>
+    where VehicleType : IVehicle
 {
-    uint ID { get; init; }
     VehicleType? CurrentVehicle { get; set; }
-
 }

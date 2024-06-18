@@ -1,4 +1,4 @@
-﻿namespace Garage.Model.Service;
+﻿namespace Garage.Model.Base;
 
 public record class GroupedVehicle(
     string VehicleType,

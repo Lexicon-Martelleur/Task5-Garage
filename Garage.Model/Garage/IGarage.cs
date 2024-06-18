@@ -1,4 +1,6 @@
-﻿using Garage.Model.ParkingLot;
+﻿using Garage.Model.Base;
+using Garage.Model.ParkingLot;
+using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
@@ -8,14 +10,13 @@ namespace Garage.Model.Garage;
 /// </summary>
 /// <typeparam name="VehicleType">The type of vehicle</typeparam>
 public interface IGarage<VehicleType> :
-    IEnumerable<IParkingLot<VehicleType>>, IEquatable<IGarage<VehicleType>>
+    IGarageInfo,
+    IEnumerable<IParkingLot<VehicleType>>,
+    IEquatable<IGarage<VehicleType>>
     where VehicleType : IVehicle
 {
-    uint Capacity { get; }
-    string Address { get; set; }
-    string GarageDescription { get; init; }
-    string ParkingLotDescription { get; init; }
     IParkingLot<VehicleType>[] ParkingLots { get; init; }
+    string VehicleTypeName();
     bool IsFullGarage();
     bool IsOccupiedLot(IParkingLot<VehicleType> parkingLot);
     bool TryAddVehicle(
@@ -45,4 +46,6 @@ public interface IGarage<VehicleType> :
     /// Throws custom model exception parking lot with specified id does not exist.
     /// </exception>
     VehicleType RemoveVehicle(uint parkingLotId);
+
+    IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType();
 }

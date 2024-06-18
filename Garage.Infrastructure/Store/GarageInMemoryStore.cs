@@ -1,10 +1,16 @@
-﻿using Garage.Model.Garage;
+﻿using Garage.Model.Base;
+using Garage.Model.Garage;
+using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
 using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
 namespace Garage.Infrastructure.Store;
 
+// TODO! Do not use specific type her use property
+// from to decide type instead.
+// E.g., in DB the type is stored 
+// Or some other solution to fix casting problem...
 public class GarageInMemoryStore : IGarageRepository
 {
 
@@ -27,90 +33,82 @@ public class GarageInMemoryStore : IGarageRepository
         CreateGarages();
     }
 
-    public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress)
+    public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(Address garageAddress)
     {
-        var garage = GetGarage(garageAddress);
-        if (garage == null) { return null; }
-
-        return garage
-            .Where(lot => lot.CurrentVehicle != null)
-            .Select(lot => new { VehicleType = lot.CurrentVehicle!.GetType().Name })
-            .GroupBy(item => item.VehicleType)
-            .Select(group => new GroupedVehicle(group.Key, group.Count()));
+        return GetGroupedVehiclesInGarage(garageAddress);
     }
 
-    // TODO! Casting return null
-    public IGarage<IVehicle>? GetGarage(string Address)
+    public IEnumerable<GroupedVehicle>? GetGroupedVehiclesInGarage(Address garageAddress)
     {
         var carGarage = _carGarages
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (carGarage != null) { return carGarage as IGarage<IVehicle>; }
+        if (carGarage != null) { return carGarage.GroupVehiclesByVehicleType(); }
 
         var busGarage = _busGarages
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (busGarage != null) { return busGarage as IGarage<IVehicle>; }
+        if (busGarage != null) { return busGarage.GroupVehiclesByVehicleType(); }
 
         var mcGarage = _mcGarages
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (mcGarage != null) { return mcGarage as IGarage<IVehicle>; }
+        if (mcGarage != null) { return mcGarage.GroupVehiclesByVehicleType(); }
 
         var airplaneHanagars = _airplaneHangars
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (airplaneHanagars != null) { return airplaneHanagars as IGarage<IVehicle>; }
+        if (airplaneHanagars != null) { return airplaneHanagars.GroupVehiclesByVehicleType(); }
 
         var boatHarbors = _boatHarbors
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (boatHarbors != null) { return boatHarbors as IGarage<IVehicle>; }
+        if (boatHarbors != null) { return boatHarbors.GroupVehiclesByVehicleType(); }
 
         var eCarGarage = _eCarGarages
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (eCarGarage != null) { return eCarGarage as IGarage<IVehicle>; }
+        if (eCarGarage != null) { return eCarGarage.GroupVehiclesByVehicleType(); }
 
         var multiGarage = _multiGarages
-            .Where(garage => garage.Address == Address)
+            .Where(garage => garage.Address == garageAddress)
             .FirstOrDefault();
-        if (multiGarage != null) { return multiGarage as IGarage<IVehicle>; }
+        if (multiGarage != null) { return multiGarage.GroupVehiclesByVehicleType(); }
 
         return null;
     }
 
-    public IEnumerable<GarageInfo> GetAllGarages()
+    public IEnumerable<GarageInfoWithVehicleTypeName> GetAllGarages()
     {
-        List<GarageInfo> garageInfoItems = [];
+        List<GarageInfoWithVehicleTypeName> garageInfoItems = [];
 
-        garageInfoItems.AddRange(_carGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_carGarages.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_busGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_busGarages.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_mcGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_mcGarages.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_boatHarbors.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_boatHarbors.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_airplaneHangars.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_airplaneHangars.Select(garage => new GarageInfoWithVehicleTypeName(
+             garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_eCarGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_eCarGarages.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
-        garageInfoItems.AddRange(_multiGarages.Select(garage => new GarageInfo(
-            garage.Address, garage.Capacity, garage.GarageDescription)));
+        garageInfoItems.AddRange(_multiGarages.Select(garage => new GarageInfoWithVehicleTypeName(
+            garage, garage.VehicleTypeName())));
 
         return garageInfoItems;
     }
 
-    public IEnumerable<ParkingLotInfo> GetAllParkingLotsWithVehicles()
+    public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
     {
-        List<ParkingLotInfo> parkingLotsInfo = [];
+        List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_carGarages));
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_busGarages));
         parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_mcGarages));
@@ -121,35 +119,32 @@ public class GarageInMemoryStore : IGarageRepository
         return parkingLotsInfo;
     }
 
-    private List<ParkingLotInfo> GetParkingLotsInfoFromGarages<VehicleType>(
+    private List<ParkingLotInfoWithAddress> GetParkingLotsInfoFromGarages<VehicleType>(
         IEnumerable<IGarage<VehicleType>> garages)
         where VehicleType : IVehicle
     {
-        List<ParkingLotInfo> parkingLotsInfo = [];
+        List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
         foreach (var garage in garages)
         {
-            parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarage<VehicleType>(
+            parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarage(
                 garage
             ));
         }
         return parkingLotsInfo;
     }
 
-    private List<ParkingLotInfo> GetParkingLotsInfoFromGarage<VehicleType>(
+    private List<ParkingLotInfoWithAddress> GetParkingLotsInfoFromGarage<VehicleType>(
         IGarage<VehicleType> garage)
         where VehicleType : IVehicle
     {
-        List<ParkingLotInfo> parkingLotsInfo = [];
+        List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
         foreach (var lot in garage.ParkingLots)
         {
             if (lot.CurrentVehicle == null) { continue; }
 
-            parkingLotsInfo.Add(new ParkingLotInfo(
+            parkingLotsInfo.Add(new ParkingLotInfoWithAddress(
                 garage.Address,
-                lot.ID,
-                lot.CurrentVehicle.RegistrationNumber.value,
-                garage.ParkingLotDescription,
-                lot.CurrentVehicle.Type
+                lot
             ));
         }
         return parkingLotsInfo;
@@ -160,48 +155,64 @@ public class GarageInMemoryStore : IGarageRepository
         
         var carGarageFactory = new GarageFactory<Car>();
         var carGarage = carGarageFactory.CreateGarage(
-            20, "Garage Street 1A", GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
+            20,
+            new Address("Garage Street 1A"),
+            GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
         PopulateCarGarage(carGarage);
         _carGarages = [carGarage];
 
         var busFactory = new GarageFactory<IBus>();
         var busGarage = busFactory.CreateGarage(
-            20, "Garage Street 1B", GarageDescription.BUS);
+            20,
+            new Address("Garage Street 1B"),
+            GarageDescription.BUS);
         PopulateBusGarage(busGarage);
         _busGarages = [busGarage];
 
         var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
         var motorCycleGarage = motorCycleGarageFactory.CreateGarage(
-            20, "Garage Street 1C", GarageDescription.MC);
+            20,
+            new Address("Garage Street 1C"),
+            GarageDescription.MC);
         PopulateMCGarage(motorCycleGarage);
         _mcGarages = [motorCycleGarage];
 
         var boatHarbourFactory = new GarageFactory<IBoat>();
         var boatHarbour = boatHarbourFactory.CreateGarage(
-            20, "Garage Street 1D", GarageDescription.BOAT);
+            20,
+            new Address("Garage Street 1D"),
+            GarageDescription.BOAT);
         PopulateBoatGarage(boatHarbour);
         _boatHarbors = [boatHarbour];
 
         var airplaneHangarFactory = new GarageFactory<IAirplane>();
         var airplaneHangar = airplaneHangarFactory.CreateGarage(
-            20, "Garage Street 1E", GarageDescription.AIRPLANE);
+            20,
+            new Address("Garage Street 1E"),
+            GarageDescription.AIRPLANE);
         PopulateAirplaneGarage(airplaneHangar);
         _airplaneHangars = [airplaneHangar];
 
         var eCarGarageFactory = new GarageFactory<ECar>();
         var eCarGarage = eCarGarageFactory.CreateGarage(
-            20, "Garage Street 1F", GarageDescription.E_CAR);
+            20,
+            new Address("Garage Street 1F"),
+            GarageDescription.E_CAR);
         PopulateECarGarage(eCarGarage);
         _eCarGarages = [eCarGarage];
 
         var universalGarageFactory = new GarageFactory<IVehicle>();
         var univarsalGarage = universalGarageFactory.CreateGarage(
-            20, "Garage Street 1G", GarageDescription.MULTI);
+            20,
+            new Address("Garage Street 1G"),
+            GarageDescription.MULTI);
         PopulateMultiGarage(univarsalGarage);
 
         var multiCarGarageFactory = new GarageFactory<IVehicle>();
         var multiCarGarage = multiCarGarageFactory.CreateGarage(
-            20, "Garage Street 1H", GarageDescription.CAR);
+            20,
+            new Address("Garage Street 1H"),
+            GarageDescription.CAR);
         PopulateMultiCarGarage(multiCarGarage);
         _multiGarages = [univarsalGarage, multiCarGarage];
     }
