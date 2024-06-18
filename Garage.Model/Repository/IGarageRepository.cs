@@ -13,9 +13,9 @@ public interface IGarageRepository
 
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles();
 
-    public bool AddVehicleToGarage(
+    public bool AddVehicleToGarage<VehicleType>(
         string address,
-        string regNumber,
-        string vehicleType,
-        out ParkingLotInfoWithAddress? parkingLotInfo);
+        VehicleType vehicle,
+        out ParkingLotInfoWithAddress? parkingLotInfo)
+        where VehicleType : IVehicle;
 }

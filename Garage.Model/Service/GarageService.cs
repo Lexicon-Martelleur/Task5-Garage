@@ -56,11 +56,44 @@ public class GarageService(IGarageRepository repository) : IGarageService
         string vehicleType,
         out ParkingLotInfoWithAddress? parkingLotInfo)
     {
-        return repository.AddVehicleToGarage(
-            address,
-            regNumber,
-            vehicleType,
-            out parkingLotInfo);
+        var vehicleFactory = new VehicleFactory();
+
+        switch (vehicleType)
+        {
+            case VehicleType.CAR:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateGasolineCar(regNumber),
+                    out parkingLotInfo);
+            case VehicleType.BUS:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateBus(regNumber),
+                    out parkingLotInfo);
+            case VehicleType.MOTORCYCLE:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateMC(regNumber),
+                    out parkingLotInfo);
+            case VehicleType.BOAT:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateBoat(regNumber),
+                    out parkingLotInfo);
+            case VehicleType.AIRPLANE:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateAirplane(regNumber),
+                    out parkingLotInfo);
+            case VehicleType.E_CAR:
+                return repository.AddVehicleToGarage(
+                    address,
+                    vehicleFactory.CreateECar(regNumber),
+                    out parkingLotInfo);
+            default:
+                parkingLotInfo = null;
+                return false;
+        };
     }
 }
 

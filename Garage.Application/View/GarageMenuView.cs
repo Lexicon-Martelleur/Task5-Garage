@@ -116,7 +116,7 @@ internal class GarageMenuView
         }
         else
         {
-            Console.WriteLine($"\nℹ️ Garage with address {address} consist of:");
+            Console.WriteLine($"\nℹ️ Garage [{address}] current status:");
             foreach (var item in groupedVehiclesEntries)
             {
                 Console.WriteLine($"\t➡️ {item.Count} {item.VehicleType} entries");

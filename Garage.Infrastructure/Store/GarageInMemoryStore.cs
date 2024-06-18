@@ -25,7 +25,14 @@ public class GarageInMemoryStore : IGarageRepository
 
     public GarageInMemoryStore()
     {
-        CreateGarages();
+        var garages = GarageInMemoryPopulator.CreateGarages();
+        _carGarages = garages.CarGarages;
+        _busGarages = garages.BusGarages;
+        _mcGarages = garages.MCGarages;
+        _boatHarbors = garages.BoatHarbors;
+        _airplaneHangars = garages.AirplaneHangars;
+        _eCarGarages = garages.ECarGarages;
+        _multiGarages = garages.MultiGarages;
     }
 
     public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(Address garageAddress)
@@ -145,319 +152,118 @@ public class GarageInMemoryStore : IGarageRepository
         return parkingLotsInfo;
     }
 
-    private void CreateGarages()
-    {
+    //private void CreateGarages()
+    //{
         
-        var carGarageFactory = new GarageFactory<Car>();
-        var carGarage = carGarageFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1A"),
-            GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
-        // PopulateCarGarage(carGarage);
-        _carGarages = [carGarage];
+    //    var carGarageFactory = new GarageFactory<Car>();
+    //    var carGarage = carGarageFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1A"),
+    //        GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
+    //    // GarageInMemoryPopulator.PopulateCarGarage(carGarage);
+    //    _carGarages = [carGarage];
 
-        var busFactory = new GarageFactory<IBus>();
-        var busGarage = busFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1B"),
-            GarageDescription.BUS);
-        PopulateBusGarage(busGarage);
-        _busGarages = [busGarage];
+    //    var busFactory = new GarageFactory<IBus>();
+    //    var busGarage = busFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1B"),
+    //        GarageDescription.BUS);
+    //    // GarageInMemoryPopulator.PopulateBusGarage(busGarage);
+    //    _busGarages = [busGarage];
 
-        var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
-        var motorCycleGarage = motorCycleGarageFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1C"),
-            GarageDescription.MC);
-        PopulateMCGarage(motorCycleGarage);
-        _mcGarages = [motorCycleGarage];
+    //    var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
+    //    var motorCycleGarage = motorCycleGarageFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1C"),
+    //        GarageDescription.MC);
+    //    GarageInMemoryPopulator.PopulateMCGarage(motorCycleGarage);
+    //    _mcGarages = [motorCycleGarage];
 
-        var boatHarbourFactory = new GarageFactory<IBoat>();
-        var boatHarbour = boatHarbourFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1D"),
-            GarageDescription.BOAT);
-        PopulateBoatGarage(boatHarbour);
-        _boatHarbors = [boatHarbour];
+    //    var boatHarbourFactory = new GarageFactory<IBoat>();
+    //    var boatHarbour = boatHarbourFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1D"),
+    //        GarageDescription.BOAT);
+    //    GarageInMemoryPopulator.PopulateBoatGarage(boatHarbour);
+    //    _boatHarbors = [boatHarbour];
 
-        var airplaneHangarFactory = new GarageFactory<IAirplane>();
-        var airplaneHangar = airplaneHangarFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1E"),
-            GarageDescription.AIRPLANE);
-        PopulateAirplaneGarage(airplaneHangar);
-        _airplaneHangars = [airplaneHangar];
+    //    var airplaneHangarFactory = new GarageFactory<IAirplane>();
+    //    var airplaneHangar = airplaneHangarFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1E"),
+    //        GarageDescription.AIRPLANE);
+    //    GarageInMemoryPopulator.PopulateAirplaneGarage(airplaneHangar);
+    //    _airplaneHangars = [airplaneHangar];
 
-        var eCarGarageFactory = new GarageFactory<ECar>();
-        var eCarGarage = eCarGarageFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1F"),
-            GarageDescription.E_CAR);
-        PopulateECarGarage(eCarGarage);
-        _eCarGarages = [eCarGarage];
+    //    var eCarGarageFactory = new GarageFactory<ECar>();
+    //    var eCarGarage = eCarGarageFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1F"),
+    //        GarageDescription.E_CAR);
+    //    GarageInMemoryPopulator.PopulateECarGarage(eCarGarage);
+    //    _eCarGarages = [eCarGarage];
 
-        var universalGarageFactory = new GarageFactory<IVehicle>();
-        var univarsalGarage = universalGarageFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1G"),
-            GarageDescription.MULTI);
-        PopulateMultiGarage(univarsalGarage);
+    //    var universalGarageFactory = new GarageFactory<IVehicle>();
+    //    var univarsalGarage = universalGarageFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1G"),
+    //        GarageDescription.MULTI);
+    //    GarageInMemoryPopulator.PopulateMultiGarage(univarsalGarage);
 
-        var multiCarGarageFactory = new GarageFactory<IVehicle>();
-        var multiCarGarage = multiCarGarageFactory.CreateGarage(
-            20,
-            new Address("Garage Street 1H"),
-            GarageDescription.CAR);
-        PopulateMultiCarGarage(multiCarGarage);
-        _multiGarages = [univarsalGarage, multiCarGarage];
-    }
+    //    var multiCarGarageFactory = new GarageFactory<IVehicle>();
+    //    var multiCarGarage = multiCarGarageFactory.CreateGarage(
+    //        20,
+    //        new Address("Garage Street 1H"),
+    //        GarageDescription.CAR);
+    //    GarageInMemoryPopulator.PopulateMultiCarGarage(multiCarGarage);
+    //    _multiGarages = [univarsalGarage, multiCarGarage];
+    //}
 
-    private void PopulateCarGarage(
-        IGarage<Car> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            garage.AddVehicle(lot.ID, new Car(
-                new RegistrationNumber($"ABC {++numberRegPart}"),
-                CarBrand.FORD,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10)));
-        }
-    }
 
-    private void PopulateBusGarage(
-        IGarage<IBus> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            garage.AddVehicle(lot.ID, new Bus(
-                new RegistrationNumber($"BBC {++numberRegPart}"),
-                10,
-                10,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10)));
-        }
-    }
-    private void PopulateMCGarage(
-        IGarage<IMotorcycle> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            garage.AddVehicle(lot.ID, new Motorcycle(
-                new RegistrationNumber($"CBC {++numberRegPart}"),
-                100,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10)));
-        }
-    }
-
-    private void PopulateBoatGarage(
-        IGarage<IBoat> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            garage.AddVehicle(lot.ID, new Boat(
-                new RegistrationNumber($"DBC {++numberRegPart}"),
-                BoatSteeringMechanism.WHEEL,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10)));
-        }
-    }
-    private void PopulateAirplaneGarage(
-        IGarage<IAirplane> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            garage.AddVehicle(lot.ID, new Airplane(
-                new RegistrationNumber($"EBC {++numberRegPart}"),
-                400,
-                40,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10)));
-        }
-    }
-
-    private void PopulateECarGarage(
-        IGarage<ECar> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        foreach (var lot in parkingLots)
-        {
-            {
-                garage.AddVehicle(lot.ID, new ECar(
-                    new RegistrationNumber($"FBC {++numberRegPart}"),
-                    CarBrand.FORD,
-                    VehicleColor.GREY,
-                    1000,
-                    new Dimension(10, 10, 10)));
-            }
-
-        }
-    }
-
-    private void PopulateMultiCarGarage(
-        IGarage<IVehicle> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        uint counter = 0;
-        foreach (var lot in parkingLots)
-        {
-            counter++;
-            if (counter % 2 == 0)
-            {
-                garage.AddVehicle(lot.ID, new Car(
-                    new RegistrationNumber($"GBC {++numberRegPart}"),
-                    CarBrand.FORD,
-                    VehicleColor.GREY,
-                    PowerSource.GASOLINE,
-                    1000,
-                    new Dimension(10, 10, 10)));
-            }
-            else
-            {
-                garage.AddVehicle(lot.ID, new ECar(
-                    new RegistrationNumber($"GBC {++numberRegPart}"),
-                    CarBrand.FORD,
-                    VehicleColor.GREY,
-                    1000,
-                    new Dimension(10, 10, 10)));
-            }
-            
-        }
-    }
-
-    private void PopulateMultiGarage(
-        IGarage<IVehicle> garage)
-    {
-        var parkingLots = garage.ParkingLots;
-        uint numberRegPart = 100;
-        for (int i = 0; i < 4; i++)
-        {
-            garage.AddVehicle(parkingLots[i].ID, new Car(
-                new RegistrationNumber($"HBC {++numberRegPart}"),
-                CarBrand.FORD,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10))
-            );
-        }
-        for (int i = 4; i < 8; i++)
-        {
-            garage.AddVehicle(parkingLots[i].ID, new Bus(
-                new RegistrationNumber($"HBC {++numberRegPart}"),
-                10,
-                10,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10))
-            );
-        }
-        for (int i = 8; i < 12; i++)
-        {
-            garage.AddVehicle(parkingLots[i].ID, new ECar(
-                new RegistrationNumber($"HBC {++numberRegPart}"),
-                CarBrand.FORD,
-                VehicleColor.GREY,
-                1000,
-                new Dimension(10, 10, 10))
-            );
-        }
-        for (int i = 12; i < 20; i++)
-        {
-            garage.AddVehicle(parkingLots[i].ID, new Motorcycle(
-                new RegistrationNumber($"HBC {++numberRegPart}"),
-                100,
-                VehicleColor.GREY,
-                PowerSource.GASOLINE,
-                1000,
-                new Dimension(10, 10, 10))
-            );
-        }
-    }
-
-    public bool AddVehicleToGarage(
-        string address,
-        string regNumber,
-        string vehicleType,
-        out ParkingLotInfoWithAddress? parkingLotInfo)
+    public bool AddVehicleToGarage<VehicleType>(
+        string addr,
+        VehicleType vehicle,
+        out ParkingLotInfoWithAddress? info
+    )
+        where VehicleType : IVehicle
     {
         var vehicleFactory = new VehicleFactory();
 
-        if (vehicleType == VehicleType.CAR && TryAddVehicleToGarage(
-            _carGarages,
-            address,
-            regNumber,
-            vehicleFactory.CreateGasolineCar,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as Car) != null && TryAddVehicle(
+            _carGarages, addr, (vehicle as Car)!, out info))
+        { return true; }
 
-        if (vehicleType == VehicleType.BUS && TryAddVehicleToGarage(
-            _busGarages,
-            address,
-            regNumber,
-            vehicleFactory.CreateBus,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as IBus) != null && TryAddVehicle(
+            _busGarages, addr, (vehicle as IBus)!, out info))
+        { return true; }
 
-        if (vehicleType == VehicleType.MOTORCYCLE && TryAddVehicleToGarage(
-            _mcGarages,
-            address,
-            regNumber,
-            vehicleFactory.CreateMC,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as IMotorcycle) != null && TryAddVehicle(
+            _mcGarages, addr, (vehicle as IMotorcycle)!, out info))
+        { return true; }
 
-        if (vehicleType == VehicleType.BOAT && TryAddVehicleToGarage(
-            _boatHarbors,
-            address,
-            regNumber,
-            vehicleFactory.CreateBoat,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as IBoat) != null && TryAddVehicle(
+            _boatHarbors, addr, (vehicle as IBoat)!, out info))
+        { return true; }
 
-        if (vehicleType == VehicleType.BUS && TryAddVehicleToGarage(
-            _airplaneHangars,
-            address,
-            regNumber,
-            vehicleFactory.CreateAirplane,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as IAirplane) != null && TryAddVehicle(
+            _airplaneHangars, addr, (vehicle as IAirplane)!, out info))
+        { return true; }
 
-        if (vehicleType == VehicleType.E_CAR && TryAddVehicleToGarage(
-            _eCarGarages,
-            address,
-            regNumber,
-            vehicleFactory.CreateECar,
-            out parkingLotInfo)) { return true; }
+        if ((vehicle as ECar) != null && TryAddVehicle(
+            _eCarGarages, addr, (vehicle as ECar)!, out info))
+        { return true; }
 
-        parkingLotInfo = null;
+        if (TryAddVehicle(_multiGarages, addr, (vehicle as IVehicle)!, out info))
+        { return true; }
+
+        info = null;
         return false;
     }
 
-    public bool TryAddVehicleToGarage<VehicleType, GarageType>(
+    public bool TryAddVehicle<VehicleType, GarageType>(
         IEnumerable<GarageType> garages,
         string address,
-        string regNumber,
-        Func<string, VehicleType> CreateVehicle,
+        VehicleType vehicle,
         out ParkingLotInfoWithAddress? parkingLotInfo
     )
         where VehicleType : IVehicle
@@ -473,154 +279,18 @@ public class GarageInMemoryStore : IGarageRepository
             return false;
         }
 
-        var vehicle = CreateVehicle(regNumber);
-        var result = garage.TryAddVehicle(garage.GetFirstFreeParkingLot().ID, vehicle, out var parkingLot);
+        var result = garage.TryAddVehicle(
+            garage.GetFirstFreeParkingLot().ID,
+            vehicle,
+            out var parkingLot);
+        
         if (parkingLot != null)
         {
             parkingLotInfo = new ParkingLotInfoWithAddress(
                 new Address(address),
                 parkingLot);
         }
+        
         return result;
     }
-
-
-    //private bool TryAddCar(
-    //    string address,
-    //    string regNumber,
-    //    string vehicleType,
-    //    out ParkingLotInfoWithAddress? parkingLotInfo)
-    //{
-    //    parkingLotInfo = null;
-    //    var garage = _carGarages
-    //        .Where(garage => garage.Address.Value == address)
-    //        .FirstOrDefault();
-    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.CAR)
-    //    {
-    //        return false;
-    //    }
-    //    var result = garage.TryAddVehicle(
-    //        garage.GetFirstFreeParkingLot().ID,
-    //        new Car(
-    //            new RegistrationNumber(regNumber),
-    //            CarBrand.FORD,
-    //            VehicleColor.GREY,
-    //            PowerSource.GASOLINE,
-    //            1000,
-    //            new Dimension(10, 10, 10)),
-    //            out IParkingLot<Car>? parkingLot
-    //    );
-    //    if (parkingLot != null){
-    //        parkingLotInfo = new ParkingLotInfoWithAddress(
-    //            new Address(address),
-    //            parkingLot
-    //        );
-    //    }
-    //    return result;
-    //}
-
-    //private bool TryAddBus(
-    //    string address,
-    //    string regNumber,
-    //    string vehicleType,
-    //    out ParkingLotInfoWithAddress? parkingLotInfo)
-    //{
-    //    parkingLotInfo = null;
-    //    var garage = _busGarages
-    //        .Where(garage => garage.Address.Value == address)
-    //        .FirstOrDefault();
-    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.BUS)
-    //    {
-    //        return false;
-    //    }
-    //    var result = garage.TryAddVehicle(
-    //        garage.GetFirstFreeParkingLot().ID,
-    //        new Bus(
-    //            new RegistrationNumber(regNumber),
-    //            10,
-    //            10,
-    //            VehicleColor.GREY,
-    //            PowerSource.GASOLINE,
-    //            1000,
-    //            new Dimension(10, 10, 10)),
-    //            out IParkingLot<IBus>? parkingLot
-    //    );
-    //    if (parkingLot != null)
-    //    {
-    //        parkingLotInfo = new ParkingLotInfoWithAddress(
-    //            new Address(address),
-    //            parkingLot
-    //        );
-    //    }
-    //    return result;
-    //}
-
-    //private bool TryAddMotorcycle(
-    //    string address,
-    //    string regNumber,
-    //    string vehicleType,
-    //    out ParkingLotInfoWithAddress? parkingLotInfo)
-    //{
-    //    parkingLotInfo = null;
-    //    var garage = _mcGarages
-    //        .Where(garage => garage.Address.Value == address)
-    //        .FirstOrDefault();
-    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.MOTORCYCLE)
-    //    {
-    //        return false;
-    //    }
-    //    var result = garage.TryAddVehicle(
-    //        garage.GetFirstFreeParkingLot().ID,
-    //        new Motorcycle(
-    //            new RegistrationNumber(regNumber),
-    //            100,
-    //            VehicleColor.GREY,
-    //            PowerSource.GASOLINE,
-    //            1000,
-    //            new Dimension(10, 10, 10)),
-    //            out IParkingLot<IMotorcycle>? parkingLot
-    //    );
-    //    if (parkingLot != null)
-    //    {
-    //        parkingLotInfo = new ParkingLotInfoWithAddress(
-    //            new Address(address),
-    //            parkingLot
-    //        );
-    //    }
-    //    return result;
-    //}
-
-    //private bool TryAddECar(
-    //    string address,
-    //    string regNumber,
-    //    string vehicleType,
-    //    out ParkingLotInfoWithAddress? parkingLotInfo)
-    //{
-    //    parkingLotInfo = null;
-    //    var garage = _eCarGarages
-    //        .Where(garage => garage.Address.Value == address)
-    //        .FirstOrDefault();
-    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.E_CAR)
-    //    {
-    //        return false;
-    //    }
-    //    var result = garage.TryAddVehicle(
-    //        garage.GetFirstFreeParkingLot().ID,
-    //        new ECar(
-    //            new RegistrationNumber(regNumber),
-    //            CarBrand.TESLA,
-    //            VehicleColor.WHITE,
-    //            1000,
-    //            new Dimension(10, 10, 10)),
-    //            out IParkingLot<ECar>? parkingLot
-    //    );
-    //    if (parkingLot != null)
-    //    {
-    //        parkingLotInfo = new ParkingLotInfoWithAddress(
-    //            new Address(address),
-    //            parkingLot
-    //        );
-    //    }
-    //    return result;
-    //}
 }
