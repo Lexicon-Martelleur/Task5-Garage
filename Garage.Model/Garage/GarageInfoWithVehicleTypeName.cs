@@ -1,11 +1,8 @@
-﻿using Garage.Model.Base;
-
-namespace Garage.Model.Garage;
+﻿namespace Garage.Model.Garage;
 
 
 public record class GarageInfoWithVehicleTypeName(
-    IGarageInfo GarageInfo,
-    string VehicleType
+    IGarageInfo GarageInfo
 )
 {
     public string GetAddress()

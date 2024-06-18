@@ -2,15 +2,10 @@
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
-using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
 namespace Garage.Infrastructure.Store;
 
-// TODO! Do not use specific type her use property
-// from to decide type instead.
-// E.g., in DB the type is stored 
-// Or some other solution to fix casting problem...
 public class GarageInMemoryStore : IGarageRepository
 {
 
@@ -83,25 +78,25 @@ public class GarageInMemoryStore : IGarageRepository
         List<GarageInfoWithVehicleTypeName> garageInfoItems = [];
 
         garageInfoItems.AddRange(_carGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         garageInfoItems.AddRange(_busGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         garageInfoItems.AddRange(_mcGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         garageInfoItems.AddRange(_boatHarbors.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         garageInfoItems.AddRange(_airplaneHangars.Select(garage => new GarageInfoWithVehicleTypeName(
-             garage, garage.VehicleTypeName())));
+             garage)));
 
         garageInfoItems.AddRange(_eCarGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         garageInfoItems.AddRange(_multiGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage, garage.VehicleTypeName())));
+            garage)));
 
         return garageInfoItems;
     }
@@ -158,7 +153,7 @@ public class GarageInMemoryStore : IGarageRepository
             20,
             new Address("Garage Street 1A"),
             GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS);
-        PopulateCarGarage(carGarage);
+        // PopulateCarGarage(carGarage);
         _carGarages = [carGarage];
 
         var busFactory = new GarageFactory<IBus>();
@@ -404,4 +399,50 @@ public class GarageInMemoryStore : IGarageRepository
         }
     }
 
+    public bool AddVehicleToGarage(
+        string address,
+        string regNumber,
+        string vehicleType,
+        out ParkingLotInfoWithAddress? parkingLotInfo)
+    {
+        var isVehicleAdded = TryAddCar(
+            address, regNumber, vehicleType, out parkingLotInfo);
+        if (isVehicleAdded) { return true; }
+
+        return false;
+    }
+
+    private bool TryAddCar(
+        string address,
+        string regNumber,
+        string vehicleType,
+        out ParkingLotInfoWithAddress? parkingLotInfo)
+    {
+        parkingLotInfo = null;
+        var garage = _carGarages
+            .Where(garage => garage.Address.Value == address)
+            .FirstOrDefault();
+        if (garage != null && !garage.IsFullGarage() && vehicleType == VehicleType.CAR)
+        {
+            var result = garage.TryAddVehicle(
+                garage.GetFistFreeParkingLot().ID,
+                new Car(
+                    new RegistrationNumber(regNumber),
+                    CarBrand.FORD,
+                    VehicleColor.GREY,
+                    PowerSource.GASOLINE,
+                    1000,
+                    new Dimension(10, 10, 10)),
+                 out IParkingLot<Car>? parkingLot
+            );
+            if (parkingLot != null){
+                parkingLotInfo = new ParkingLotInfoWithAddress(
+                    new Address(address),
+                    parkingLot
+                );
+            }
+            return result;
+        }
+        return false;
+    }
 }

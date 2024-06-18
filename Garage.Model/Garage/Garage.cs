@@ -1,6 +1,5 @@
 ﻿using Garage.Model.Base;
 using Garage.Model.ParkingLot;
-using Garage.Model.Service;
 using Garage.Model.Vehicle;
 using System.Collections;
 using System.Linq;
@@ -32,13 +31,6 @@ public class Garage<VehicleType> :
         _parkingLots = [.. parkingLots];
     }
 
-    public string VehicleTypeName()
-    {
-        return this.GetType()
-            .GetGenericArguments()
-            .FirstOrDefault()?.Name ?? "IVehicle";
-    }
-
     public uint Capacity => _capacity;
 
     public Address Address => _address;
@@ -51,7 +43,14 @@ public class Garage<VehicleType> :
         get => _parkingLots;
         init => _parkingLots = value;
     }
-  
+
+    //private string VehicleTypeName()
+    //{
+    //    return this.GetType()
+    //        .GetGenericArguments()
+    //        .FirstOrDefault()?.Name ?? "IVehicle";
+    //}
+
     public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out IParkingLot<VehicleType>? parkingLot)
     {
         parkingLot = this.FirstOrDefault(item => item.ID == parkingLotId);
@@ -169,5 +168,16 @@ public class Garage<VehicleType> :
             .Select(lot => new { VehicleType = lot.CurrentVehicle!.Type })
             .GroupBy(item => item.VehicleType)
             .Select(group => new GroupedVehicle(group.Key, group.Count()));
+    }
+
+    public IParkingLot<VehicleType> GetFistFreeParkingLot()
+    {
+        if (IsFullGarage())
+        {
+            throw new InvalidGarageStateException("_");
+        }
+        return this
+            .Where(lot => lot.CurrentVehicle == null)
+            .FirstOrDefault()!;
     }
 }

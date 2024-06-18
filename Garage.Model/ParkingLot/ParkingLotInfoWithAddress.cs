@@ -7,7 +7,7 @@ public record class ParkingLotInfoWithAddress(
     IParkingLotInfo ParkingLotInfo
 )
 {
-    public uint GetVehicleID()
+    public uint GetParkingLotID()
     {
         return ParkingLotInfo.ID;
     }

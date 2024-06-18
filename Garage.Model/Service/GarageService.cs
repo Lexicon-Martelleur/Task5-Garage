@@ -2,6 +2,7 @@
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
+using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
@@ -13,7 +14,7 @@ public class GarageService(IGarageRepository repository) : IGarageService
         var parkingLotInfo = repository.GetAllParkingLotsWithVehicles();
         if (!IsUniqueCarRegistrationNumbers(parkingLotInfo))
         {
-            throw new InvalidGarageStateException("Car registration number must be unique for each garage.");
+            throw new InvalidGarageStateException("Registration number must be unique for each vehicle.");
         }
         return parkingLotInfo;
     }
@@ -40,12 +41,26 @@ public class GarageService(IGarageRepository repository) : IGarageService
         var uniqueCars = parkingLotInfos
             .Select(lot => lot.ParkingLotInfo.VehicleRegistrationNumber)
             .ToHashSet();
+
         return parkingLotInfos.Count() == uniqueCars.Count;
     }
 
     public IEnumerable<GroupedVehicle>? GetGroupedVehiclesByVehicleType(string garageAddress)
     {
         return repository.GetGroupedVehiclesByVehicleType(new Address(garageAddress));
+    }
+
+    public bool AddVehicleToGarage(
+        string address,
+        string regNumber,
+        string vehicleType,
+        out ParkingLotInfoWithAddress? parkingLotInfo)
+    {
+        return repository.AddVehicleToGarage(
+            address,
+            regNumber,
+            vehicleType,
+            out parkingLotInfo);
     }
 }
 

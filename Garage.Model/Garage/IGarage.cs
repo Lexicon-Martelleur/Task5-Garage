@@ -1,6 +1,5 @@
 ﻿using Garage.Model.Base;
 using Garage.Model.ParkingLot;
-using Garage.Model.Service;
 using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
@@ -16,7 +15,6 @@ public interface IGarage<VehicleType> :
     where VehicleType : IVehicle
 {
     IParkingLot<VehicleType>[] ParkingLots { get; init; }
-    string VehicleTypeName();
     bool IsFullGarage();
     bool IsOccupiedLot(IParkingLot<VehicleType> parkingLot);
     bool TryAddVehicle(
@@ -48,4 +46,6 @@ public interface IGarage<VehicleType> :
     VehicleType RemoveVehicle(uint parkingLotId);
 
     IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType();
+
+    IParkingLot<VehicleType> GetFistFreeParkingLot();
 }
