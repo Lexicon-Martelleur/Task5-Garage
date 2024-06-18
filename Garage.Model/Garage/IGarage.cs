@@ -47,5 +47,5 @@ public interface IGarage<VehicleType> :
 
     IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType();
 
-    IParkingLot<VehicleType> GetFistFreeParkingLot();
+    IParkingLot<VehicleType> GetFirstFreeParkingLot();
 }

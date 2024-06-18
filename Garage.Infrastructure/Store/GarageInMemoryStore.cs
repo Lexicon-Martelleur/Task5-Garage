@@ -405,44 +405,222 @@ public class GarageInMemoryStore : IGarageRepository
         string vehicleType,
         out ParkingLotInfoWithAddress? parkingLotInfo)
     {
-        var isVehicleAdded = TryAddCar(
-            address, regNumber, vehicleType, out parkingLotInfo);
-        if (isVehicleAdded) { return true; }
+        var vehicleFactory = new VehicleFactory();
 
+        if (vehicleType == VehicleType.CAR && TryAddVehicleToGarage(
+            _carGarages,
+            address,
+            regNumber,
+            vehicleFactory.CreateGasolineCar,
+            out parkingLotInfo)) { return true; }
+
+        if (vehicleType == VehicleType.BUS && TryAddVehicleToGarage(
+            _busGarages,
+            address,
+            regNumber,
+            vehicleFactory.CreateBus,
+            out parkingLotInfo)) { return true; }
+
+        if (vehicleType == VehicleType.MOTORCYCLE && TryAddVehicleToGarage(
+            _mcGarages,
+            address,
+            regNumber,
+            vehicleFactory.CreateMC,
+            out parkingLotInfo)) { return true; }
+
+        if (vehicleType == VehicleType.BOAT && TryAddVehicleToGarage(
+            _boatHarbors,
+            address,
+            regNumber,
+            vehicleFactory.CreateBoat,
+            out parkingLotInfo)) { return true; }
+
+        if (vehicleType == VehicleType.BUS && TryAddVehicleToGarage(
+            _airplaneHangars,
+            address,
+            regNumber,
+            vehicleFactory.CreateAirplane,
+            out parkingLotInfo)) { return true; }
+
+        if (vehicleType == VehicleType.E_CAR && TryAddVehicleToGarage(
+            _eCarGarages,
+            address,
+            regNumber,
+            vehicleFactory.CreateECar,
+            out parkingLotInfo)) { return true; }
+
+        parkingLotInfo = null;
         return false;
     }
 
-    private bool TryAddCar(
+    public bool TryAddVehicleToGarage<VehicleType, GarageType>(
+        IEnumerable<GarageType> garages,
         string address,
         string regNumber,
-        string vehicleType,
-        out ParkingLotInfoWithAddress? parkingLotInfo)
+        Func<string, VehicleType> CreateVehicle,
+        out ParkingLotInfoWithAddress? parkingLotInfo
+    )
+        where VehicleType : IVehicle
+        where GarageType : IGarage<VehicleType>
     {
         parkingLotInfo = null;
-        var garage = _carGarages
+        var garage = garages
             .Where(garage => garage.Address.Value == address)
             .FirstOrDefault();
-        if (garage != null && !garage.IsFullGarage() && vehicleType == VehicleType.CAR)
+        
+        if (garage == null || garage.IsFullGarage())
         {
-            var result = garage.TryAddVehicle(
-                garage.GetFistFreeParkingLot().ID,
-                new Car(
-                    new RegistrationNumber(regNumber),
-                    CarBrand.FORD,
-                    VehicleColor.GREY,
-                    PowerSource.GASOLINE,
-                    1000,
-                    new Dimension(10, 10, 10)),
-                 out IParkingLot<Car>? parkingLot
-            );
-            if (parkingLot != null){
-                parkingLotInfo = new ParkingLotInfoWithAddress(
-                    new Address(address),
-                    parkingLot
-                );
-            }
-            return result;
+            return false;
         }
-        return false;
+
+        var vehicle = CreateVehicle(regNumber);
+        var result = garage.TryAddVehicle(garage.GetFirstFreeParkingLot().ID, vehicle, out var parkingLot);
+        if (parkingLot != null)
+        {
+            parkingLotInfo = new ParkingLotInfoWithAddress(
+                new Address(address),
+                parkingLot);
+        }
+        return result;
     }
+
+
+    //private bool TryAddCar(
+    //    string address,
+    //    string regNumber,
+    //    string vehicleType,
+    //    out ParkingLotInfoWithAddress? parkingLotInfo)
+    //{
+    //    parkingLotInfo = null;
+    //    var garage = _carGarages
+    //        .Where(garage => garage.Address.Value == address)
+    //        .FirstOrDefault();
+    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.CAR)
+    //    {
+    //        return false;
+    //    }
+    //    var result = garage.TryAddVehicle(
+    //        garage.GetFirstFreeParkingLot().ID,
+    //        new Car(
+    //            new RegistrationNumber(regNumber),
+    //            CarBrand.FORD,
+    //            VehicleColor.GREY,
+    //            PowerSource.GASOLINE,
+    //            1000,
+    //            new Dimension(10, 10, 10)),
+    //            out IParkingLot<Car>? parkingLot
+    //    );
+    //    if (parkingLot != null){
+    //        parkingLotInfo = new ParkingLotInfoWithAddress(
+    //            new Address(address),
+    //            parkingLot
+    //        );
+    //    }
+    //    return result;
+    //}
+
+    //private bool TryAddBus(
+    //    string address,
+    //    string regNumber,
+    //    string vehicleType,
+    //    out ParkingLotInfoWithAddress? parkingLotInfo)
+    //{
+    //    parkingLotInfo = null;
+    //    var garage = _busGarages
+    //        .Where(garage => garage.Address.Value == address)
+    //        .FirstOrDefault();
+    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.BUS)
+    //    {
+    //        return false;
+    //    }
+    //    var result = garage.TryAddVehicle(
+    //        garage.GetFirstFreeParkingLot().ID,
+    //        new Bus(
+    //            new RegistrationNumber(regNumber),
+    //            10,
+    //            10,
+    //            VehicleColor.GREY,
+    //            PowerSource.GASOLINE,
+    //            1000,
+    //            new Dimension(10, 10, 10)),
+    //            out IParkingLot<IBus>? parkingLot
+    //    );
+    //    if (parkingLot != null)
+    //    {
+    //        parkingLotInfo = new ParkingLotInfoWithAddress(
+    //            new Address(address),
+    //            parkingLot
+    //        );
+    //    }
+    //    return result;
+    //}
+
+    //private bool TryAddMotorcycle(
+    //    string address,
+    //    string regNumber,
+    //    string vehicleType,
+    //    out ParkingLotInfoWithAddress? parkingLotInfo)
+    //{
+    //    parkingLotInfo = null;
+    //    var garage = _mcGarages
+    //        .Where(garage => garage.Address.Value == address)
+    //        .FirstOrDefault();
+    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.MOTORCYCLE)
+    //    {
+    //        return false;
+    //    }
+    //    var result = garage.TryAddVehicle(
+    //        garage.GetFirstFreeParkingLot().ID,
+    //        new Motorcycle(
+    //            new RegistrationNumber(regNumber),
+    //            100,
+    //            VehicleColor.GREY,
+    //            PowerSource.GASOLINE,
+    //            1000,
+    //            new Dimension(10, 10, 10)),
+    //            out IParkingLot<IMotorcycle>? parkingLot
+    //    );
+    //    if (parkingLot != null)
+    //    {
+    //        parkingLotInfo = new ParkingLotInfoWithAddress(
+    //            new Address(address),
+    //            parkingLot
+    //        );
+    //    }
+    //    return result;
+    //}
+
+    //private bool TryAddECar(
+    //    string address,
+    //    string regNumber,
+    //    string vehicleType,
+    //    out ParkingLotInfoWithAddress? parkingLotInfo)
+    //{
+    //    parkingLotInfo = null;
+    //    var garage = _eCarGarages
+    //        .Where(garage => garage.Address.Value == address)
+    //        .FirstOrDefault();
+    //    if (garage == null || garage.IsFullGarage() || vehicleType != VehicleType.E_CAR)
+    //    {
+    //        return false;
+    //    }
+    //    var result = garage.TryAddVehicle(
+    //        garage.GetFirstFreeParkingLot().ID,
+    //        new ECar(
+    //            new RegistrationNumber(regNumber),
+    //            CarBrand.TESLA,
+    //            VehicleColor.WHITE,
+    //            1000,
+    //            new Dimension(10, 10, 10)),
+    //            out IParkingLot<ECar>? parkingLot
+    //    );
+    //    if (parkingLot != null)
+    //    {
+    //        parkingLotInfo = new ParkingLotInfoWithAddress(
+    //            new Address(address),
+    //            parkingLot
+    //        );
+    //    }
+    //    return result;
+    //}
 }

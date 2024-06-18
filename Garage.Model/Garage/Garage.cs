@@ -170,7 +170,7 @@ public class Garage<VehicleType> :
             .Select(group => new GroupedVehicle(group.Key, group.Count()));
     }
 
-    public IParkingLot<VehicleType> GetFistFreeParkingLot()
+    public IParkingLot<VehicleType> GetFirstFreeParkingLot()
     {
         if (IsFullGarage())
         {
