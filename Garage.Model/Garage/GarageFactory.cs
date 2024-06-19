@@ -4,6 +4,12 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
+/// <summary>
+/// A factory class used to create generic garages.
+/// </summary>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 public class GarageFactory<VehicleType> :
     IGarageFactory<VehicleType>
     where VehicleType : IVehicle

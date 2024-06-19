@@ -5,6 +5,12 @@ using System.Collections;
 
 namespace Garage.Model.Garage;
 
+/// <summary>
+/// An domain garage implementing <see cref="IGarage"/> used for garage logic.
+/// </summary>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 public class Garage<VehicleType> :
     IGarage<VehicleType>
     where VehicleType : IVehicle

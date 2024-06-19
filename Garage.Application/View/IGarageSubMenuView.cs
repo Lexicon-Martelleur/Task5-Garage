@@ -5,6 +5,10 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Application.View;
 
+/// <summary>
+/// An interface used to describe an IGarageSubMenuView
+/// view type.
+/// </summary>
 internal interface IGarageSubMenuView
 {
     void PrintAllGarages(IEnumerable<GarageInfoWithVehicleTypeName> garages);

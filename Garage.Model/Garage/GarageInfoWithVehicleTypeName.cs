@@ -1,6 +1,11 @@
 ﻿namespace Garage.Model.Garage;
 
 
+/// <summary>
+/// A none generic record class
+/// used to transfer data in the application.
+/// </summary>
+/// <param name="GarageInfo"></param>
 public record class GarageInfoWithVehicleTypeName(
     IGarageInfo GarageInfo
 )

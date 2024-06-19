@@ -1,5 +1,8 @@
 ﻿namespace Garage.Application.Controller;
 
+/// <summary>
+/// INterface used to describe a IGarageSubMenuController.
+/// </summary>
 internal interface IGarageSubMenuController
 {
     void HandleAddVehicleToGarage();

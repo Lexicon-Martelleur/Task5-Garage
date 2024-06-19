@@ -2,6 +2,10 @@
 
 namespace Garage.Model.Garage;
 
+/// <summary>
+/// A class used for constant description of vehicles
+/// supported by the application.
+/// </summary>
 public static class GarageDescriptionKeeper
 {
     public readonly static GarageDescriptionItem DEFAULT = new(

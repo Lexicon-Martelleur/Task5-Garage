@@ -2,6 +2,11 @@
 
 // TODO! Fix static creation of vehicle properties.
 // TODO! Update to write all properties or use unknown to simplify.
+
+/// <summary>
+/// A factory class used to create new vehicles
+/// added into the system.
+/// </summary>
 public class VehicleFactory
 {
     public Car CreateGasolineCar(string regNumber)

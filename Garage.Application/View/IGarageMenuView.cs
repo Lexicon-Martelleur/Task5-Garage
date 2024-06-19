@@ -1,5 +1,9 @@
 ﻿namespace Garage.Application.View;
 
+/// <summary>
+/// An interface used to describe an IGarageMenuView
+/// view type.
+/// </summary>
 internal interface IGarageMenuView
 {
     void PrintCorruptedData(string selection);

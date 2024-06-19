@@ -7,7 +7,9 @@ namespace Garage.Model.Garage;
 /// <summary>
 /// An interface describing a generics garage.
 /// </summary>
-/// <typeparam name="VehicleType">The type of vehicle</typeparam>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 public interface IGarage<VehicleType> :
     IGarageInfo,
     IEnumerable<IParkingLot<VehicleType>>,

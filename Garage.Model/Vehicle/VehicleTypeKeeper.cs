@@ -1,7 +1,8 @@
 ﻿namespace Garage.Model.Vehicle;
 
 /// <summary>
-/// A class used to keep constant data related to the application vehicles.
+/// A class used to keep constant data related to the 
+/// application supported vehicles.
 /// </summary>
 public static class VehicleTypeKeeper
 {

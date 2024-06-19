@@ -1,5 +1,9 @@
 ﻿namespace Garage.Model.Garage;
 
+/// <summary>
+/// A custom domain exception used to describe incorrect
+/// garage state.
+/// </summary>
 public class InvalidGarageStateException : InvalidOperationException
 {
     public InvalidGarageStateException() { }

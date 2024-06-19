@@ -3,6 +3,15 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
+/// <summary>
+/// A utility class used to create unique ids for parking lots.
+/// </summary>
+/// <typeparam name="ParkingLotType">
+/// A type parameter of <see cref="IParkingLot"/> type or its subclasses.
+/// </typeparam>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 internal static class GarageUtility<ParkingLotType, VehicleType>
     where VehicleType : IVehicle
     where ParkingLotType : IParkingLot<VehicleType>

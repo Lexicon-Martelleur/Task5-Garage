@@ -4,7 +4,7 @@ using Garage.Model.Vehicle;
 namespace Garage.Application.Controller;
 
 /// <summary>
-/// A utility class used for testing user input
+/// A utility class used for validating user input
 /// </summary>
 internal static class Utility
 {

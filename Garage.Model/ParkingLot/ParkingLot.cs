@@ -3,6 +3,13 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.ParkingLot;
 
+/// <summary>
+/// A domain class used for parking lot logic
+/// implementing <see cref="IParkingLot"/>
+/// </summary>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 public class ParkingLot<VehicleType> : IParkingLot<VehicleType>
     where VehicleType : IVehicle
 {

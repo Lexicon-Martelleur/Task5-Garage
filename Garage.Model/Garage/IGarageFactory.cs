@@ -4,6 +4,12 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Garage;
 
+/// <summary>
+/// An interface used to describe a generic garage factory.
+/// </summary>
+/// <typeparam name="VehicleType">
+/// A type parameter of <see cref="IVehicle"/> type or its subclasses.
+/// </typeparam>
 public interface IGarageFactory<VehicleType>
     where VehicleType : IVehicle
 {
