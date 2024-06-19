@@ -18,16 +18,17 @@ public class Garage<VehicleType> :
 
     private IParkingLot<VehicleType>[] _parkingLots;
 
-    private static readonly HashSet<uint> _IDs = [];
+    private readonly string[] _vehicleTypes = [];
 
     public Garage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
         Address address,
-        string description)
+        (string Description, string[] VehicleTypes) description)
     {
         _capacity = (uint)parkingLots.Count;
         _address = address;
-        _garageDescription = description;
+        _garageDescription = description.Description;
+        _vehicleTypes = description.VehicleTypes;
         _parkingLots = [.. parkingLots];
     }
 
@@ -36,20 +37,15 @@ public class Garage<VehicleType> :
     public Address Address => _address;
 
     public string Description => _garageDescription;
-  
+
+    public string DescriptionWithVehicleTypes => $"{_garageDescription} " +
+        $"{_vehicleTypes.ToString()}";
 
     public IParkingLot<VehicleType>[] ParkingLots
     {
         get => _parkingLots;
         init => _parkingLots = value;
     }
-
-    //private string VehicleTypeName()
-    //{
-    //    return this.GetType()
-    //        .GetGenericArguments()
-    //        .FirstOrDefault()?.Name ?? "IVehicle";
-    //}
 
     public bool TryAddVehicle(uint parkingLotId, VehicleType vehicle, out IParkingLot<VehicleType>? parkingLot)
     {
@@ -161,6 +157,7 @@ public class Garage<VehicleType> :
         return Address.GetHashCode();
     }
 
+    // TODO! Test remaining methods
     public IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType()
     {
         return this

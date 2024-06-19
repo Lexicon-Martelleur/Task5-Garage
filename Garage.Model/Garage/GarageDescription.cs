@@ -1,20 +1,45 @@
-﻿namespace Garage.Model.Garage;
+﻿using Garage.Model.Vehicle;
 
-public class GarageDescription
+namespace Garage.Model.Garage;
+
+public static class GarageDescription
 {
-    public const string CAR = "A standard car garage for all cars";
+    public readonly static (string Description, string[] VehicleTypes) CAR = 
+        (Description: "A car garage for all cars",
+        VehicleTypes: [VehicleType.CAR, VehicleType.E_CAR]);
 
-    public const string E_CAR = "A car garage only for e-cars";
+    public readonly static (string Description, string[] VehicleTypes) E_CAR = 
+        (Description: "A car garage only for e-cars",
+        VehicleTypes: [VehicleType.E_CAR]);
 
-    public const string CAR_NO_ELECTRICAL_PARKING_LOTS = "A car garage (OBS! No electrical parking lots)";
+    public readonly static (string Description, string[] VehicleTypes) CAR_NO_ELECTRICAL_PARKING_LOTS = 
+        (Description: "A car garage (OBS! No electrical parking lots)",
+        VehicleTypes: [VehicleType.CAR, VehicleType.E_CAR]);
 
-    public const string BUS = "A standard bus garage";
+    public readonly static (string Description, string[] VehicleTypes) BUS = 
+        (Description: "A bus garage",
+        VehicleTypes: [VehicleType.BUS]);
 
-    public const string MC = "A standard motorcycle garage";
+    public readonly static (string Description, string[] VehicleTypes) MC = 
+        (Description: "A motorcycle garage",
+        VehicleTypes: [VehicleType.MOTORCYCLE]);
 
-    public const string BOAT = "A standard boat harbor";
+    public readonly static (string Description, string[] VehicleTypes) BOAT = 
+        (Description: "A boat harbor",
+        VehicleTypes: [VehicleType.BOAT]);
 
-    public const string AIRPLANE = "A standard airplane hangar";
+    public readonly static (string Description, string[] VehicleTypes) AIRPLANE = 
+        (Description: "A airplane hangar",
+        VehicleTypes: [VehicleType.AIRPLANE]);
 
-    public const string MULTI = "A standard multi garage";
+    public readonly static (string Description, string[] VehicleTypes) MULTI = 
+        (Description: "A multi garage",
+        VehicleTypes: [
+            VehicleType.CAR,
+            VehicleType.E_CAR,
+            VehicleType.BUS,
+            VehicleType.MOTORCYCLE,
+            VehicleType.BOAT,
+            VehicleType.AIRPLANE
+        ]);
 }

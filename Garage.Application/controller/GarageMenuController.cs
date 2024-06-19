@@ -60,17 +60,20 @@ internal class GarageMenuController
 
     private void HandleListAllGarages(string menuSelection)
     {
-        try {
+        try
+        {
             _view.PrintAllGarages(_service.GetAllGarages());
         }
-        catch {
+        catch
+        {
             _view.PrintCorruptedData(menuSelection);
         }
     }
 
     private void HandleListAllVehicles(string menuSelection)
     {
-        try {
+        try
+        {
             var parkingLotInfos = _service.GetAllParkingLotsWithVehicles();
             _view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
         }
@@ -85,7 +88,7 @@ internal class GarageMenuController
     {
         try
         {
-            if (EmptyString(out string address, _view.ReadGarageAddress)) { return; }
+            if (EmptyString(out var address, _view.ReadGarageAddress)) { return; }
             var groupedVehicles = _service.GetGroupedVehiclesByVehicleType(address);
             _view.PrintGroupedVehicles(groupedVehicles, address);
         }
@@ -123,9 +126,9 @@ internal class GarageMenuController
     {
         try
         {
-            if (EmptyString(out string addr, _view.ReadGarageAddress) ||
-                EmptyString(out string regNumber, _view.ReadVehicleRegNr) ||
-                InvalidVehicleType(out string vehicleType))
+            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
+                EmptyString(out var regNumber, _view.ReadVehicleRegNr) ||
+                InvalidVehicleType(out var vehicleType))
             {
                 return;
             }
@@ -158,6 +161,34 @@ internal class GarageMenuController
     // TODO HandleRemoveVehicleFromGarage!
     private void HandleRemoveVehicleFromGarage(string menuSelection)
     {
+        try
+        {
+            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
+                EmptyString(out var parkingLotId, _view.ReadParkingLotId))
+            {
+                return;
+            }
+            
+            if (!uint.TryParse(parkingLotId, out uint parsedParkingLotId)) 
+            {
+                _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
+            }
+            
+            var regNumber = _service.RemoveVehicleFromGarage(addr, parsedParkingLotId);
+
+            if (regNumber != null)
+            {
+                _view.PrintVehicleRemovedFromToGarage((RegistrationNumber)regNumber);
+            }
+            else
+            {
+                _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
+            }
+        }
+        catch
+        {
+            _view.PrintCorruptedData(menuSelection);
+        }
     }
 
     // TODO HandleCreateGarage!

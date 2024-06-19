@@ -7,7 +7,9 @@ using Garage.Model.Vehicle;
 namespace Garage.Model.Service;
 
 
-public class GarageService(IGarageRepository repository) : IGarageService
+public class GarageService(
+    IGarageRepository repository
+) : IGarageService
 {
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
     {
@@ -50,12 +52,17 @@ public class GarageService(IGarageRepository repository) : IGarageService
         return repository.GetGroupedVehiclesByVehicleType(new Address(garageAddress));
     }
 
-    // TODO! Return ParkingLotInfoWithAddress? may simplify solution
+    public IGarageInfo? GetGarage(string address)
+    {
+        return repository.GetGarage(address);
+    }
+
     public ParkingLotInfoWithAddress? AddVehicleToGarage(
         string address,
         string regNumber,
         string vehicleType)
     {
+        // TODO ! Move creation of vehicle to controller.
         var vehicleFactory = new VehicleFactory();
 
         switch (vehicleType)
@@ -87,6 +94,11 @@ public class GarageService(IGarageRepository repository) : IGarageService
             default:
                 return null;
         };
+    }
+
+    public RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId)
+    {
+        return repository.RemoveVehicleFromGarage(addr, parkingLotId);
     }
 }
 

@@ -3,7 +3,6 @@ using Garage.Model.Base;
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
-using System.Security.Cryptography;
 
 namespace Garage.Application.View;
 
@@ -85,7 +84,7 @@ internal class GarageMenuView
 
     internal string ReadGarageAddress()
     {
-        Console.Write("\n✏️ Enter garage address: ");
+        Console.Write("\n✏️ Enter a valid garage address: ");
         return Console.ReadLine() ?? String.Empty;
     }
 
@@ -178,10 +177,12 @@ internal class GarageMenuView
         string regNumber,
         string vehicleType)
     {
-        Console.WriteLine($"\nℹ️ {GetVehicleTypeName(vehicleType)} [{regNumber}]: Parked at {lot.GetAddress()} in lot {lot.GetParkingLotID()}");
+        Console.WriteLine($"\nℹ️ " +
+            $"{MapVehicleTypeToVehicleName(vehicleType)} [{regNumber}]: " +
+            $"Parked at '{lot.GetAddress()}' in lot '{lot.GetParkingLotID()}'");
     }
 
-    private string GetVehicleTypeName(
+    private string MapVehicleTypeToVehicleName(
         string selectedVehicleType) => selectedVehicleType switch
         {
             VehicleType.AIRPLANE => "Airplane",
@@ -198,7 +199,26 @@ internal class GarageMenuView
         string regNumber,
         string vehicleType)
     {
-        Console.WriteLine($"\n⚠️ {GetVehicleTypeName(vehicleType)} [{regNumber}] " +
+        Console.WriteLine($"\n⚠️ " +
+            $"{MapVehicleTypeToVehicleName(vehicleType)} [{regNumber}] " +
             $"could not be parked at garage '{address}'");
+    }
+
+    internal void PrintVehicleRemovedFromToGarage(RegistrationNumber regNumber)
+    {
+        Console.WriteLine($"\nℹ️ Vehicle [{regNumber.Value}] " +
+            $"is removed from garage");
+    }
+
+    internal void PrintCanNotRemoveVehicleFromGarage(string addr, string regNumber)
+    {
+        Console.WriteLine($"\n⚠️ Vehicle [{regNumber}] " +
+            $"could not be removed from garage with address '{addr}'");
+    }
+
+    internal string ReadParkingLotId()
+    {
+        Console.Write("\n✏️ Enter parking lot id: ");
+        return Console.ReadLine() ?? String.Empty;
     }
 }

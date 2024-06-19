@@ -3,6 +3,7 @@ using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
 using Garage.Model.Vehicle;
+using System.Reflection;
 
 namespace Garage.Infrastructure.Store;
 
@@ -77,26 +78,26 @@ public class GarageInMemoryStore : IGarageRepository
     {
         List<GarageInfoWithVehicleTypeName> garageInfoItems = [];
 
-        garageInfoItems.AddRange(_carGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_carGarages.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_busGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_busGarages.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_mcGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_mcGarages.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_boatHarbors.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_boatHarbors.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_airplaneHangars.Select(garage => new GarageInfoWithVehicleTypeName(
-             garage)));
+        garageInfoItems.AddRange(_airplaneHangars.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_eCarGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_eCarGarages.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
-        garageInfoItems.AddRange(_multiGarages.Select(garage => new GarageInfoWithVehicleTypeName(
-            garage)));
+        garageInfoItems.AddRange(_multiGarages.Select(
+            garage => new GarageInfoWithVehicleTypeName(garage)));
 
         return garageInfoItems;
     }
@@ -145,48 +146,83 @@ public class GarageInMemoryStore : IGarageRepository
         return parkingLotsInfo;
     }
 
+    public IGarageInfo? GetGarage(string addr)
+    {
+        var carGarage = _carGarages
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if ( carGarage != null ) { return carGarage; }
+
+        var busGarage = _busGarages
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if (busGarage != null) { return busGarage; }
+
+        var mcGarage = _mcGarages
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if (mcGarage != null) { return mcGarage; }
+
+        var boatHarbor = _boatHarbors
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if (boatHarbor != null) { return boatHarbor; }
+
+        var airplaneHangar = _airplaneHangars
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if (airplaneHangar != null) { return airplaneHangar; }
+
+        var multiGarage = _multiGarages
+            .Where(garage => garage.Address.Value == addr)
+            .FirstOrDefault();
+        if (multiGarage != null) { return multiGarage; }
+
+        return null;
+    }
+
     public ParkingLotInfoWithAddress? AddVehicleToGarage<VehicleType>(
         string addr,
         VehicleType vehicle
-        // out ParkingLotInfoWithAddress? info
     )
         where VehicleType : IVehicle
     {
-        var vehicleFactory = new VehicleFactory();
+        var selectedGarage = GetGarage(addr);
+        if ( selectedGarage == null) { return null; }
 
-        ParkingLotInfoWithAddress? info = null;
+        ParkingLotInfoWithAddress? parkingLotInfo = null;
         if ((vehicle as Car) != null && TryAddVehicle(
-            _carGarages, addr, (vehicle as Car)!, out info))
-        { return info; }
+            _carGarages, addr, (vehicle as Car)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
         if ((vehicle as IBus) != null && TryAddVehicle(
-            _busGarages, addr, (vehicle as IBus)!, out info))
-        { return info; }
+            _busGarages, addr, (vehicle as IBus)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
         if ((vehicle as IMotorcycle) != null && TryAddVehicle(
-            _mcGarages, addr, (vehicle as IMotorcycle)!, out info))
-        { return info; }
+            _mcGarages, addr, (vehicle as IMotorcycle)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
         if ((vehicle as IBoat) != null && TryAddVehicle(
-            _boatHarbors, addr, (vehicle as IBoat)!, out info))
-        { return info; }
+            _boatHarbors, addr, (vehicle as IBoat)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
         if ((vehicle as IAirplane) != null && TryAddVehicle(
-            _airplaneHangars, addr, (vehicle as IAirplane)!, out info))
-        { return info; }
+            _airplaneHangars, addr, (vehicle as IAirplane)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
         if ((vehicle as ECar) != null && TryAddVehicle(
-            _eCarGarages, addr, (vehicle as ECar)!, out info))
-        { return info; }
+            _eCarGarages, addr, (vehicle as ECar)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
-        if (TryAddVehicle(_multiGarages, addr, (vehicle as IVehicle)!, out info))
-        { return info; }
+        if (TryAddVehicle(
+            _multiGarages, addr, (vehicle as IVehicle)!, out parkingLotInfo))
+        { return parkingLotInfo; }
 
-        // info = null;
-        return info;
+        return parkingLotInfo;
     }
 
-    public bool TryAddVehicle<VehicleType, GarageType>(
+    private bool TryAddVehicle<VehicleType, GarageType>(
         IEnumerable<GarageType> garages,
         string address,
         VehicleType vehicle,
@@ -196,6 +232,7 @@ public class GarageInMemoryStore : IGarageRepository
         where GarageType : IGarage<VehicleType>
     {
         parkingLotInfo = null;
+        
         var garage = garages
             .Where(garage => garage.Address.Value == address)
             .FirstOrDefault();
@@ -218,6 +255,50 @@ public class GarageInMemoryStore : IGarageRepository
                 parkingLot);
         }
         
+        return result;
+    }
+
+    public RegistrationNumber? RemoveVehicleFromGarage(
+        string addr, 
+        uint parkingLotId)
+    {
+        var selectedGarage = GetGarage(addr);
+        if (selectedGarage == null) { return null; }
+
+        if (TryRemoveVehicle<Car, IGarage<Car>>(
+            _carGarages,
+            addr,
+            parkingLotId,
+            out var regNumber))
+        { if (regNumber != null) { return regNumber; } }
+
+        return null;
+    }
+
+    private bool TryRemoveVehicle<VehicleType, GarageType>(
+        IEnumerable<GarageType> garages,
+        string address,
+        uint parkingLotId,
+        out RegistrationNumber? regNumber
+    )
+        where VehicleType : IVehicle
+        where GarageType : IGarage<VehicleType>
+    {
+        regNumber = null;
+
+        var garage = garages
+            .Where(garage => garage.Address.Value == address)
+            .FirstOrDefault();
+
+        if (garage == null) { return false; }
+
+        var result = garage.TryRemoveVehicle(
+            parkingLotId,
+            out var vehicle
+        );
+
+        regNumber = vehicle?.RegistrationNumber; 
+
         return result;
     }
 }

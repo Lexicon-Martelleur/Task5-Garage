@@ -17,4 +17,8 @@ public interface IGarageRepository
         string address,
         VehicleType vehicle)
         where VehicleType : IVehicle;
+
+    public IGarageInfo? GetGarage(string addr);
+    
+    RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId);
 }

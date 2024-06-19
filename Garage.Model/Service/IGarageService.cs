@@ -1,6 +1,7 @@
 ﻿using Garage.Model.Base;
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
+using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
@@ -13,4 +14,5 @@ public interface IGarageService
         string address,
         string regNumber,
         string vehicleType);
+    RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId);
 }
