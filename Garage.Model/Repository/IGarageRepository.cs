@@ -23,4 +23,5 @@ public interface IGarageRepository
     RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId);
     bool StoreGarage<VehicleType>(IGarage<VehicleType> garage)
         where VehicleType : IVehicle;
+    ParkingLotInfoWithAddress? FindVehicleInAllGarages(string regNumber);
 }

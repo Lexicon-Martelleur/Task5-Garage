@@ -156,7 +156,7 @@ internal class GarageMenuController
             out vehicleType,
             _view.ReadVehicleType,
             _view.WriteNotValidInput,
-            (string value) => value.Equals(VehicleType.DEFAULT));
+            (string value) => value.Equals(VehicleTypeKeeper.DEFAULT));
     }
 
     private void HandleRemoveVehicleFromGarage(string menuSelection)
@@ -226,9 +226,29 @@ internal class GarageMenuController
         }
     }
 
-    // TODO HandleSearchVehicleByRegNr!
     private void HandleSearchVehicleByRegNr(string menuSelection)
     {
+        try
+        {
+            if (EmptyString(out var regNumber, _view.ReadVehicleRegNr))
+            {
+                return;
+            }
+            ParkingLotInfoWithAddress? parkingLotInfo = _service.FindVehicleInAllGarages(regNumber);
+
+            if (parkingLotInfo != null)
+            {
+                _view.PrintVehicleFind(parkingLotInfo);
+            }
+            else
+            {
+                _view.PrintCanNotFindVehicleInAnyGarage(regNumber);
+            }
+        }
+        catch
+        {
+            _view.PrintCorruptedData(menuSelection);
+        }
     }
 
     // TODO HandleFilterVehicle!

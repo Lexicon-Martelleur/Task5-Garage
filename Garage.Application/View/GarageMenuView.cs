@@ -148,12 +148,12 @@ internal class GarageMenuView
         var listOfVehicleTypes = $"""
 
         📋 Vehicles types:
-                {VehicleType.AIRPLANE}) Airplane
-                {VehicleType.BOAT}) Boat
-                {VehicleType.BUS}) Bus
-                {VehicleType.CAR}) Car
-                {VehicleType.E_CAR}) E-car
-                {VehicleType.MOTORCYCLE}) Motorcycle
+                {VehicleTypeKeeper.AIRPLANE}) Airplane
+                {VehicleTypeKeeper.BOAT}) Boat
+                {VehicleTypeKeeper.BUS}) Bus
+                {VehicleTypeKeeper.CAR}) Car
+                {VehicleTypeKeeper.E_CAR}) E-car
+                {VehicleTypeKeeper.MOTORCYCLE}) Motorcycle
         """;
 
         Console.WriteLine(listOfVehicleTypes);
@@ -164,13 +164,13 @@ internal class GarageMenuView
     private string GetSelectedVehicleType(
         string selectedVehicleType) => selectedVehicleType switch
     {
-        VehicleType.AIRPLANE or
-        VehicleType.BOAT or
-        VehicleType.BUS or
-        VehicleType.CAR or
-        VehicleType.E_CAR or
-        VehicleType.MOTORCYCLE => selectedVehicleType,
-        _ => VehicleType.DEFAULT
+        VehicleTypeKeeper.AIRPLANE or
+        VehicleTypeKeeper.BOAT or
+        VehicleTypeKeeper.BUS or
+        VehicleTypeKeeper.CAR or
+        VehicleTypeKeeper.E_CAR or
+        VehicleTypeKeeper.MOTORCYCLE => selectedVehicleType,
+        _ => VehicleTypeKeeper.DEFAULT
     };
 
     internal void PrintVehicleAddedToGarage(
@@ -187,13 +187,13 @@ internal class GarageMenuView
         string selectedVehicleType
     ) => selectedVehicleType switch
     {
-        VehicleType.AIRPLANE => "Airplane",
-        VehicleType.BOAT => "Boat",
-        VehicleType.BUS => "Bus",
-        VehicleType.CAR => "Car",
-        VehicleType.E_CAR => "E-car",
-        VehicleType.MOTORCYCLE => "MC",
-        _ => VehicleType.DEFAULT
+        VehicleTypeKeeper.AIRPLANE => "Airplane",
+        VehicleTypeKeeper.BOAT => "Boat",
+        VehicleTypeKeeper.BUS => "Bus",
+        VehicleTypeKeeper.CAR => "Car",
+        VehicleTypeKeeper.E_CAR => "E-car",
+        VehicleTypeKeeper.MOTORCYCLE => "MC",
+        _ => VehicleTypeKeeper.DEFAULT
     };
 
     internal void PrintCanNotAddVehicleToGarage(
@@ -240,29 +240,29 @@ internal class GarageMenuView
         var listGarageTypes = $"""
 
         📋 Select garage to create:
-                {GarageDescription.AIRPLANE.ID}) {GarageDescription.AIRPLANE.Description}
-                {GarageDescription.BOAT.ID}) {GarageDescription.BOAT.Description}
-                {GarageDescription.BUS.ID}) {GarageDescription.BUS.Description}
-                {GarageDescription.CAR.ID}) {GarageDescription.CAR.Description}
-                {GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.ID}) {GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.Description}
-                {GarageDescription.E_CAR.ID}) {GarageDescription.E_CAR.Description}
-                {GarageDescription.MC.ID}) {GarageDescription.MC.Description}
-                {GarageDescription.MULTI.ID}) {GarageDescription.MULTI.Description}
+                {GarageDescriptionKeeper.AIRPLANE.ID}) {GarageDescriptionKeeper.AIRPLANE.Description}
+                {GarageDescriptionKeeper.BOAT.ID}) {GarageDescriptionKeeper.BOAT.Description}
+                {GarageDescriptionKeeper.BUS.ID}) {GarageDescriptionKeeper.BUS.Description}
+                {GarageDescriptionKeeper.CAR.ID}) {GarageDescriptionKeeper.CAR.Description}
+                {GarageDescriptionKeeper.CAR_NO_ELECTRICAL_PARKING_LOTS.ID}) {GarageDescriptionKeeper.CAR_NO_ELECTRICAL_PARKING_LOTS.Description}
+                {GarageDescriptionKeeper.E_CAR.ID}) {GarageDescriptionKeeper.E_CAR.Description}
+                {GarageDescriptionKeeper.MC.ID}) {GarageDescriptionKeeper.MC.Description}
+                {GarageDescriptionKeeper.MULTI.ID}) {GarageDescriptionKeeper.MULTI.Description}
         """;
 
         Console.WriteLine(listGarageTypes);
         Console.Write("\n✏️ Select garage to create (number): ");
         garageDescription = GetSelectedGarage(Console.ReadLine() ?? String.Empty);
-        return garageDescription != GarageDescription.DEFAULT;
+        return garageDescription != GarageDescriptionKeeper.DEFAULT;
     }
 
     private GarageDescriptionItem GetSelectedGarage(
         string selectedGarageType)
     {
-        return GarageDescription.GarageDescriptions.ContainsKey(
+        return GarageDescriptionKeeper.GarageDescriptions.ContainsKey(
             selectedGarageType
-        ) ? GarageDescription.GarageDescriptions[selectedGarageType]
-        : GarageDescription.DEFAULT;
+        ) ? GarageDescriptionKeeper.GarageDescriptions[selectedGarageType]
+        : GarageDescriptionKeeper.DEFAULT;
     }
 
     internal void PrintGarageCreated(IGarageInfo garageInfo)
@@ -277,5 +277,20 @@ internal class GarageMenuView
         Console.WriteLine($"\n⚠️ Could not create garage '{garageDescription.Description}' " +
             $"at address '{addr}' " +
             $"with capacity '{capacity}'");
+    }
+
+    internal void PrintVehicleFind(ParkingLotInfoWithAddress parkingLotInfo)
+    {
+        Console.WriteLine($"\nℹ️ Vehicle [{parkingLotInfo.GetVehicleRegistrationNumber()}] " +
+            $"of type '{parkingLotInfo.GetVehicleType()}' " +
+            $"was find in garage at address '{parkingLotInfo.Address.Value}' " +
+            $"in lot {parkingLotInfo.GetParkingLotID()}");
+    }
+
+    internal void PrintCanNotFindVehicleInAnyGarage(string regNumber)
+    {
+        Console.WriteLine($"\n⚠️ Could not find vehicle with vehicle " +
+            $"with registration number '{regNumber}' " +
+            $"in any garages");
     }
 }

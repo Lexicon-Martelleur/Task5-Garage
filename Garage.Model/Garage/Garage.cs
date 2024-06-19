@@ -2,7 +2,6 @@
 using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
 using System.Collections;
-using System.Linq;
 
 namespace Garage.Model.Garage;
 
@@ -175,6 +174,13 @@ public class Garage<VehicleType> :
         }
         return this
             .Where(lot => lot.CurrentVehicle == null)
+            .FirstOrDefault()!;
+    }
+
+    public IParkingLot<VehicleType>? GetParkingLotWithVehicle(string regNumber)
+    {
+        return this
+            .Where(lot => lot.CurrentVehicle?.RegistrationNumber.Value == regNumber)
             .FirstOrDefault()!;
     }
 }

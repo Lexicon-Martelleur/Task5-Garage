@@ -66,27 +66,27 @@ public class GarageService(
 
         switch (vehicleType)
         {
-            case VehicleType.CAR:
+            case VehicleTypeKeeper.CAR:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateGasolineCar(regNumber));
-            case VehicleType.BUS:
+            case VehicleTypeKeeper.BUS:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateBus(regNumber));
-            case VehicleType.MOTORCYCLE:
+            case VehicleTypeKeeper.MOTORCYCLE:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateMC(regNumber));
-            case VehicleType.BOAT:
+            case VehicleTypeKeeper.BOAT:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateBoat(regNumber));
-            case VehicleType.AIRPLANE:
+            case VehicleTypeKeeper.AIRPLANE:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateAirplane(regNumber));
-            case VehicleType.E_CAR:
+            case VehicleTypeKeeper.E_CAR:
                 return repository.AddVehicleToGarage(
                     address,
                     vehicleFactory.CreateECar(regNumber));
@@ -108,14 +108,14 @@ public class GarageService(
             Func<string, uint, GarageDescriptionItem, IGarageInfo?>
         > garageFactoryMap = new() 
         {
-            { GarageDescription.AIRPLANE.ID, StoreAirplaneHangar },
-            { GarageDescription.BOAT.ID, StoreBoatHarbor },
-            { GarageDescription.BUS.ID, StoreBusGarage },
-            { GarageDescription.CAR.ID, StoreGeneralCarGarage },
-            { GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.ID, StoreCarGarage },
-            { GarageDescription.E_CAR.ID, StoreECarGarage },
-            { GarageDescription.MC.ID, StoreMCGarage },
-            { GarageDescription.MULTI.ID, StoreMultiGarage }
+            { GarageDescriptionKeeper.AIRPLANE.ID, StoreAirplaneHangar },
+            { GarageDescriptionKeeper.BOAT.ID, StoreBoatHarbor },
+            { GarageDescriptionKeeper.BUS.ID, StoreBusGarage },
+            { GarageDescriptionKeeper.CAR.ID, StoreGeneralCarGarage },
+            { GarageDescriptionKeeper.CAR_NO_ELECTRICAL_PARKING_LOTS.ID, StoreCarGarage },
+            { GarageDescriptionKeeper.E_CAR.ID, StoreECarGarage },
+            { GarageDescriptionKeeper.MC.ID, StoreMCGarage },
+            { GarageDescriptionKeeper.MULTI.ID, StoreMultiGarage }
         };
 
         if (garageFactoryMap.TryGetValue(description.ID, out var garageFactory))
@@ -228,5 +228,10 @@ public class GarageService(
         );
         var resultStoredGarage = repository.StoreGarage(garage);
         return resultStoredGarage ? garage : null;
+    }
+
+    public ParkingLotInfoWithAddress? FindVehicleInAllGarages(string regNumber)
+    {
+        return repository.FindVehicleInAllGarages(regNumber);
     }
 }

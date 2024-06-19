@@ -155,7 +155,7 @@ public class GarageTest
             var garage = new Garage<IVehicle>(
                 inParkingLots,
                 new Address("ADDRESS"),
-                GarageDescription.MULTI
+                GarageDescriptionKeeper.MULTI
             );
             var actualCapacity = garage.Capacity;
             Assert.Equal((uint)inParkingLots.Count, actualCapacity);
@@ -179,7 +179,7 @@ public class GarageTest
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             garage.TryAddVehicle(
                 parkingLotId,
@@ -199,7 +199,7 @@ public class GarageTest
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var parkingResult = garage.TryAddVehicle(
                 parkingLotId,
@@ -220,7 +220,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
          
             garage.TryAddVehicle(
                 parkingLotId,
@@ -243,7 +243,7 @@ public class GarageTest
         {
             CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var parkingResult = garage.TryAddVehicle(
                 parkingLotId,
@@ -264,7 +264,7 @@ public class GarageTest
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var parkingResult = garage.TryAddVehicle(
                 parkingLotId, _f.MockVehicle.Object, out IParkingLot<IVehicle>? parkingLot
@@ -297,7 +297,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             CleanDefaultGarageVehiclesBeforeTest(parkingLots);
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
 
             garage.TryRemoveVehicle(
                 parkingLotId,
@@ -317,7 +317,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             CleanDefaultGarageVehiclesBeforeTest(parkingLots);
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var removeCarResult = garage.TryRemoveVehicle(
                 parkingLotId,
@@ -339,7 +339,7 @@ public class GarageTest
         {
             // TODO! Why do not default vehicle work here?
             AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var removeCarResult = garage.TryRemoveVehicle(parkingLotId, out IVehicle? vehicle);
             Assert.NotNull(vehicle);
@@ -354,7 +354,7 @@ public class GarageTest
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var removeCarResult = garage.TryRemoveVehicle(parkingLotId, out IVehicle? vehicle);
 
@@ -386,7 +386,7 @@ public class GarageTest
         {
             CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             var parkingLot = garage.AddVehicle(
                 parkingLotId, _f.MockVehicle.Object
@@ -407,7 +407,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
             Assert.Throws<InvalidGarageStateException>(() => garage.AddVehicle(
                 parkingLotId, _f.MockVehicle.Object
@@ -426,7 +426,7 @@ public class GarageTest
             CleanDefaultGarageVehiclesBeforeTest(parkingLots);
             var factory = _f.GarageFactory;
 
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
 
             Assert.Throws<InvalidGarageStateException>(() => garage.AddVehicle(
                 parkingLotId, _f.MockVehicle.Object
@@ -458,7 +458,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
             
             var reomvedVehicle = garage.RemoveVehicle(parkingLotId);
@@ -477,7 +477,7 @@ public class GarageTest
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
             var factory = _f.GarageFactory;
-            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescription.MULTI);
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
 
             Assert.Throws<InvalidGarageStateException>(() => garage.RemoveVehicle(

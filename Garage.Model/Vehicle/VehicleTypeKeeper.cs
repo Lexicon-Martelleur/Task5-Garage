@@ -1,6 +1,6 @@
 ﻿namespace Garage.Model.Vehicle;
 
-public static class VehicleType
+public static class VehicleTypeKeeper
 {
     public const string AIRPLANE = "1";
     public const string BOAT = "2";

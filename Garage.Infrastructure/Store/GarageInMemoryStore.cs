@@ -3,7 +3,7 @@ using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
 using Garage.Model.Vehicle;
-using System.Reflection;
+using System.Net;
 
 namespace Garage.Infrastructure.Store;
 
@@ -308,12 +308,9 @@ public class GarageInMemoryStore : IGarageRepository
     {
         if (garage is IGarage<IAirplane> airplaneHangar)
         {
-            Console.WriteLine("XXXXXXXXXXX");
-            Console.WriteLine(_airplaneHangars);
             var updatedGarages = _airplaneHangars.ToList();
             updatedGarages.Add(airplaneHangar);
             _airplaneHangars = updatedGarages;
-            Console.WriteLine(_airplaneHangars);
             return true;
         }
 
@@ -365,5 +362,59 @@ public class GarageInMemoryStore : IGarageRepository
             return true;
         }
         return false;
+    }
+
+    public ParkingLotInfoWithAddress? FindVehicleInAllGarages(string regNumber)
+    {
+        var infoFromAirplaneHangars = _airplaneHangars
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromAirplaneHangars != null) { return infoFromAirplaneHangars; }
+
+        var infoFromBoatHarbors = _boatHarbors
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromBoatHarbors != null) { return infoFromBoatHarbors; }
+
+        var infoFromBusGarages = _busGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromBusGarages != null) { return infoFromBusGarages; }
+
+        var infoFromCarGarages = _carGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromCarGarages != null) { return infoFromCarGarages; }
+
+        var infoFromECarGarages = _eCarGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromECarGarages != null) { return infoFromECarGarages; }
+
+        var infoFromMCGarages = _mcGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromMCGarages != null) { return infoFromMCGarages; }
+
+        var infoFromMultiGarages = _multiGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .Select(garage => new ParkingLotInfoWithAddress(
+                garage.Address, garage.GetParkingLotWithVehicle(regNumber)!))
+            .FirstOrDefault();
+        if (infoFromMultiGarages != null) { return infoFromMultiGarages; }
+
+        return null;
     }
 }

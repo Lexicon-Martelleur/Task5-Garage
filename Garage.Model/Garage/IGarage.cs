@@ -48,4 +48,6 @@ public interface IGarage<VehicleType> :
     IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType();
 
     IParkingLot<VehicleType> GetFirstFreeParkingLot();
+
+    public IParkingLot<VehicleType>? GetParkingLotWithVehicle(string regNumber);
 }
