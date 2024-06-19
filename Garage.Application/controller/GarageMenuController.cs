@@ -1,11 +1,7 @@
 ﻿using Garage.Application.Constant;
 using Garage.Application.View;
-using Garage.Model.Garage;
-using Garage.Model.ParkingLot;
-using Garage.Model.Service;
-using Garage.Model.Vehicle;
 
-namespace Garage.Application.controller;
+namespace Garage.Application.Controller;
 
 /// <summary>
 /// A controller class used to control data flow between
@@ -13,16 +9,29 @@ namespace Garage.Application.controller;
 /// </summary>
 internal class GarageMenuController
 {
-    private bool _quitGarageMainMenu = false;
-    private readonly Dictionary<string, Action<string>> _mainMenuActions;
+    private bool _quitGarageMenu = false;
+    private readonly Dictionary<string, Action<string>> _menuActionsMap;
     private readonly GarageMenuView _view;
-    private readonly IGarageService _service;
+    private readonly GarageSubMenuController _subMenuController;
 
-    public GarageMenuController(GarageMenuView view, IGarageService service)
+    /// <summary>
+    /// A constructor used to create an instance of this class.
+    /// In constructor a menu action map is also created.   
+    /// </summary>
+    /// <param name="view">
+    /// A view class used to read and write information to and from the user
+    /// </param>
+    /// <param name="subMenuController">
+    /// A controller class used to delegate controller logic for data flow
+    /// to the domain/model layer.
+    /// </param>
+    public GarageMenuController(
+        GarageMenuView view,
+        GarageSubMenuController subMenuController)
     {
         _view = view;
-        _service = service;
-        _mainMenuActions = new() 
+        _subMenuController = subMenuController;
+        _menuActionsMap = new() 
         {
             { GarageMenu.EXIT, _ => HandleExit() },
             { GarageMenu.LIST_ALL_GARAGES, HandleListAllGarages },
@@ -36,37 +45,35 @@ internal class GarageMenuController
         };
     }
 
-    internal void StartGarageMainMenu()
+    internal void StartGarageMenu()
     {
-        do
-        {
-            HandleMainMenuSelection(_view.PrintGarageMainMenu());
-
-        } while (!_quitGarageMainMenu);
+        do { HandleMainMenuSelection(_view.PrintGarageMainMenu()); } 
+        while (!_quitGarageMenu);
     }
 
-    private void HandleMainMenuSelection(string userInput)
+    private void HandleMainMenuSelection(string input)
     {
-        if (_mainMenuActions.TryGetValue(userInput, out var MainMenuAction))
+        if (_menuActionsMap.TryGetValue(input, out var MenuAction))
         {
-            MainMenuAction(userInput);
+            MenuAction(input);
         }
         else
         {
-            HandleIncorrectMenuSelection(userInput);
+            HandleIncorrectMenuSelection(input);
         }
     }
 
     private void HandleExit()
     {
-        _quitGarageMainMenu = true;
+        _quitGarageMenu = true;
     }
 
     private void HandleListAllGarages(string menuSelection)
     {
         try
         {
-            _view.PrintAllGarages(_service.GetAllGarages());
+            _view.WriteStartListAllGaragesMenu();
+            _subMenuController.HandleListAllGarages();
         }
         catch
         {
@@ -78,12 +85,11 @@ internal class GarageMenuController
     {
         try
         {
-            var parkingLotInfos = _service.GetAllParkingLotsWithVehicles();
-            _view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
+            _view.WriteStartListAllVehiclesMenu();
+            _subMenuController.HandleListAllVehicles();
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -93,38 +99,12 @@ internal class GarageMenuController
         try
         {
             _view.WriteStartGroupedVehiclesByTypeMenu();
-            if (EmptyString(out var address, _view.ReadGarageAddress)) { return; }
-            var groupedVehicles = _service.GetGroupedVehiclesByVehicleType(address);
-            _view.PrintGroupedVehicles(groupedVehicles, address);
+            _subMenuController.HandleListGroupedVehiclesByType();
         }
         catch
         {
             _view.PrintCorruptedData(menuSelection);
         }
-    }
-
-    private bool EmptyString(out string value, Func<string> ReadFromUser)
-    {
-        return InvalidInput(
-            out value,
-            ReadFromUser,
-            _view.WriteNotValidInput,
-            (string value) => value.Equals(String.Empty));
-    }
-
-    private bool InvalidInput(
-        out string value,
-        Func<string> ReadFromUser,
-        Action<string> WriteCorrectionToUser,
-        Func<string, bool> Predicate)
-    {
-        value = ReadFromUser();
-        if (Predicate(value))
-        {
-            WriteCorrectionToUser(value);
-            return true;
-        }
-        return false;
     }
 
     private void HandleAddVehicleToGarage(string menuSelection)
@@ -132,22 +112,7 @@ internal class GarageMenuController
         try
         {
             _view.WriteStartAddVehicleMenu();
-            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
-                EmptyString(out var regNumber, _view.ReadVehicleRegNr) ||
-                InvalidVehicleType(out var vehicleType))
-            {
-                return;
-            }
-            var parkingLot = _service.AddVehicleToGarage(addr, regNumber, vehicleType);
-
-            if (parkingLot != null)
-            {
-                _view.PrintVehicleAddedToGarage(parkingLot, regNumber, vehicleType);
-            }
-            else
-            {
-                _view.PrintCanNotAddVehicleToGarage(addr, regNumber, vehicleType);
-            }
+            _subMenuController.HandleAddVehicleToGarage();
         }
         catch
         {
@@ -155,42 +120,12 @@ internal class GarageMenuController
         }
     }
 
-    private bool InvalidVehicleType(out string vehicleType)
-    {
-        return InvalidInput(
-            out vehicleType,
-            _view.ReadVehicleType,
-            _view.WriteNotValidInput,
-            (string value) => value.Equals(VehicleTypeKeeper.DEFAULT));
-    }
-
     private void HandleRemoveVehicleFromGarage(string menuSelection)
     {
         try
         {
             _view.WriteRemoveAddVehicleMenu();
-            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
-                EmptyString(out var parkingLotId, _view.ReadParkingLotId))
-            {
-                return;
-            }
-            
-            if (!uint.TryParse(parkingLotId, out var parsedParkingLotId) || parsedParkingLotId == 0) 
-            {
-                _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
-                return;
-            }
-            
-            var regNumber = _service.RemoveVehicleFromGarage(addr, parsedParkingLotId);
-
-            if (regNumber != null)
-            {
-                _view.PrintVehicleRemovedFromToGarage((RegistrationNumber)regNumber);
-            }
-            else
-            {
-                _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
-            }
+            _subMenuController.HandleRemoveVehicleFromGarage();
         }
         catch
         {
@@ -203,30 +138,7 @@ internal class GarageMenuController
         try
         {
             _view.WriteStartCreateGarageMenu();
-            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
-                !_view.ReadGarageDescriptionOK(out var garageDescription) ||
-                EmptyString(out var capacity, _view.ReadGarageCapacity))
-            {
-                return;
-            }
-
-            if (!uint.TryParse(capacity, out var parsedCapacity) || parsedCapacity == 0)
-            {
-                _view.PrintCanNotCreateGarageWithSpecifiedCapacity(capacity);
-                return;
-            }
-
-            IGarageInfo? garageInfo = _service.CreateGarage(
-                addr, parsedCapacity, garageDescription);
-
-            if (garageInfo != null)
-            {
-                _view.PrintGarageCreated(garageInfo);
-            }
-            else
-            {
-                _view.PrintCouldNotCreateGarage(addr, capacity, garageDescription);
-            }
+            _subMenuController.HandleCreateGarage();
         }
         catch
         {
@@ -239,20 +151,7 @@ internal class GarageMenuController
         try
         {
             _view.WriteStartSearchVehicleByRegNrMenu();
-            if (EmptyString(out var regNumber, _view.ReadVehicleRegNr))
-            {
-                return;
-            }
-
-            ParkingLotInfoWithAddress? parkingLotInfo = _service.FindVehicleInAllGarages(regNumber);
-            if (parkingLotInfo != null)
-            {
-                _view.PrintVehicleFind(parkingLotInfo);
-            }
-            else
-            {
-                _view.PrintCanNotFindVehicleInAnyGarage(regNumber);
-            }
+            _subMenuController.HandleSearchVehicleVyRegNr();
         }
         catch
         {
@@ -264,17 +163,8 @@ internal class GarageMenuController
     {
         try
         {
-            var vehiclePropertyDescriptionMap = Vehicle.GetPropertyDescriptionMap();
-
-            Dictionary<string, string> filterMap = new();
-
             _view.WriteStartFilterMenu();
-            foreach (var property in vehiclePropertyDescriptionMap)
-            {
-               string filterInput = _view.ReadFilterProperty(property.Value);
-               filterMap[property.Key] = filterInput;
-            }
-
+            _subMenuController.HandleFilterVehicle();
         }
         catch
         {

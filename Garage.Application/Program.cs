@@ -1,4 +1,4 @@
-﻿using Garage.Application.controller;
+﻿using Garage.Application.Controller;
 using Garage.Application.View;
 using Garage.Infrastructure.Store;
 using Garage.Model.Service;
@@ -12,10 +12,13 @@ IGarageService garageService = new GarageService(
     garageRepositoryFactory.GetGarageRepository(),
     vehicleFactory);
 
-var garageMenuView = new GarageMenuView();
 
+var garageSubMenuView = new GarageSubMenuView();
+var subMenuController = new GarageSubMenuController(garageSubMenuView, garageService);
+
+var garageMenuView = new GarageMenuView();
 var garageMenuController = new GarageMenuController(
     garageMenuView,
-    garageService);
+    subMenuController);
 
-garageMenuController.StartGarageMainMenu();
+garageMenuController.StartGarageMenu();
