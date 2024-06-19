@@ -16,8 +16,7 @@ public class ParkingLot<VehicleType> : IParkingLot<VehicleType>
 
     public VehicleType? CurrentVehicle { get; set; }
 
-    public string? VehicleRegistrationNumber => CurrentVehicle?.RegistrationNumber.value;
-    
+    public string? VehicleRegistrationNumber => CurrentVehicle?.RegistrationNumber.Value;    
 
     public string? VehicleTypeName => CurrentVehicle?.Type;
 

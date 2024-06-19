@@ -3,6 +3,7 @@ using Garage.Model.Base;
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
+using System.Security.Cryptography;
 
 namespace Garage.Application.View;
 
@@ -183,16 +184,17 @@ internal class GarageMenuView
     }
 
     private string MapVehicleTypeToVehicleName(
-        string selectedVehicleType) => selectedVehicleType switch
-        {
-            VehicleType.AIRPLANE => "Airplane",
-            VehicleType.BOAT => "Boat",
-            VehicleType.BUS => "Bus",
-            VehicleType.CAR => "Car",
-            VehicleType.E_CAR => "E-car",
-            VehicleType.MOTORCYCLE => "MC",
-            _ => VehicleType.DEFAULT
-        };
+        string selectedVehicleType
+    ) => selectedVehicleType switch
+    {
+        VehicleType.AIRPLANE => "Airplane",
+        VehicleType.BOAT => "Boat",
+        VehicleType.BUS => "Bus",
+        VehicleType.CAR => "Car",
+        VehicleType.E_CAR => "E-car",
+        VehicleType.MOTORCYCLE => "MC",
+        _ => VehicleType.DEFAULT
+    };
 
     internal void PrintCanNotAddVehicleToGarage(
         string address,
@@ -218,7 +220,62 @@ internal class GarageMenuView
 
     internal string ReadParkingLotId()
     {
-        Console.Write("\n✏️ Enter parking lot id: ");
+        Console.Write("\n✏️ Enter parking lot id (number > 0): ");
         return Console.ReadLine() ?? String.Empty;
+    }
+
+    internal string ReadGarageCapacity()
+    {
+        Console.Write("\n✏️ Enter garage capacity (number > 0): ");
+        return Console.ReadLine() ?? String.Empty;
+    }
+
+    internal void PrintCanNotCreateGarageWithSpecifiedCapacity(string capacity)
+    {
+        Console.WriteLine($"\n⚠️ Can not create garage with capacity '{capacity}'");
+    }
+
+    internal bool ReadGarageDescriptionOK(out GarageDescriptionItem garageDescription)
+    {
+        var listGarageTypes = $"""
+
+        📋 Select garage to create:
+                {GarageDescription.AIRPLANE.ID}) {GarageDescription.AIRPLANE.Description}
+                {GarageDescription.BOAT.ID}) {GarageDescription.BOAT.Description}
+                {GarageDescription.BUS.ID}) {GarageDescription.BUS.Description}
+                {GarageDescription.CAR.ID}) {GarageDescription.CAR.Description}
+                {GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.ID}) {GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.Description}
+                {GarageDescription.E_CAR.ID}) {GarageDescription.E_CAR.Description}
+                {GarageDescription.MC.ID}) {GarageDescription.MC.Description}
+                {GarageDescription.MULTI.ID}) {GarageDescription.MULTI.Description}
+        """;
+
+        Console.WriteLine(listGarageTypes);
+        Console.Write("\n✏️ Select garage to create (number): ");
+        garageDescription = GetSelectedGarage(Console.ReadLine() ?? String.Empty);
+        return garageDescription != GarageDescription.DEFAULT;
+    }
+
+    private GarageDescriptionItem GetSelectedGarage(
+        string selectedGarageType)
+    {
+        return GarageDescription.GarageDescriptions.ContainsKey(
+            selectedGarageType
+        ) ? GarageDescription.GarageDescriptions[selectedGarageType]
+        : GarageDescription.DEFAULT;
+    }
+
+    internal void PrintGarageCreated(IGarageInfo garageInfo)
+    {
+        Console.WriteLine($"\nℹ️ Garage [{garageInfo.Address.Value}] " +
+            $"{garageInfo.Description}" +
+            $"is created with capacity {garageInfo.Capacity}");
+    }
+
+    internal void PrintCouldNotCreateGarage(string addr, string capacity, GarageDescriptionItem garageDescription)
+    {
+        Console.WriteLine($"\n⚠️ Could not create garage '{garageDescription.Description}' " +
+            $"at address '{addr}' " +
+            $"with capacity '{capacity}'");
     }
 }

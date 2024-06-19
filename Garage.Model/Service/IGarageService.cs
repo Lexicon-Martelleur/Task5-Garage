@@ -15,4 +15,5 @@ public interface IGarageService
         string regNumber,
         string vehicleType);
     RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId);
+    IGarageInfo? CreateGarage(string addr, uint capacity, GarageDescriptionItem description);
 }

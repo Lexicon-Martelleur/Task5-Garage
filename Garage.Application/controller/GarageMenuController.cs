@@ -1,5 +1,6 @@
 ﻿using Garage.Application.Constant;
 using Garage.Application.View;
+using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Service;
 using Garage.Model.Vehicle;
@@ -158,7 +159,6 @@ internal class GarageMenuController
             (string value) => value.Equals(VehicleType.DEFAULT));
     }
 
-    // TODO HandleRemoveVehicleFromGarage!
     private void HandleRemoveVehicleFromGarage(string menuSelection)
     {
         try
@@ -169,7 +169,7 @@ internal class GarageMenuController
                 return;
             }
             
-            if (!uint.TryParse(parkingLotId, out uint parsedParkingLotId)) 
+            if (!uint.TryParse(parkingLotId, out var parsedParkingLotId) || parsedParkingLotId == 0) 
             {
                 _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
             }
@@ -194,6 +194,36 @@ internal class GarageMenuController
     // TODO HandleCreateGarage!
     private void HandleCreateGarage(string menuSelection)
     {
+        try
+        {
+            if (EmptyString(out var addr, _view.ReadGarageAddress) ||
+                !_view.ReadGarageDescriptionOK(out var garageDescription) ||
+                EmptyString(out var capacity, _view.ReadGarageCapacity))
+            {
+                return;
+            }
+
+            if (!uint.TryParse(capacity, out var parsedCapacity) || parsedCapacity == 0)
+            {
+                _view.PrintCanNotCreateGarageWithSpecifiedCapacity(capacity);
+            }
+
+            IGarageInfo? garageInfo = _service.CreateGarage(
+                addr, parsedCapacity, garageDescription);
+
+            if (garageInfo != null)
+            {
+                _view.PrintGarageCreated(garageInfo);
+            }
+            else
+            {
+                _view.PrintCouldNotCreateGarage(addr, capacity, garageDescription);
+            }
+        }
+        catch
+        {
+            _view.PrintCorruptedData(menuSelection);
+        }
     }
 
     // TODO HandleSearchVehicleByRegNr!

@@ -191,32 +191,32 @@ public class GarageInMemoryStore : IGarageRepository
         if ( selectedGarage == null) { return null; }
 
         ParkingLotInfoWithAddress? parkingLotInfo = null;
-        if ((vehicle as Car) != null && TryAddVehicle(
-            _carGarages, addr, (vehicle as Car)!, out parkingLotInfo))
+        if (vehicle is Car car && TryAddVehicle(
+            _carGarages, addr, car, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if ((vehicle as IBus) != null && TryAddVehicle(
-            _busGarages, addr, (vehicle as IBus)!, out parkingLotInfo))
+        if (vehicle is IBus bus && TryAddVehicle(
+            _busGarages, addr, bus, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if ((vehicle as IMotorcycle) != null && TryAddVehicle(
-            _mcGarages, addr, (vehicle as IMotorcycle)!, out parkingLotInfo))
+        if (vehicle is IMotorcycle mc && TryAddVehicle(
+            _mcGarages, addr, mc, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if ((vehicle as IBoat) != null && TryAddVehicle(
-            _boatHarbors, addr, (vehicle as IBoat)!, out parkingLotInfo))
+        if (vehicle is IBoat boat && TryAddVehicle(
+            _boatHarbors, addr, boat, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if ((vehicle as IAirplane) != null && TryAddVehicle(
-            _airplaneHangars, addr, (vehicle as IAirplane)!, out parkingLotInfo))
+        if (vehicle is IAirplane airplane && TryAddVehicle(
+            _airplaneHangars, addr, airplane, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if ((vehicle as ECar) != null && TryAddVehicle(
-            _eCarGarages, addr, (vehicle as ECar)!, out parkingLotInfo))
+        if (vehicle is ECar eCar && TryAddVehicle(
+            _eCarGarages, addr, eCar, out parkingLotInfo))
         { return parkingLotInfo; }
 
-        if (TryAddVehicle(
-            _multiGarages, addr, (vehicle as IVehicle)!, out parkingLotInfo))
+        if (vehicle is IVehicle multiVehicle && TryAddVehicle(
+            _multiGarages, addr, multiVehicle, out parkingLotInfo))
         { return parkingLotInfo; }
 
         return parkingLotInfo;
@@ -300,5 +300,70 @@ public class GarageInMemoryStore : IGarageRepository
         regNumber = vehicle?.RegistrationNumber; 
 
         return result;
+    }
+
+    
+    public bool StoreGarage<VehicleType>(IGarage<VehicleType> garage)
+        where VehicleType : IVehicle
+    {
+        if (garage is IGarage<IAirplane> airplaneHangar)
+        {
+            Console.WriteLine("XXXXXXXXXXX");
+            Console.WriteLine(_airplaneHangars);
+            var updatedGarages = _airplaneHangars.ToList();
+            updatedGarages.Add(airplaneHangar);
+            _airplaneHangars = updatedGarages;
+            Console.WriteLine(_airplaneHangars);
+            return true;
+        }
+
+        if (garage is IGarage<IBoat> boatHarbor)
+        {
+            var updatedGarages = _boatHarbors.ToList();
+            updatedGarages.Add(boatHarbor);
+            _boatHarbors = updatedGarages;
+            return true;
+        }
+
+        if (garage is IGarage<IBus> busGarage)
+        {
+            var updatedGarages = _busGarages.ToList();
+            updatedGarages.Add(busGarage);
+            _busGarages = updatedGarages;
+            return true;
+        }
+
+        if (garage is IGarage<Car> carGarage)
+        {
+            var updatedGarages = _carGarages.ToList();
+            updatedGarages.Add(carGarage);
+            _carGarages = updatedGarages;
+            return true;
+        }
+
+        if (garage is IGarage<IMotorcycle> mcGarage)
+        {
+            var updatedGarages = _mcGarages.ToList();
+            updatedGarages.Add(mcGarage);
+            _mcGarages = updatedGarages;
+            return true;
+        }
+
+        if (garage is IGarage<ECar> eCarGarage)
+        {
+            var updatedGarages = _eCarGarages.ToList();
+            updatedGarages.Add(eCarGarage);
+            _eCarGarages = updatedGarages;
+            return true;
+        }
+
+        if (garage is IGarage<IVehicle> multiGarage)
+        {
+            var updatedGarages = _multiGarages.ToList();
+            updatedGarages.Add(multiGarage);
+            _multiGarages = updatedGarages;
+            return true;
+        }
+        return false;
     }
 }

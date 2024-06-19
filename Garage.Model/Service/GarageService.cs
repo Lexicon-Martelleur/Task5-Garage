@@ -6,7 +6,6 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
-
 public class GarageService(
     IGarageRepository repository
 ) : IGarageService
@@ -62,7 +61,7 @@ public class GarageService(
         string regNumber,
         string vehicleType)
     {
-        // TODO ! Move creation of vehicle to controller.
+        // TODO ! Move creation of vehicle to constructor.
         var vehicleFactory = new VehicleFactory();
 
         switch (vehicleType)
@@ -100,5 +99,134 @@ public class GarageService(
     {
         return repository.RemoveVehicleFromGarage(addr, parkingLotId);
     }
-}
 
+    public IGarageInfo? CreateGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        Dictionary<
+            string,
+            Func<string, uint, GarageDescriptionItem, IGarageInfo?>
+        > garageFactoryMap = new() 
+        {
+            { GarageDescription.AIRPLANE.ID, StoreAirplaneHangar },
+            { GarageDescription.BOAT.ID, StoreBoatHarbor },
+            { GarageDescription.BUS.ID, StoreBusGarage },
+            { GarageDescription.CAR.ID, StoreGeneralCarGarage },
+            { GarageDescription.CAR_NO_ELECTRICAL_PARKING_LOTS.ID, StoreCarGarage },
+            { GarageDescription.E_CAR.ID, StoreECarGarage },
+            { GarageDescription.MC.ID, StoreMCGarage },
+            { GarageDescription.MULTI.ID, StoreMultiGarage }
+        };
+
+        if (garageFactoryMap.TryGetValue(description.ID, out var garageFactory))
+        {
+            return garageFactory(addr, capacity, description);
+        }
+
+        return null;
+    }
+
+    private IGarageInfo? StoreAirplaneHangar(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<IAirplane>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreBoatHarbor(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<IBoat>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreBusGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<IBus>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreGeneralCarGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<ICar>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreCarGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<Car>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreECarGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<ECar>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreMCGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<IMotorcycle>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+
+    private IGarageInfo? StoreMultiGarage(
+        string addr, uint capacity, GarageDescriptionItem description)
+    {
+        var garageFactory = new GarageFactory<IVehicle>();
+        var garage = garageFactory.CreateGarage(
+            capacity,
+            new Address(addr),
+            description
+        );
+        var resultStoredGarage = repository.StoreGarage(garage);
+        return resultStoredGarage ? garage : null;
+    }
+}

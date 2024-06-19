@@ -10,10 +10,10 @@ public interface IGarageFactory<VehicleType>
     IGarage<VehicleType> CreateGarage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
         Address address,
-        (string Description, string[] VehicleTypes) description);
+        GarageDescriptionItem description);
 
     IGarage<VehicleType> CreateGarage(
         uint capacity,
         Address address,
-        (string Description, string[] VehicleTypes) description);
+        GarageDescriptionItem description);
 }

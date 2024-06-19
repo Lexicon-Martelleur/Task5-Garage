@@ -23,7 +23,7 @@ public class Garage<VehicleType> :
     public Garage(
         HashSet<IParkingLot<VehicleType>> parkingLots,
         Address address,
-        (string Description, string[] VehicleTypes) description)
+        GarageDescriptionItem description)
     {
         _capacity = (uint)parkingLots.Count;
         _address = address;
