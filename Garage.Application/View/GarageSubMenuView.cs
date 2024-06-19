@@ -111,7 +111,7 @@ internal class GarageSubMenuView : IGarageSubMenuView
         """;
 
         Console.WriteLine(listOfVehicleTypes);
-        Console.Write("\t✏️ Select vehicle type: ");
+        Console.Write("\t✏️ Select vehicle type (number): ");
         var garageDescription = GetSelectedVehicleType(Console.ReadLine() ?? String.Empty);
         return garageDescription.ID;
     }

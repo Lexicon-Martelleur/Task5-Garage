@@ -118,6 +118,13 @@ internal class GarageMenuView : IGarageMenuView
 
     public void PrintIncorrectMenuSelection(string selection)
     {
-        Console.WriteLine($"\n⚠️ '{selection}' is not a valid menu selection.");
+        if (selection == GarageMenu.DEFAULT)
+        {
+            Console.WriteLine($"\n⚠️ Invalid menu selection.");
+        }
+        else
+        {
+            Console.WriteLine($"\n⚠️ '{selection}' is not a valid menu selection.");
+        }
     }
 }

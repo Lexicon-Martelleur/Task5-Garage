@@ -162,7 +162,6 @@ public class Garage<VehicleType> :
         return Address.GetHashCode();
     }
 
-    // TODO! Test remaining methods
     public IEnumerable<GroupedVehicle> GroupVehiclesByVehicleType()
     {
         return this
@@ -176,7 +175,7 @@ public class Garage<VehicleType> :
     {
         if (IsFullGarage())
         {
-            throw new InvalidGarageStateException("_");
+            throw new InvalidGarageStateException("Garage is full no free parking lots exist");
         }
         return this
             .Where(lot => lot.CurrentVehicle == null)

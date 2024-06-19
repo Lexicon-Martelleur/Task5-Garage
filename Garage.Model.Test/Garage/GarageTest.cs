@@ -2,6 +2,7 @@
 using Garage.Model.Vehicle;
 using Garage.Model.ParkingLot;
 using Garage.Model.Base;
+using Garage.Model.Test.Utility;
 
 
 namespace Garage.Model.Test.Garage;
@@ -337,7 +338,6 @@ public class GarageTest
             uint parkingLotId,
             HashSet<IParkingLot<IVehicle>> parkingLots)
         {
-            // TODO! Why do not default vehicle work here?
             AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
             var garage = _f.GarageFactory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
             
@@ -485,6 +485,157 @@ public class GarageTest
             ));            
         }
 
+        public void Dispose()
+        {
+            _f.MockVehicle.Reset();
+        }
+    }
+
+    public class GroupVehiclesByVehicleType(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
+
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        [Theory(DisplayName = """
+        🧪 Return an enumerable of grouped vehicles by vehicle type
+        when garage is empty
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T1_GroupVehiclesByVehicleType(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+
+            var groupedList = garage.GroupVehiclesByVehicleType();
+
+            Assert.Equal(parkingLots.Count, groupedList.ToList()[0].Count);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Return an empty enumerable of grouped vehicles by vehicle type
+        when garage is empty
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T2_GroupVehiclesByVehicleType(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
+
+            var groupedList = garage.GroupVehiclesByVehicleType();
+
+            Assert.Empty(groupedList);
+        }
+
+        public void Dispose()
+        {
+            _f.MockVehicle.Reset();
+        }
+    }
+    
+    public class GetFirstFreeParkingLot(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
+
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        [Theory(DisplayName = """
+        🧪 Return free parking lot
+        when garage is not full.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T1_GetFirstFreeParkingLot(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            CleanDefaultGarageVehiclesBeforeTest(parkingLots);
+
+            AssertExtensions.DoesNotThrow(() => garage.GetFirstFreeParkingLot());
+        }
+
+        [Theory(DisplayName = """
+        🧪 Throw custom model exception
+        when garage is full.
+        """)]
+        [MemberData(nameof(FailureTestData))]
+        internal void T2_GetFirstFreeParkingLot(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+
+            Assert.Throws<InvalidGarageStateException>(garage.GetFirstFreeParkingLot);
+        }
+
+        public void Dispose()
+        {
+            _f.MockVehicle.Reset();
+        }
+    }
+
+    public class GetParkingLotWithVehicle(Fixture fixture) : IClassFixture<Fixture>, IDisposable
+    {
+        private readonly Fixture _f = fixture;
+
+        public static IEnumerable<object[]> SuccessTestData = CreateSuccessTestData();
+
+        public static IEnumerable<object[]> FailureTestData = CreateFailureTestData();
+
+        [Theory(DisplayName = """
+        🧪 Return parking lot with vehicle when
+        when vehicle with reg number exist.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T1_GetParkingLotWithVehicle(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            _f.MockVehicle.Setup(vehicle => vehicle.RegistrationNumber).Returns(
+                new RegistrationNumber("111AAA"));
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+
+            var parkingLot = garage.GetParkingLotWithVehicle("111AAA");
+
+            Assert.NotNull(parkingLot);
+            Assert.NotNull(parkingLot.CurrentVehicle);
+            Assert.Equal(new RegistrationNumber("111AAA"), parkingLot.CurrentVehicle.RegistrationNumber);
+        }
+
+        [Theory(DisplayName = """
+        🧪 Return null when
+        when vehicle with reg number does not exist.
+        """)]
+        [MemberData(nameof(SuccessTestData))]
+        internal void T2_GetParkingLotWithVehicle(
+            uint _,
+            HashSet<IParkingLot<IVehicle>> parkingLots)
+        {
+            var factory = _f.GarageFactory;
+            var garage = factory.CreateGarage(parkingLots, new Address("ADDRESS"), GarageDescriptionKeeper.MULTI);
+            _f.MockVehicle.Setup(vehicle => vehicle.RegistrationNumber).Returns(
+                new RegistrationNumber("111AB"));
+            AddGarageVehiclesBeforeTest(parkingLots, _f.MockVehicle.Object);
+
+            var parkingLot = garage.GetParkingLotWithVehicle("111AAA");
+
+            Assert.Null(parkingLot);
+        }
 
         public void Dispose()
         {

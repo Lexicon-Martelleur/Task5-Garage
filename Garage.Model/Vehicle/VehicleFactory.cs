@@ -1,11 +1,12 @@
 ﻿namespace Garage.Model.Vehicle;
 
-// TODO! Fix static creation of vehicle properties.
-// TODO! Update to write all properties or use unknown to simplify.
+// TODO! Finish implementation of VehicleFactory
+// 1) Fix static creation of vehicle properties.
+// 2) Update to write all properties or use unknown to simplify.
 
 /// <summary>
-/// A factory class used to create new vehicles
-/// added into the system.
+/// A factory class used to add newly created vehicles
+/// into the system.
 /// </summary>
 public class VehicleFactory
 {
