@@ -1,5 +1,8 @@
 ﻿namespace Garage.Application.Constant;
 
+/// <summary>
+/// A class used to hold garage menu constants.
+/// </summary>
 internal class GarageMenu
 {
     internal const string EXIT = "0";

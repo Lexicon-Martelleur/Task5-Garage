@@ -7,31 +7,32 @@ namespace Garage.Application.Controller;
 /// A controller class used to control data flow between
 /// the user and the domain/model layer.
 /// </summary>
-internal class GarageMenuController
+internal class GarageMenuController : IGarageMenuController
 {
     private bool _quitGarageMenu = false;
     private readonly Dictionary<string, Action<string>> _menuActionsMap;
-    private readonly GarageMenuView _view;
-    private readonly GarageSubMenuController _subMenuController;
+    private readonly IGarageMenuView _view;
+    private readonly IGarageSubMenuController _subMenuController;
 
     /// <summary>
     /// A constructor used to create an instance of this class.
     /// In constructor a menu action map is also created.   
     /// </summary>
     /// <param name="view">
-    /// A view class used to read and write information to and from the user
+    /// A view type of <see cref="IGarageMenuView'"/> used to 
+    /// read and write information to and from the user
     /// </param>
     /// <param name="subMenuController">
-    /// A controller class used to delegate controller logic for data flow
-    /// to the domain/model layer.
+    /// A controller type of <see cref="IGarageSubMenuController"/> used to 
+    /// delegate controller logic to.
     /// </param>
-    public GarageMenuController(
-        GarageMenuView view,
-        GarageSubMenuController subMenuController)
+    internal GarageMenuController(
+        IGarageMenuView view,
+        IGarageSubMenuController subMenuController)
     {
         _view = view;
         _subMenuController = subMenuController;
-        _menuActionsMap = new() 
+        _menuActionsMap = new()
         {
             { GarageMenu.EXIT, _ => HandleExit() },
             { GarageMenu.LIST_ALL_GARAGES, HandleListAllGarages },
@@ -45,9 +46,9 @@ internal class GarageMenuController
         };
     }
 
-    internal void StartGarageMenu()
+    public void StartGarageMenu()
     {
-        do { HandleMainMenuSelection(_view.PrintGarageMainMenu()); } 
+        do { HandleMainMenuSelection(_view.PrintGarageMainMenu()); }
         while (!_quitGarageMenu);
     }
 
@@ -151,7 +152,7 @@ internal class GarageMenuController
         try
         {
             _view.WriteStartSearchVehicleByRegNrMenu();
-            _subMenuController.HandleSearchVehicleVyRegNr();
+            _subMenuController.HandleSearchVehicleByRegNumber();
         }
         catch
         {

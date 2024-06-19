@@ -9,9 +9,9 @@ namespace Garage.Application.View;
 /// A view class used to display the garage sub menus
 /// and read user input for the applications garage features.
 /// </summary>
-internal class GarageSubMenuView
+internal class GarageSubMenuView : IGarageSubMenuView
 {
-    internal void PrintAllGarages(IEnumerable<GarageInfoWithVehicleTypeName> garages)
+    public void PrintAllGarages(IEnumerable<GarageInfoWithVehicleTypeName> garages)
     {
         garages.ToList().ForEach(i => Console.WriteLine(GetGarageInfo(i)));
     }
@@ -23,7 +23,7 @@ internal class GarageSubMenuView
             $"with capacity of {garage.GetCapacity()} vehicles";
     }
 
-    internal void PrintAllParkingLotsWithVehicles(
+    public void PrintParkingLotsWithVehicles(
         IEnumerable<ParkingLotInfoWithAddress> parkingLotsInfos)
     {
         parkingLotsInfos.ToList().ForEach(i => Console.WriteLine(GetParkingLotInfo(i)));
@@ -36,18 +36,18 @@ internal class GarageSubMenuView
             $"Parked at '{lot.GetAddress()}' in lot ID '{lot.GetParkingLotID()}'";
     }
 
-    internal string ReadGarageAddr()
+    public string ReadGarageAddr()
     {
         Console.Write("\n\t✏️ Enter a valid garage address: ");
-        return Console.ReadLine() ?? String.Empty;
+        return Console.ReadLine()?.Trim() ?? String.Empty;
     }
 
-    internal void PrintNoGarageFoundForAddress(string address)
+    public void PrintNoGarageFoundForAddress(string address)
     {
         Console.WriteLine($"\n\t⚠️ No garage exist in the system with address: '{address}'");
     }
 
-    internal void PrintGroupedVehicles(
+    public void PrintGroupedVehicles(
         IEnumerable<GroupedVehicle>? groupedVehicles,
         string address)
     {
@@ -61,7 +61,7 @@ internal class GarageSubMenuView
         }
     }
 
-    private void PrintGroupedVehiclesEntries(
+    public void PrintGroupedVehiclesEntries(
         IEnumerable<GroupedVehicle> groupedVehiclesEntries,
         string address)
     {
@@ -79,7 +79,7 @@ internal class GarageSubMenuView
         }
     }
 
-    internal void WriteNotValidInput(string input)
+    public void WriteNotValidInput(string input)
     {
         if (input == String.Empty)
         {
@@ -91,13 +91,13 @@ internal class GarageSubMenuView
         }
     }
 
-    internal string ReadRegNr()
+    public string ReadRegNr()
     {
         Console.Write("\n\t✏️ Enter vehicle registration number: ");
-        return Console.ReadLine() ?? String.Empty;
+        return Console.ReadLine()?.Trim() ?? String.Empty;
     }
 
-    internal string ReadVehicleType()
+    public string ReadVehicleType()
     {
         var listOfVehicleTypes = $"""
 
@@ -125,7 +125,7 @@ internal class GarageSubMenuView
         : VehicleTypeKeeper.DEFAULT;
     }
 
-    internal void PrintVehicleAddedToGarage(
+    public void PrintVehicleAddedToGarage(
         ParkingLotInfoWithAddress lot,
         string regNumber,
         string vehicleType)
@@ -143,7 +143,7 @@ internal class GarageSubMenuView
         : VehicleTypeKeeper.DEFAULT.Description;
     }
 
-    internal void PrintCanNotAddVehicleToGarage(
+    public void PrintCanNotAddVehicleToGarage(
         string address,
         string regNumber,
         string vehicleType)
@@ -153,36 +153,36 @@ internal class GarageSubMenuView
             $"could not be parked at garage '{address}'");
     }
 
-    internal void PrintVehicleRemovedFromToGarage(RegistrationNumber regNumber)
+    public void PrintVehicleRemovedFromToGarage(RegistrationNumber regNumber)
     {
         Console.WriteLine($"\n\tℹ️ Vehicle [{regNumber.Value}] " +
             $"is removed from garage");
     }
 
-    internal void PrintCanNotRemoveVehicleFromGarage(string addr, string regNumber)
+    public void PrintCanNotRemoveVehicleFromGarage(string addr, string regNumber)
     {
         Console.WriteLine($"\n\t⚠️ Vehicle [{regNumber}] " +
             $"could not be removed from garage with address '{addr}'");
     }
 
-    internal string ReadParkingLotId()
+    public string ReadParkingLotId()
     {
         Console.Write("\n\t✏️ Enter parking lot id (number > 0): ");
-        return Console.ReadLine() ?? String.Empty;
+        return Console.ReadLine()?.Trim() ?? String.Empty;
     }
 
-    internal string ReadGarageCapacity()
+    public string ReadGarageCapacity()
     {
         Console.Write("\n\t✏️ Enter garage capacity (number > 0): ");
-        return Console.ReadLine() ?? String.Empty;
+        return Console.ReadLine()?.Trim() ?? String.Empty;
     }
 
-    internal void PrintCanNotCreateGarageWithSpecifiedCapacity(string capacity)
+    public void PrintCanNotCreateGarageWithSpecifiedCapacity(string capacity)
     {
         Console.WriteLine($"\n\t⚠️ Can not create garage with capacity '{capacity}'");
     }
 
-    internal bool ReadGarageDescriptionOK(out GarageDescriptionItem garageDescription)
+    public bool ReadGarageDescriptionOK(out GarageDescriptionItem garageDescription)
     {
         var listGarageTypes = $"""
 
@@ -199,7 +199,7 @@ internal class GarageSubMenuView
 
         Console.WriteLine(listGarageTypes);
         Console.Write("\t✏️ Select garage to create (number): ");
-        garageDescription = GetSelectedGarage(Console.ReadLine() ?? String.Empty);
+        garageDescription = GetSelectedGarage(Console.ReadLine()?.Trim() ?? String.Empty);
         return garageDescription != GarageDescriptionKeeper.DEFAULT;
     }
 
@@ -212,21 +212,21 @@ internal class GarageSubMenuView
         : GarageDescriptionKeeper.DEFAULT;
     }
 
-    internal void PrintGarageCreated(IGarageInfo garageInfo)
+    public void PrintGarageCreated(IGarageInfo garageInfo)
     {
         Console.WriteLine($"\n\tℹ️ Garage [{garageInfo.Address.Value}] " +
             $"{garageInfo.Description} " +
             $"is created with capacity {garageInfo.Capacity}");
     }
 
-    internal void PrintCouldNotCreateGarage(string addr, string capacity, GarageDescriptionItem garageDescription)
+    public void PrintCouldNotCreateGarage(string addr, string capacity, GarageDescriptionItem garageDescription)
     {
         Console.WriteLine($"\n\t⚠️ Could not create garage '{garageDescription.Description}' " +
             $"at address '{addr}' " +
             $"with capacity '{capacity}'");
     }
 
-    internal void PrintVehicleFind(ParkingLotInfoWithAddress parkingLotInfo)
+    public void PrintVehicleFind(ParkingLotInfoWithAddress parkingLotInfo)
     {
         Console.WriteLine($"\n\tℹ️ Vehicle [{parkingLotInfo.GetVehicleRegistrationNumber()}] " +
             $"of type '{parkingLotInfo.GetVehicleType()}' " +
@@ -234,16 +234,21 @@ internal class GarageSubMenuView
             $"in lot '{parkingLotInfo.GetParkingLotID()}'");
     }
 
-    internal void PrintCanNotFindVehicleInAnyGarage(string regNumber)
+    public void PrintCanNotFindVehicleInAnyGarage(string regNumber)
     {
         Console.WriteLine($"\n\t⚠️ Could not find vehicle with vehicle " +
             $"with registration number '{regNumber}' " +
             $"in any garages");
     }
 
-    internal string ReadFilterProperty(string value)
+    public string ReadFilterProperty(string value)
     {
         Console.Write($"\n\t✏️ {value}: ");
-        return Console.ReadLine() ?? String.Empty;
+        return Console.ReadLine()?.Trim() ?? String.Empty;
+    }
+
+    public void PrintFilteredVehicles(Dictionary<string, string[]> filterMap)
+    {
+        Console.WriteLine($"\nℹ️ Filtered vehicles [<FilterMap>]:");
     }
 }

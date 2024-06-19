@@ -3,22 +3,28 @@ using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Repository;
 using Garage.Model.Vehicle;
+using System.Collections;
 
 namespace Garage.Infrastructure.Store;
 
+/// <summary>
+/// A class used to create, read, update, and delete garage data.
+/// </summary>
 public class GarageInMemoryStore : IGarageRepository
 {
-    private IEnumerable<IGarage<Car>> _carGarages = [];
-    private IEnumerable<IGarage<ICar>> _multiCarGarages = [];
-    private IEnumerable<IGarage<IBus>> _busGarages = [];
-    private IEnumerable<IGarage<IMotorcycle>> _mcGarages = [];
-    private IEnumerable<IGarage<IBoat>> _boatHarbors = [];
-    private IEnumerable<IGarage<IAirplane>> _airplaneHangars = [];
-    private IEnumerable<IGarage<ECar>> _eCarGarages = [];
-    private IEnumerable<IGarage<IVehicle>> _multiGarages = [];
+
+    private List<IGarage<Car>> _carGarages = [];
+    private List<IGarage<ICar>> _multiCarGarages = [];
+    private List<IGarage<IBus>> _busGarages = [];
+    private List<IGarage<IMotorcycle>> _mcGarages = [];
+    private List<IGarage<IBoat>> _boatHarbors = [];
+    private List<IGarage<IAirplane>> _airplaneHangars = [];
+    private List<IGarage<ECar>> _eCarGarages = [];
+    private List<IGarage<IVehicle>> _multiGarages = [];
 
     public GarageInMemoryStore()
     {
+        _busGarages.Clear();
         var garages = GarageInMemoryPopulator.CreateGarages();
         _carGarages = garages.CarGarages;
         _multiCarGarages = garages.MultiCarGarages;
@@ -114,46 +120,118 @@ public class GarageInMemoryStore : IGarageRepository
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
     {
         List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_carGarages));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_multiCarGarages));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_busGarages));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_mcGarages));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_boatHarbors));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_airplaneHangars));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_eCarGarages));
-        parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarages(_multiGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_carGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_multiCarGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_busGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_mcGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_boatHarbors));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_airplaneHangars));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_eCarGarages));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_multiGarages));
         return parkingLotsInfo;
     }
 
-    private List<ParkingLotInfoWithAddress> GetParkingLotsInfoFromGarages<VehicleType>(
-        IEnumerable<IGarage<VehicleType>> garages)
+    public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles(
+        Dictionary<string, string[]> filterMap)
+    {
+        List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_carGarages, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_multiCarGarages, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_busGarages, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_mcGarages, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_boatHarbors, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_airplaneHangars, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_eCarGarages, filterMap));
+        parkingLotsInfo.AddRange(GetParkingLotsInfoFromAllGarages(_multiGarages, filterMap));
+        return parkingLotsInfo;
+    }
+
+    private IEnumerable<ParkingLotInfoWithAddress> GetParkingLotsInfoFromAllGarages<VehicleType>(
+        IEnumerable<IGarage<VehicleType>> garages,
+        Dictionary<string, string[]>? filterMap = null)
         where VehicleType : IVehicle
     {
         List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
         foreach (var garage in garages)
         {
             parkingLotsInfo.AddRange(GetParkingLotsInfoFromGarage(
-                garage
+                garage, filterMap
             ));
         }
         return parkingLotsInfo;
     }
 
-    private List<ParkingLotInfoWithAddress> GetParkingLotsInfoFromGarage<VehicleType>(
-        IGarage<VehicleType> garage)
+    private IEnumerable<ParkingLotInfoWithAddress> GetParkingLotsInfoFromGarage<VehicleType>(
+        IGarage<VehicleType> garage,
+        Dictionary<string, string[]>? filterMap)
         where VehicleType : IVehicle
     {
-        List<ParkingLotInfoWithAddress> parkingLotsInfo = [];
-        foreach (var lot in garage.ParkingLots)
-        {
-            if (lot.CurrentVehicle == null) { continue; }
+        return garage.ParkingLots
+            .Where(lot => lot.CurrentVehicle != null)
+            .Where(lot =>
+            {
+                if (filterMap == null) {  return true; }
+                foreach (var key in filterMap.Keys)
+                {
+                    if (key == "Color")
+                    {
+                        if (!filterMap[key].Contains(lot.CurrentVehicle?.Color))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            })
+            .Select(lot => new ParkingLotInfoWithAddress(garage.Address, lot));
+    }
 
-            parkingLotsInfo.Add(new ParkingLotInfoWithAddress(
-                garage.Address,
-                lot
-            ));
+    private bool CheckFilterMap(
+        IParkingLot<IVehicle> lot,
+        Dictionary<string, string[]> filterMap)
+    {
+        foreach (var key in filterMap.Keys)
+        {
+            if (key == Vehicle.ColorKey)
+            {
+                if (!filterMap[key].Contains(lot.CurrentVehicle?.Color))
+                {
+                    return false;
+                }
+            }
+            if (key == Vehicle.PowerSourceKey)
+            {
+                if (!filterMap[key].Contains(lot.CurrentVehicle?.PowerSource))
+                {
+                    return false;
+                }
+            }
+            if (key == Vehicle.VehicleTypeKey)
+            {
+                if (!filterMap[key].Contains(lot.CurrentVehicle?.Type))
+                {
+                    return false;
+                }
+            }
+            if (key == Vehicle.VehicleWeightKey)
+            {
+                if (uint.TryParse(filterMap[key][0], out var result) &&
+                    result != lot.CurrentVehicle?.Weight)
+                {
+                    return false;
+                }
+            }
+            if (key == Vehicle.VehicleDimensionKey)
+            {
+                if (uint.TryParse(filterMap[key][0], out var X) &&
+                    uint.TryParse(filterMap[key][0], out var Y) &&
+                    uint.TryParse(filterMap[key][0], out var Z))
+                {
+                    return new Dimension(X, Y, Z) == lot.CurrentVehicle?.Dimension;
+                }
+            }
         }
-        return parkingLotsInfo;
+        return true;
     }
 
     public IGarageInfo? GetGarage(string addr)

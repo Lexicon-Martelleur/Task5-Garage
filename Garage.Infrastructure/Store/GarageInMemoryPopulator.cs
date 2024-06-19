@@ -4,17 +4,21 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Infrastructure.Store;
 
+/// <summary>
+/// A class used to init <see cref="GarageInMemoryStore"/>
+/// with data.
+/// </summary>
 internal static class GarageInMemoryPopulator
 {
     internal static (
-        IEnumerable<IGarage<Car>> CarGarages,
-        IEnumerable<IGarage<ICar>> MultiCarGarages,
-        IEnumerable<IGarage<IBus>> BusGarages,
-        IEnumerable<IGarage<IMotorcycle>> MCGarages,
-        IEnumerable<IGarage<IBoat>> BoatHarbors,
-        IEnumerable<IGarage<IAirplane>> AirplaneHangars,
-        IEnumerable<IGarage<ECar>> ECarGarages,
-        IEnumerable<IGarage<IVehicle>> MultiGarages
+        List<IGarage<Car>> CarGarages,
+        List<IGarage<ICar>> MultiCarGarages,
+        List<IGarage<IBus>> BusGarages,
+        List<IGarage<IMotorcycle>> MCGarages,
+        List<IGarage<IBoat>> BoatHarbors,
+        List<IGarage<IAirplane>> AirplaneHangars,
+        List<IGarage<ECar>> ECarGarages,
+        List<IGarage<IVehicle>> MultiGarages
     ) CreateGarages()
     {
 
@@ -111,7 +115,7 @@ internal static class GarageInMemoryPopulator
             garage.AddVehicle(lot.ID, new Car(
                 new RegistrationNumber($"ABC {++numberRegPart}"),
                 CarBrand.FORD,
-                VehicleColor.GREY,
+                VehicleColor.BLUE,
                 PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
@@ -146,7 +150,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"BBC {++numberRegPart}"),
                 10,
                 10,
-                VehicleColor.GREY,
+                VehicleColor.BLACK,
                 PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
@@ -162,7 +166,7 @@ internal static class GarageInMemoryPopulator
             garage.AddVehicle(lot.ID, new Motorcycle(
                 new RegistrationNumber($"CBC {++numberRegPart}"),
                 100,
-                VehicleColor.GREY,
+                VehicleColor.RED,
                 PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
@@ -179,7 +183,7 @@ internal static class GarageInMemoryPopulator
             garage.AddVehicle(lot.ID, new Boat(
                 new RegistrationNumber($"DBC {++numberRegPart}"),
                 BoatSteeringMechanism.WHEEL,
-                VehicleColor.GREY,
+                VehicleColor.WHITE,
                 PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
@@ -214,7 +218,7 @@ internal static class GarageInMemoryPopulator
                 garage.AddVehicle(lot.ID, new ECar(
                     new RegistrationNumber($"FBC {++numberRegPart}"),
                     CarBrand.FORD,
-                    VehicleColor.GREY,
+                    VehicleColor.UNKNOWN,
                     1000,
                     new Dimension(10, 10, 10)));
             }

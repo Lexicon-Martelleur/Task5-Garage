@@ -11,25 +11,27 @@ namespace Garage.Application.Controller;
 /// for each sub menu described in <see cref="GarageMenuController"/>
 /// </summary>
 /// <param name="view">
-/// A view class used to read and write information to and from the user.
+/// A view type of <see cref="IGarageSubMenuView"/> used to read and write
+/// information to and from the user.
 /// </param>
-/// <param name="service"></param>
+/// <param name="service">A service of type <see cref="IGarageService"/> used to handle
+/// garage domain logic</param>
 internal class GarageSubMenuController(
-    GarageSubMenuView view,
-    IGarageService service)
+    IGarageSubMenuView view,
+    IGarageService service) : IGarageSubMenuController
 {
-    internal void HandleListAllGarages()
+    public void HandleListAllGarages()
     {
         view.PrintAllGarages(service.GetAllGarages());
     }
 
-    internal void HandleListAllVehicles()
+    public void HandleListAllVehicles()
     {
         var parkingLotInfos = service.GetAllParkingLotsWithVehicles();
-        view.PrintAllParkingLotsWithVehicles(parkingLotInfos);
+        view.PrintParkingLotsWithVehicles(parkingLotInfos);
     }
 
-    internal void HandleListGroupedVehiclesByType()
+    public void HandleListGroupedVehiclesByType()
     {
         if (Utility.EmptyInput(out var address, view.ReadGarageAddr, view.WriteNotValidInput))
         {
@@ -40,7 +42,7 @@ internal class GarageSubMenuController(
         view.PrintGroupedVehicles(groupedVehicles, address);
     }
 
-    internal void HandleAddVehicleToGarage()
+    public void HandleAddVehicleToGarage()
     {
         if (Utility.EmptyInput(out var addr, view.ReadGarageAddr, view.WriteNotValidInput) ||
             Utility.EmptyInput(out var regNumber, view.ReadRegNr, view.WriteNotValidInput) ||
@@ -60,7 +62,7 @@ internal class GarageSubMenuController(
         }
     }
 
-    internal void HandleRemoveVehicleFromGarage()
+    public void HandleRemoveVehicleFromGarage()
     {
         if (Utility.EmptyInput(out var addr, view.ReadGarageAddr, view.WriteNotValidInput) ||
             Utility.EmptyInput(out var parkingLotId, view.ReadParkingLotId, view.WriteNotValidInput))
@@ -86,7 +88,7 @@ internal class GarageSubMenuController(
         }
     }
 
-    internal void HandleCreateGarage()
+    public void HandleCreateGarage()
     {
         if (Utility.EmptyInput(out var addr, view.ReadGarageAddr, view.WriteNotValidInput) ||
             !view.ReadGarageDescriptionOK(out var description) ||
@@ -102,8 +104,7 @@ internal class GarageSubMenuController(
             return;
         }
 
-        IGarageInfo? garageInfo = service.CreateGarage(
-            addr, parsedCapacity, description);
+        IGarageInfo? garageInfo = service.CreateGarage(addr, parsedCapacity, description);
         if (garageInfo != null)
         {
             view.PrintGarageCreated(garageInfo);
@@ -114,7 +115,7 @@ internal class GarageSubMenuController(
         }
     }
 
-    internal void HandleSearchVehicleVyRegNr()
+    public void HandleSearchVehicleByRegNumber()
     {
         if (Utility.EmptyInput(out var regNumber, view.ReadRegNr, view.WriteNotValidInput))
         {
@@ -132,16 +133,27 @@ internal class GarageSubMenuController(
         }
     }
 
-    internal void HandleFilterVehicle()
+    public void HandleFilterVehicle()
     {
         var vehiclePropertyDescriptionMap = Vehicle.GetPropertyDescriptionMap();
 
-        Dictionary<string, string> filterMap = new();
+        Dictionary<string, string[]> filterMap = new();
 
         foreach (var property in vehiclePropertyDescriptionMap)
         {
             string filterInput = view.ReadFilterProperty(property.Value);
-            filterMap[property.Key] = filterInput;
+            filterMap[property.Key] = SplitAndTrimInput(filterInput);
         }
+
+        var parkingLotInfos = service.GetAllParkingLotsWithVehicles(filterMap);
+        view.PrintFilteredVehicles(filterMap);
+        view.PrintParkingLotsWithVehicles(parkingLotInfos);
+    }
+
+    private string[] SplitAndTrimInput(string input)
+    {
+        return input.Split(',')
+                    .Select(s => s.Trim().ToUpper())
+                    .ToArray();
     }
 }

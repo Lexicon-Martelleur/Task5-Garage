@@ -7,10 +7,15 @@ using Garage.Model.Vehicle;
 namespace Garage.Model.Service;
 
 /// <summary>
-/// A Service class used to handle domain logic for garage operations.
+/// A Service class implementing <see cref="IGarageService"/> used
+/// to handle domain garage logic.
 /// </summary>
-/// <param name="repository">A repository used to abstract garage storage</param>
-/// <param name="vehicleFactory">A factory used to create vehicles of different types</param>
+/// <param name="repository">
+/// A repository of type <see cref="IGarageRepository"/> used to abstract garage storage
+/// </param>
+/// <param name="vehicleFactory">
+/// A factory used to create vehicles of different types
+/// </param>
 public class GarageService(
     IGarageRepository repository,
     VehicleFactory vehicleFactory
@@ -19,6 +24,17 @@ public class GarageService(
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
     {
         var parkingLotInfo = repository.GetAllParkingLotsWithVehicles();
+        if (!IsUniqueCarRegistrationNumbers(parkingLotInfo))
+        {
+            throw new InvalidGarageStateException("Registration number must be unique for each vehicle.");
+        }
+        return parkingLotInfo;
+    }
+
+    public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles(
+        Dictionary<string, string[]> filterMap)
+    {
+        var parkingLotInfo = repository.GetAllParkingLotsWithVehicles(filterMap);
         if (!IsUniqueCarRegistrationNumbers(parkingLotInfo))
         {
             throw new InvalidGarageStateException("Registration number must be unique for each vehicle.");

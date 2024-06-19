@@ -2,6 +2,12 @@
 
 namespace Garage.Model.ParkingLot;
 
+/// <summary>
+/// Class used to hold none generic parking lot data
+/// and the address to the garage of the parking lot.
+/// </summary>
+/// <param name="Address"></param>
+/// <param name="ParkingLotInfo"></param>
 public record class ParkingLotInfoWithAddress(
     Address Address,
     IParkingLotInfo ParkingLotInfo

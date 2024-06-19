@@ -1,15 +1,15 @@
 ﻿using Garage.Application.Constant;
+using Garage.Model.Vehicle;
+using System.Text;
 
 namespace Garage.Application.View;
 
-
-// TODO! Remove empty postfix string spaces in input here or in controller.
 
 /// <summary>
 /// A view class used to display the garage main menu
 /// and read user input for the applications garage features.
 /// </summary>
-internal class GarageMenuView
+internal class GarageMenuView : IGarageMenuView
 {
     public string PrintGarageMainMenu()
     {
@@ -24,11 +24,30 @@ internal class GarageMenuView
                 {GarageMenu.REMOVE_VEHICLE_FROM_GARAGE}) Remove vehicle from specified garage
                 {GarageMenu.CREATE_GARAGE}) Create new garage
                 {GarageMenu.SEARCH_VEHICLE_BY_REGNR}) Search after vehicle by registration number in all garages
-                {GarageMenu.FILTER_VEHICLES}) Filter vehicles by (<common properties>) in all garages
+                {GarageMenu.FILTER_VEHICLES}) Filter vehicles by [{GetCommonPropertiesKeys()}] from all garages
         ✏️ Select option ({GarageMenu.LIST_ALL_GARAGES}-{GarageMenu.FILTER_VEHICLES}) or {GarageMenu.EXIT} to quit: 
         """;
         Console.Write(garageMenu);
-        return GetSelectedGarageMenuEntry(Console.ReadLine() ?? "");
+        return GetSelectedGarageMenuEntry(Console.ReadLine()?.Trim() ?? "");
+    }
+
+    private string GetCommonPropertiesKeys()
+    {
+        var text = new StringBuilder();
+        var counter = 0;
+        foreach (var key in Vehicle.GetPropertyDescriptionMap().Keys)
+        {
+            counter++;
+            if (counter == Vehicle.GetPropertyDescriptionMap().Keys.Count)
+            {
+                text.Append(key.ToUpper());
+            }
+            else
+            {
+                text.Append(key.ToUpper() + ", ");
+            }
+        }
+        return text.ToString();
     }
 
     private string GetSelectedGarageMenuEntry(
@@ -46,58 +65,58 @@ internal class GarageMenuView
         _ => GarageMenu.DEFAULT
     };
 
-    internal void PrintCorruptedData(string selection)
+    public void PrintCorruptedData(string selection)
     {
         Console.WriteLine($"\n\t⚠️ Could not handle selection '{selection}' due possible data corruption in the system.");
     }
 
-    internal void WriteStartListAllGaragesMenu()
+    public void WriteStartListAllGaragesMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.LIST_ALL_GARAGES}) " +
             $"Stored garages in the system:");
     }
 
-    internal void WriteStartListAllVehiclesMenu()
+    public void WriteStartListAllVehiclesMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.LIST_ALL_VEHICLES}) " +
             $"Stored vehicles in the system:");
     }
 
-    internal void WriteStartGroupedVehiclesByTypeMenu()
+    public void WriteStartGroupedVehiclesByTypeMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.LIST_GROUPED_VEHICLES_BY_VEHICLE_TYPE}) List grouped vehicles by type in specified garage");
     }
 
-    internal void WriteStartAddVehicleMenu()
+    public void WriteStartAddVehicleMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.ADD_VEHICLE_TO_GARAGE}) Add vehicle to specified garage");
     }
 
-    internal void WriteRemoveAddVehicleMenu()
+    public void WriteRemoveAddVehicleMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.REMOVE_VEHICLE_FROM_GARAGE}) " +
             $"Remove vehicle from specified garage");
     }
 
-    internal void WriteStartCreateGarageMenu()
+    public void WriteStartCreateGarageMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.CREATE_GARAGE}) " +
             $"Create new garage");
     }
 
-    internal void WriteStartSearchVehicleByRegNrMenu()
+    public void WriteStartSearchVehicleByRegNrMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.SEARCH_VEHICLE_BY_REGNR}) " +
             $"Search after vehicle by registration number in all garages");
     }
 
-    internal void WriteStartFilterMenu()
+    public void WriteStartFilterMenu()
     {
         Console.WriteLine($"\nℹ️ Menu {GarageMenu.FILTER_VEHICLES}) " +
-            $"Enter property to filter search on: ");
+            $"Enter property to filter search on (use ',' as separation if using multiple values): ");
     }
 
-    internal void PrintIncorrectMenuSelection(string selection)
+    public void PrintIncorrectMenuSelection(string selection)
     {
         Console.WriteLine($"\n⚠️ '{selection}' is not a valid menu selection.");
     }

@@ -24,34 +24,47 @@ public abstract class Vehicle(
 
     public string Type => this.GetType().Name;
 
+    public const string ColorKey = "Color";
+
+    public const string PowerSourceKey = "PowerSource";
+
+    public const string VehicleTypeKey = "VehicleType";
+
+    public const string VehicleWeightKey = "Weight";
+
+    public const string VehicleDimensionKey = "Dimension";
+
     public static Dictionary<string, string> GetPropertyDescriptionMap()
     {
         Dictionary<string, string> propertDescriptionMap = new()
         {
-            { "Color", $"Select color or leave empty for any color [{VehicleColor.GREY}, " +
-                $"{VehicleColor.WHITE}, " +
-                $"{VehicleColor.BLACK}, " +
-                $"{VehicleColor.BLUE}, " +
-                $"{VehicleColor.RED}, " +
-                $"{VehicleColor.MULTI}, " +
-                $"{VehicleColor.UNKNOWN}]"
+            { $"{ColorKey}", $"Select color or leave empty for any color [" +
+                $"{VehicleColor.GREY.ToUpper()}, " +
+                $"{VehicleColor.WHITE.ToUpper()}, " +
+                $"{VehicleColor.BLACK.ToUpper()}, " +
+                $"{VehicleColor.BLUE.ToUpper()}, " +
+                $"{VehicleColor.RED.ToUpper()}, " +
+                $"{VehicleColor.MULTI.ToUpper()}, " +
+                $"{VehicleColor.UNKNOWN.ToUpper()}]"
             },
-            { "PowerSource", $"Select power source or leave empty for any source [{PowerSourceKeeper.GASOLINE}, " +
-                $"{PowerSourceKeeper.DIESEL}, " +
-                $"{PowerSourceKeeper.HYDROGEN}, " +
-                $"{PowerSourceKeeper.ELECTRIC}, " +
-                $"{PowerSourceKeeper.HYBRID}, " +
-                $"{PowerSourceKeeper.NONE}, " +
-                $"{PowerSourceKeeper.UNKNOWN}]"},
-            { "Weight", "Enter exact weight (Number > 0) or leave empty for any weights"},
-            { "Type", $"Select vehicle type or leave empty for any type [{VehicleTypeKeeper.AIRPLANE}, " +
-                $"{VehicleTypeKeeper.BOAT.Description}, " +
-                $"{VehicleTypeKeeper.BUS.Description}, " +
-                $"{VehicleTypeKeeper.CAR.Description}, " +
-                $"{VehicleTypeKeeper.E_CAR.Description}, " +
-                $"{VehicleTypeKeeper.MOTORCYCLE.Description}]"
+            { $"{PowerSourceKey}", $"Select power source or leave empty for any source [" +
+                $"{PowerSourceKeeper.GASOLINE.ToUpper()}, " +
+                $"{PowerSourceKeeper.DIESEL.ToUpper()}, " +
+                $"{PowerSourceKeeper.HYDROGEN.ToUpper()}, " +
+                $"{PowerSourceKeeper.ELECTRIC.ToUpper()}, " +
+                $"{PowerSourceKeeper.HYBRID.ToUpper()}, " +
+                $"{PowerSourceKeeper.NONE.ToUpper()}, " +
+                $"{PowerSourceKeeper.UNKNOWN.ToUpper()}]"},
+            { $"{VehicleTypeKey}", $"Select vehicle type or leave empty for any type [" +
+                $"{VehicleTypeKeeper.AIRPLANE.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.BOAT.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.BUS.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.CAR.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.E_CAR.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.MOTORCYCLE.Description.ToUpper()}]"
             },
-            { "Dimension", "Enter exact dimensions (x, y, z) or leave empty for any dimensions"},
+            { $"{VehicleWeightKey}", "Enter exact weight (Number > 0) or leave empty for any weights"},
+            { $"{VehicleDimensionKey}", "Enter exact dimensions (x, y, z | x, y, z > 0) or leave empty for any dimensions"},
         };
 
         return propertDescriptionMap;

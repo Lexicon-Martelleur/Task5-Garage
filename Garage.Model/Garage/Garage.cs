@@ -180,7 +180,9 @@ public class Garage<VehicleType> :
     public IParkingLot<VehicleType>? GetParkingLotWithVehicle(string regNumber)
     {
         return this
-            .Where(lot => lot.CurrentVehicle?.RegistrationNumber.Value == regNumber)
+            .Where(lot => 
+                lot.CurrentVehicle?.RegistrationNumber.Value.ToUpper() == 
+                regNumber.ToUpper())
             .FirstOrDefault()!;
     }
 }
