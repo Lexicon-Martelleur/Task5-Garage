@@ -2,13 +2,14 @@
 
 # Model layer
 
-Every type but service typ should have internal access. Service
-classes should have public.
+1. Update/finish implementation of VehicleFactory.cs
 
 ## App layer
 
-Implement according to req.
+1. Implement according to req.
 
 ## Infrastructur layer 
 
-Implement according to req.
+1. Implement according to req.
+
+2. Use SQLite as persistent data
