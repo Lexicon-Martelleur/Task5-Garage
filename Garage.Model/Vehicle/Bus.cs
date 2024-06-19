@@ -11,7 +11,7 @@ public class Bus : Vehicle, IBus
         uint standingPassengerCapacity,
         uint seatingPassengerCapacity,
         string color,
-        PowerSource powerSource,
+        string powerSource,
         uint weight,
         Dimension dimension
     ) : base(

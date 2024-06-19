@@ -11,7 +11,7 @@ public class Airplane : Vehicle, IAirplane
         uint wingSpan,
         uint passengerCapacity,
         string color,
-        PowerSource powerSource,
+        string powerSource,
         uint weight,
         Dimension dimension
     ) : base(

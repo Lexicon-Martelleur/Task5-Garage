@@ -8,7 +8,7 @@ public class Car : Vehicle, ICar
         RegistrationNumber registrationNumber,
         CarBrand brand,
         string color,
-        PowerSource powerSource,
+        string powerSource,
         uint weight,
         Dimension dimension
     ) : base(

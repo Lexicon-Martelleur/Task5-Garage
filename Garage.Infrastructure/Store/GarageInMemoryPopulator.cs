@@ -102,7 +102,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"ABC {++numberRegPart}"),
                 CarBrand.FORD,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
         }
@@ -120,7 +120,7 @@ internal static class GarageInMemoryPopulator
                 10,
                 10,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
         }
@@ -136,7 +136,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"CBC {++numberRegPart}"),
                 100,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
         }
@@ -153,7 +153,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"DBC {++numberRegPart}"),
                 BoatSteeringMechanism.WHEEL,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
         }
@@ -170,7 +170,7 @@ internal static class GarageInMemoryPopulator
                 400,
                 40,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10)));
         }
@@ -210,7 +210,7 @@ internal static class GarageInMemoryPopulator
                     new RegistrationNumber($"GBC {++numberRegPart}"),
                     CarBrand.FORD,
                     VehicleColor.GREY,
-                    PowerSource.GASOLINE,
+                    PowerSourceKeeper.GASOLINE,
                     1000,
                     new Dimension(10, 10, 10)));
             }
@@ -238,7 +238,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"HBC {++numberRegPart}"),
                 CarBrand.FORD,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10))
             );
@@ -250,7 +250,7 @@ internal static class GarageInMemoryPopulator
                 10,
                 10,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10))
             );
@@ -271,7 +271,7 @@ internal static class GarageInMemoryPopulator
                 new RegistrationNumber($"HBC {++numberRegPart}"),
                 100,
                 VehicleColor.GREY,
-                PowerSource.GASOLINE,
+                PowerSourceKeeper.GASOLINE,
                 1000,
                 new Dimension(10, 10, 10))
             );

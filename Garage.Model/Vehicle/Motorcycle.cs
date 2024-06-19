@@ -9,7 +9,7 @@ public class Motorcycle : Vehicle, IMotorcycle
         RegistrationNumber registrationNumber,
         uint noiseLevel,
         string color,
-        PowerSource powerSource,
+        string powerSource,
         uint weight,
         Dimension dimension
     ) : base(

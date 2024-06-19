@@ -7,7 +7,7 @@ public interface IVehicle
 
     public string Color { get; set; }
 
-    public PowerSource PowerSource { get; }
+    public string PowerSource { get; }
 
     public uint Weight { get; }
 

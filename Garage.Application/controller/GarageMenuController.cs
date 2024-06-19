@@ -191,7 +191,6 @@ internal class GarageMenuController
         }
     }
 
-    // TODO HandleCreateGarage!
     private void HandleCreateGarage(string menuSelection)
     {
         try
@@ -251,9 +250,26 @@ internal class GarageMenuController
         }
     }
 
-    // TODO HandleFilterVehicle!
     private void HandleFilterVehicle(string menuSelection)
     {
+        try
+        {
+            var vehiclePropertyDescriptionMap = Vehicle.GetPropertyDescriptionMap();
+
+            Dictionary<string, string> filterMap = new();
+
+            _view.WriteStartFilterMenu();
+            foreach (var property in vehiclePropertyDescriptionMap)
+            {
+               string filterInput = _view.ReadFilterProperty(property.Value);
+               filterMap[property.Key] = filterInput;
+            }
+
+        }
+        catch
+        {
+            _view.PrintCorruptedData(menuSelection);
+        }
     }
 
     private void HandleIncorrectMenuSelection(string userInput)

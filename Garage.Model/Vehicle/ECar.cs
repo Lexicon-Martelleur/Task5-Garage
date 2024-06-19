@@ -13,7 +13,7 @@ public class ECar : Vehicle, ICar
     ) : base(
         registrationNumber,
         color,
-        PowerSource.ELECTRIC,
+        PowerSourceKeeper.ELECTRIC,
         weight,
         dimension
     )

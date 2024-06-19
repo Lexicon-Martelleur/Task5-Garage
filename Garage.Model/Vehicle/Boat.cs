@@ -8,7 +8,7 @@ public class Boat : Vehicle, IBoat
         RegistrationNumber registrationNumber,
         string steeringMechanism,
         string color,
-        PowerSource powerSource,
+        string powerSource,
         uint weight,
         Dimension dimension
     ) : base(

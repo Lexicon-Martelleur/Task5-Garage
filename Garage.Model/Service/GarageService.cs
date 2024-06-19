@@ -7,7 +7,8 @@ using Garage.Model.Vehicle;
 namespace Garage.Model.Service;
 
 public class GarageService(
-    IGarageRepository repository
+    IGarageRepository repository,
+    VehicleFactory vehicleFactory
 ) : IGarageService
 {
     public IEnumerable<ParkingLotInfoWithAddress> GetAllParkingLotsWithVehicles()
@@ -57,42 +58,74 @@ public class GarageService(
     }
 
     public ParkingLotInfoWithAddress? AddVehicleToGarage(
-        string address,
-        string regNumber,
-        string vehicleType)
+        string addr, string regNumber, string vehicleType)
     {
-        // TODO ! Move creation of vehicle to constructor.
-        var vehicleFactory = new VehicleFactory();
-
-        switch (vehicleType)
+        Dictionary<
+            string,
+            Func<string, string, string, ParkingLotInfoWithAddress?>
+        > carFactoryMap = new()
         {
-            case VehicleTypeKeeper.CAR:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateGasolineCar(regNumber));
-            case VehicleTypeKeeper.BUS:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateBus(regNumber));
-            case VehicleTypeKeeper.MOTORCYCLE:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateMC(regNumber));
-            case VehicleTypeKeeper.BOAT:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateBoat(regNumber));
-            case VehicleTypeKeeper.AIRPLANE:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateAirplane(regNumber));
-            case VehicleTypeKeeper.E_CAR:
-                return repository.AddVehicleToGarage(
-                    address,
-                    vehicleFactory.CreateECar(regNumber));
-            default:
-                return null;
+            { VehicleTypeKeeper.AIRPLANE.ID, AddAirplaneToGarage },
+            { VehicleTypeKeeper.BOAT.ID, AddBoatToGarage },
+            { VehicleTypeKeeper.BUS.ID, AddBusToGarage },
+            { VehicleTypeKeeper.CAR.ID, AddGasolineCarToGarage },
+            { VehicleTypeKeeper.E_CAR.ID, AddECarToGarage },
+            { VehicleTypeKeeper.MOTORCYCLE.ID, AddMCToGarage }
         };
+
+        if (carFactoryMap.TryGetValue(vehicleType, out var carFactory))
+        {
+            return carFactory(addr, regNumber, vehicleType);
+        }
+        return null;
+    }
+
+    private ParkingLotInfoWithAddress? AddAirplaneToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateAirplane(
+            regNumber
+        ));
+    }
+
+    private ParkingLotInfoWithAddress? AddBoatToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateBoat(
+            regNumber
+        ));
+    }
+
+    private ParkingLotInfoWithAddress? AddBusToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateBus(
+            regNumber
+        ));
+    }
+
+    private ParkingLotInfoWithAddress? AddGasolineCarToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateGasolineCar(
+            regNumber
+        ));
+    }
+
+    private ParkingLotInfoWithAddress? AddECarToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateECar(
+            regNumber
+        ));
+    }
+
+    private ParkingLotInfoWithAddress? AddMCToGarage(
+        string addr, string regNumber, string vehicleType)
+    {
+        return repository.AddVehicleToGarage(addr, vehicleFactory.CreateMC(
+            regNumber
+        ));
     }
 
     public RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId)

@@ -8,5 +8,5 @@ public static class VehicleColor
     public const string BLUE = "BLUE";
     public const string RED = "RED";
     public const string MULTI = "MULTI";
-    public const string UNKNOWN = "UNKNOWN";
+    public const string UNKNOWN = "?";
 }

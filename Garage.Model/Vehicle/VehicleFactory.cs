@@ -10,7 +10,7 @@ public class VehicleFactory
             new RegistrationNumber(regNumber),
             CarBrand.FORD,
             VehicleColor.GREY,
-            PowerSource.GASOLINE,
+            PowerSourceKeeper.GASOLINE,
             1000,
             new Dimension(10, 10, 10)
         );
@@ -23,7 +23,7 @@ public class VehicleFactory
             20,
             20,
             VehicleColor.GREY,
-            PowerSource.GASOLINE,
+            PowerSourceKeeper.GASOLINE,
             1000,
             new Dimension(10, 10, 10)
         );
@@ -35,7 +35,7 @@ public class VehicleFactory
             new RegistrationNumber(regNumber),
             100,
             VehicleColor.GREY,
-            PowerSource.GASOLINE,
+            PowerSourceKeeper.GASOLINE,
             1000,
             new Dimension(10, 10, 10)
         );
@@ -47,7 +47,7 @@ public class VehicleFactory
             new RegistrationNumber(regNumber),
             BoatSteeringMechanism.WHEEL,
             VehicleColor.GREY,
-            PowerSource.GASOLINE,
+            PowerSourceKeeper.GASOLINE,
             1000,
             new Dimension(10, 10, 10)
         );
@@ -60,7 +60,7 @@ public class VehicleFactory
             20,
             200,
             VehicleColor.GREY,
-            PowerSource.GASOLINE,
+            PowerSourceKeeper.GASOLINE,
             1000,
             new Dimension(10, 10, 10)
         );

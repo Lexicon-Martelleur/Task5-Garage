@@ -148,30 +148,28 @@ internal class GarageMenuView
         var listOfVehicleTypes = $"""
 
         📋 Vehicles types:
-                {VehicleTypeKeeper.AIRPLANE}) Airplane
-                {VehicleTypeKeeper.BOAT}) Boat
-                {VehicleTypeKeeper.BUS}) Bus
-                {VehicleTypeKeeper.CAR}) Car
-                {VehicleTypeKeeper.E_CAR}) E-car
-                {VehicleTypeKeeper.MOTORCYCLE}) Motorcycle
+                {VehicleTypeKeeper.AIRPLANE.ID}) {VehicleTypeKeeper.AIRPLANE.Description}
+                {VehicleTypeKeeper.BOAT.ID}) {VehicleTypeKeeper.BOAT.Description}
+                {VehicleTypeKeeper.BUS.ID}) {VehicleTypeKeeper.BUS.Description}
+                {VehicleTypeKeeper.CAR.ID}) {VehicleTypeKeeper.CAR.Description}
+                {VehicleTypeKeeper.E_CAR.ID}) {VehicleTypeKeeper.E_CAR.Description}
+                {VehicleTypeKeeper.MOTORCYCLE.ID}) {VehicleTypeKeeper.MOTORCYCLE.Description}
         """;
 
         Console.WriteLine(listOfVehicleTypes);
-        Console.Write("\n✏️ Select vehicle type: ");
-        return GetSelectedVehicleType(Console.ReadLine() ?? String.Empty);
+        Console.Write("✏️ Select vehicle type: ");
+        var garageDescription = GetSelectedVehicleType(Console.ReadLine() ?? String.Empty);
+        return garageDescription.ID;
     }
 
-    private string GetSelectedVehicleType(
-        string selectedVehicleType) => selectedVehicleType switch
+    private VehicleTypeItem GetSelectedVehicleType(
+        string selectedVehicleType)
     {
-        VehicleTypeKeeper.AIRPLANE or
-        VehicleTypeKeeper.BOAT or
-        VehicleTypeKeeper.BUS or
-        VehicleTypeKeeper.CAR or
-        VehicleTypeKeeper.E_CAR or
-        VehicleTypeKeeper.MOTORCYCLE => selectedVehicleType,
-        _ => VehicleTypeKeeper.DEFAULT
-    };
+        return VehicleTypeKeeper.VehicleDescriptions.ContainsKey(
+            selectedVehicleType
+        ) ? VehicleTypeKeeper.VehicleDescriptions[selectedVehicleType]
+        : VehicleTypeKeeper.DEFAULT;
+    }
 
     internal void PrintVehicleAddedToGarage(
         ParkingLotInfoWithAddress lot,
@@ -183,18 +181,13 @@ internal class GarageMenuView
             $"Parked at '{lot.GetAddress()}' in lot '{lot.GetParkingLotID()}'");
     }
 
-    private string MapVehicleTypeToVehicleName(
-        string selectedVehicleType
-    ) => selectedVehicleType switch
+    private string MapVehicleTypeToVehicleName(string selectedVehicleType)
     {
-        VehicleTypeKeeper.AIRPLANE => "Airplane",
-        VehicleTypeKeeper.BOAT => "Boat",
-        VehicleTypeKeeper.BUS => "Bus",
-        VehicleTypeKeeper.CAR => "Car",
-        VehicleTypeKeeper.E_CAR => "E-car",
-        VehicleTypeKeeper.MOTORCYCLE => "MC",
-        _ => VehicleTypeKeeper.DEFAULT
-    };
+        return VehicleTypeKeeper.VehicleDescriptions.ContainsKey(
+            selectedVehicleType
+        ) ? VehicleTypeKeeper.VehicleDescriptions[selectedVehicleType].Description
+        : VehicleTypeKeeper.DEFAULT.Description;
+    }
 
     internal void PrintCanNotAddVehicleToGarage(
         string address,
@@ -292,5 +285,16 @@ internal class GarageMenuView
         Console.WriteLine($"\n⚠️ Could not find vehicle with vehicle " +
             $"with registration number '{regNumber}' " +
             $"in any garages");
+    }
+
+    internal void WriteStartFilterMenu()
+    {
+        Console.WriteLine("\nℹ️ Enter property to filter search on: ");
+    }
+
+    internal string ReadFilterProperty(string value)
+    {
+        Console.Write($"\n\t✏️ {value}: ");
+        return Console.ReadLine() ?? String.Empty;
     }
 }

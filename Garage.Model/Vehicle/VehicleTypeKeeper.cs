@@ -1,12 +1,24 @@
-﻿namespace Garage.Model.Vehicle;
+﻿using Garage.Model.Garage;
+
+namespace Garage.Model.Vehicle;
 
 public static class VehicleTypeKeeper
 {
-    public const string AIRPLANE = "1";
-    public const string BOAT = "2";
-    public const string BUS = "3";
-    public const string CAR = "4";
-    public const string E_CAR = "5";
-    public const string MOTORCYCLE = "6";
-    public const string DEFAULT = "-1";
+    public readonly static VehicleTypeItem AIRPLANE = new("1", "Airplane");
+    public readonly static VehicleTypeItem BOAT = new("2", "Boat");
+    public readonly static VehicleTypeItem BUS = new("3", "Bus");
+    public readonly static VehicleTypeItem CAR = new("4", "Car");
+    public readonly static VehicleTypeItem E_CAR = new("5", "E-Car");
+    public readonly static VehicleTypeItem MOTORCYCLE = new("6", "Motorcycle");
+    public readonly static VehicleTypeItem DEFAULT = new("-1", "Default");
+
+    public static readonly Dictionary<string, VehicleTypeItem> VehicleDescriptions = new()
+    {
+        { AIRPLANE.ID, AIRPLANE },
+        { BOAT.ID, BOAT },
+        { BUS.ID, BUS },
+        { CAR.ID, CAR },
+        { E_CAR.ID, E_CAR },
+        { MOTORCYCLE.ID, MOTORCYCLE }
+    };
 }

@@ -12,49 +12,49 @@ public static class GarageDescriptionKeeper
     public readonly static GarageDescriptionItem AIRPLANE = new(
         ID: "1",
         Description: "A airplane hangar",
-        VehicleTypes: [VehicleTypeKeeper.AIRPLANE]);
+        VehicleTypes: [VehicleTypeKeeper.AIRPLANE.ID]);
 
     public readonly static GarageDescriptionItem BOAT = new(
         ID: "2",
         Description: "A boat harbor",
-        VehicleTypes: [VehicleTypeKeeper.BOAT]);
+        VehicleTypes: [VehicleTypeKeeper.BOAT.ID]);
 
     public readonly static GarageDescriptionItem BUS = new(
         ID: "3",
         Description: "A bus garage",
-        VehicleTypes: [VehicleTypeKeeper.BUS]);
+        VehicleTypes: [VehicleTypeKeeper.BUS.ID]);
 
     public readonly static GarageDescriptionItem CAR = new(
         ID: "4",
         Description: "A car garage for all cars",
-        VehicleTypes: [VehicleTypeKeeper.CAR, VehicleTypeKeeper.E_CAR]);
+        VehicleTypes: [VehicleTypeKeeper.CAR.ID, VehicleTypeKeeper.E_CAR.ID]);
 
     
     public readonly static GarageDescriptionItem CAR_NO_ELECTRICAL_PARKING_LOTS = new(
         ID: "5",
         Description: "A car garage (OBS! No electrical parking lots)",
-        VehicleTypes: [VehicleTypeKeeper.CAR, VehicleTypeKeeper.E_CAR]);
+        VehicleTypes: [VehicleTypeKeeper.CAR.ID, VehicleTypeKeeper.E_CAR.ID]);
 
     public readonly static GarageDescriptionItem E_CAR = new(
         ID: "6",
         Description: "A car garage only for e-cars",
-        VehicleTypes: [VehicleTypeKeeper.E_CAR]);
+        VehicleTypes: [VehicleTypeKeeper.E_CAR.ID]);
 
     public readonly static GarageDescriptionItem MC = new(
         ID: "7",
         Description: "A motorcycle garage",
-        VehicleTypes: [VehicleTypeKeeper.MOTORCYCLE]);    
+        VehicleTypes: [VehicleTypeKeeper.MOTORCYCLE.ID]);    
     
     public readonly static GarageDescriptionItem MULTI = new(
         ID: "8",
         Description: "A multi garage",
         VehicleTypes: [
-            VehicleTypeKeeper.CAR,
-            VehicleTypeKeeper.E_CAR,
-            VehicleTypeKeeper.BUS,
-            VehicleTypeKeeper.MOTORCYCLE,
-            VehicleTypeKeeper.BOAT,
-            VehicleTypeKeeper.AIRPLANE
+            VehicleTypeKeeper.CAR.ID,
+            VehicleTypeKeeper.E_CAR.ID,
+            VehicleTypeKeeper.BUS.ID,
+            VehicleTypeKeeper.MOTORCYCLE.ID,
+            VehicleTypeKeeper.BOAT.ID,
+            VehicleTypeKeeper.AIRPLANE.ID
         ]);
 
     public static readonly Dictionary<string, GarageDescriptionItem> GarageDescriptions = new()
