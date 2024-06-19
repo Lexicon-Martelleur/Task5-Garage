@@ -7,6 +7,10 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Application.controller;
 
+/// <summary>
+/// A controller class used to control data flow between
+/// the user and the domain/model layer.
+/// </summary>
 internal class GarageMenuController
 {
     private bool _quitGarageMainMenu = false;

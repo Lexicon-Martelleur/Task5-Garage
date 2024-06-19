@@ -7,7 +7,12 @@ using Garage.Model.Vehicle;
 namespace Garage.Application.View;
 
 
-// TODO Remove empty postfix string spaces.
+// TODO! Remove empty postfix string spaces in input here or in controller.
+
+/// <summary>
+/// A view class used to display garage menu and read user input
+/// for the applications garage features.
+/// </summary>
 internal class GarageMenuView
 {
     public string PrintGarageMainMenu()

@@ -6,6 +6,11 @@ using Garage.Model.Vehicle;
 
 namespace Garage.Model.Service;
 
+/// <summary>
+/// A Service class used to handle domain logic for garage operations.
+/// </summary>
+/// <param name="repository">A repository used to abstract garage storage</param>
+/// <param name="vehicleFactory">A factory used to create vehicles of different types</param>
 public class GarageService(
     IGarageRepository repository,
     VehicleFactory vehicleFactory

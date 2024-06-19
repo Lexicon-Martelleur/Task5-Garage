@@ -1,7 +1,8 @@
-﻿using Garage.Model.Garage;
+﻿namespace Garage.Model.Vehicle;
 
-namespace Garage.Model.Vehicle;
-
+/// <summary>
+/// A class used to keep constant data related to the application vehicles.
+/// </summary>
 public static class VehicleTypeKeeper
 {
     public readonly static VehicleTypeItem AIRPLANE = new("1", "Airplane");
