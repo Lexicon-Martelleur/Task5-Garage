@@ -4,6 +4,6 @@
 
 [Task](./garage_task.pdf)
 
-## Design
+## First Draft of Design
 
 [Design](./garage_design.pdf)
