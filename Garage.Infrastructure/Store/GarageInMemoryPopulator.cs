@@ -8,6 +8,7 @@ internal static class GarageInMemoryPopulator
 {
     internal static (
         IEnumerable<IGarage<Car>> CarGarages,
+        IEnumerable<IGarage<ICar>> MultiCarGarages,
         IEnumerable<IGarage<IBus>> BusGarages,
         IEnumerable<IGarage<IMotorcycle>> MCGarages,
         IEnumerable<IGarage<IBoat>> BoatHarbors,
@@ -25,10 +26,18 @@ internal static class GarageInMemoryPopulator
         // PopulateCarGarage(carGarage);
         List<IGarage<Car>> CarGarages = [carGarage];
 
+        var allCarGarageFactory = new GarageFactory<ICar>();
+        var allCarGarage = allCarGarageFactory.CreateGarage(
+            20,
+            new Address("Garage Street 1B"),
+            GarageDescriptionKeeper.CAR);
+        // PopulateAllCarGarage(carGarage);
+        List<IGarage<ICar>> MultiCarGarages = [allCarGarage];
+
         var busFactory = new GarageFactory<IBus>();
         var busGarage = busFactory.CreateGarage(
             20,
-            new Address("Garage Street 1B"),
+            new Address("Garage Street 1C"),
             GarageDescriptionKeeper.BUS);
         // PopulateBusGarage(busGarage);
         List<IGarage<IBus>> BusGarages = [busGarage];
@@ -36,7 +45,7 @@ internal static class GarageInMemoryPopulator
         var motorCycleGarageFactory = new GarageFactory<IMotorcycle>();
         var motorCycleGarage = motorCycleGarageFactory.CreateGarage(
             20,
-            new Address("Garage Street 1C"),
+            new Address("Garage Street 1D"),
             GarageDescriptionKeeper.MC);
         PopulateMCGarage(motorCycleGarage);
         List<IGarage<IMotorcycle>> MCGarages = [motorCycleGarage];
@@ -44,7 +53,7 @@ internal static class GarageInMemoryPopulator
         var boatHarbourFactory = new GarageFactory<IBoat>();
         var boatHarbor = boatHarbourFactory.CreateGarage(
             20,
-            new Address("Garage Street 1D"),
+            new Address("Garage Street 1E"),
             GarageDescriptionKeeper.BOAT);
         PopulateBoatGarage(boatHarbor);
         List<IGarage<IBoat>> BoatHarbors = [boatHarbor];
@@ -52,7 +61,7 @@ internal static class GarageInMemoryPopulator
         var airplaneHangarFactory = new GarageFactory<IAirplane>();
         var airplaneHangar = airplaneHangarFactory.CreateGarage(
             20,
-            new Address("Garage Street 1E"),
+            new Address("Garage Street 1F"),
             GarageDescriptionKeeper.AIRPLANE);
         PopulateAirplaneGarage(airplaneHangar);
         List<IGarage<IAirplane>> AirplaneHangars = [airplaneHangar];
@@ -60,7 +69,7 @@ internal static class GarageInMemoryPopulator
         var eCarGarageFactory = new GarageFactory<ECar>();
         var eCarGarage = eCarGarageFactory.CreateGarage(
             20,
-            new Address("Garage Street 1F"),
+            new Address("Garage Street 1G"),
             GarageDescriptionKeeper.E_CAR);
         PopulateECarGarage(eCarGarage);
         List<IGarage<ECar>> ECarGarages = [eCarGarage];
@@ -68,20 +77,21 @@ internal static class GarageInMemoryPopulator
         var universalGarageFactory = new GarageFactory<IVehicle>();
         var univarsalGarage = universalGarageFactory.CreateGarage(
             20,
-            new Address("Garage Street 1G"),
+            new Address("Garage Street 1H"),
             GarageDescriptionKeeper.MULTI);
         PopulateMultiGarage(univarsalGarage);
 
         var multiCarGarageFactory = new GarageFactory<IVehicle>();
         var multiCarGarage = multiCarGarageFactory.CreateGarage(
             20,
-            new Address("Garage Street 1H"),
+            new Address("Garage Street 1I"),
             GarageDescriptionKeeper.CAR);
         PopulateMultiCarGarage(multiCarGarage);
         List<IGarage<IVehicle>> MultiGarages = [univarsalGarage, multiCarGarage];
 
         return (
             CarGarages,
+            MultiCarGarages,
             BusGarages,
             MCGarages,
             BoatHarbors,
@@ -93,6 +103,23 @@ internal static class GarageInMemoryPopulator
 
     private static void PopulateCarGarage(
         IGarage<Car> garage)
+    {
+        var parkingLots = garage.ParkingLots;
+        uint numberRegPart = 100;
+        foreach (var lot in parkingLots)
+        {
+            garage.AddVehicle(lot.ID, new Car(
+                new RegistrationNumber($"ABC {++numberRegPart}"),
+                CarBrand.FORD,
+                VehicleColor.GREY,
+                PowerSourceKeeper.GASOLINE,
+                1000,
+                new Dimension(10, 10, 10)));
+        }
+    }
+
+    private static void PopulateAllCarGarage(
+        IGarage<ICar> garage)
     {
         var parkingLots = garage.ParkingLots;
         uint numberRegPart = 100;

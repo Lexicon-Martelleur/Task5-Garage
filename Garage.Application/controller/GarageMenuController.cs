@@ -10,7 +10,6 @@ namespace Garage.Application.controller;
 internal class GarageMenuController
 {
     private bool _quitGarageMainMenu = false;
-
     private readonly Dictionary<string, Action<string>> _mainMenuActions;
     private readonly GarageMenuView _view;
     private readonly IGarageService _service;
@@ -89,6 +88,7 @@ internal class GarageMenuController
     {
         try
         {
+            _view.WriteStartGroupedVehiclesByTypeMenu();
             if (EmptyString(out var address, _view.ReadGarageAddress)) { return; }
             var groupedVehicles = _service.GetGroupedVehiclesByVehicleType(address);
             _view.PrintGroupedVehicles(groupedVehicles, address);
@@ -127,6 +127,7 @@ internal class GarageMenuController
     {
         try
         {
+            _view.WriteStartAddVehicleMenu();
             if (EmptyString(out var addr, _view.ReadGarageAddress) ||
                 EmptyString(out var regNumber, _view.ReadVehicleRegNr) ||
                 InvalidVehicleType(out var vehicleType))
@@ -163,6 +164,7 @@ internal class GarageMenuController
     {
         try
         {
+            _view.WriteRemoveAddVehicleMenu();
             if (EmptyString(out var addr, _view.ReadGarageAddress) ||
                 EmptyString(out var parkingLotId, _view.ReadParkingLotId))
             {
@@ -172,6 +174,7 @@ internal class GarageMenuController
             if (!uint.TryParse(parkingLotId, out var parsedParkingLotId) || parsedParkingLotId == 0) 
             {
                 _view.PrintCanNotRemoveVehicleFromGarage(addr, parkingLotId);
+                return;
             }
             
             var regNumber = _service.RemoveVehicleFromGarage(addr, parsedParkingLotId);
@@ -195,6 +198,7 @@ internal class GarageMenuController
     {
         try
         {
+            _view.WriteStartCreateGarageMenu();
             if (EmptyString(out var addr, _view.ReadGarageAddress) ||
                 !_view.ReadGarageDescriptionOK(out var garageDescription) ||
                 EmptyString(out var capacity, _view.ReadGarageCapacity))
@@ -205,6 +209,7 @@ internal class GarageMenuController
             if (!uint.TryParse(capacity, out var parsedCapacity) || parsedCapacity == 0)
             {
                 _view.PrintCanNotCreateGarageWithSpecifiedCapacity(capacity);
+                return;
             }
 
             IGarageInfo? garageInfo = _service.CreateGarage(
@@ -229,12 +234,13 @@ internal class GarageMenuController
     {
         try
         {
+            _view.WriteStartSearchVehicleByRegNrMenu();
             if (EmptyString(out var regNumber, _view.ReadVehicleRegNr))
             {
                 return;
             }
-            ParkingLotInfoWithAddress? parkingLotInfo = _service.FindVehicleInAllGarages(regNumber);
 
+            ParkingLotInfoWithAddress? parkingLotInfo = _service.FindVehicleInAllGarages(regNumber);
             if (parkingLotInfo != null)
             {
                 _view.PrintVehicleFind(parkingLotInfo);

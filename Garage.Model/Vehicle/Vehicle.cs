@@ -45,11 +45,11 @@ public abstract class Vehicle(
                 $"{PowerSourceKeeper.UNKNOWN}]"},
             { "Weight", "Enter exact weight (Number > 0) or leave empty for any weights"},
             { "Type", $"Select vehicle type or leave empty for any type [{VehicleTypeKeeper.AIRPLANE}, " +
-                $"{VehicleTypeKeeper.BOAT}, " +
-                $"{VehicleTypeKeeper.BUS}, " +
-                $"{VehicleTypeKeeper.CAR}, " +
-                $"{VehicleTypeKeeper.E_CAR}, " +
-                $"{VehicleTypeKeeper.MOTORCYCLE}]"
+                $"{VehicleTypeKeeper.BOAT.Description}, " +
+                $"{VehicleTypeKeeper.BUS.Description}, " +
+                $"{VehicleTypeKeeper.CAR.Description}, " +
+                $"{VehicleTypeKeeper.E_CAR.Description}, " +
+                $"{VehicleTypeKeeper.MOTORCYCLE.Description}]"
             },
             { "Dimension", "Enter exact dimensions (x, y, z) or leave empty for any dimensions"},
         };
