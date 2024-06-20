@@ -52,7 +52,6 @@ internal class GarageSubMenuController(
         }
 
         Dictionary<string, string> creationalMap = [];
-
         view.PrintSelectedVehicle(vehicleType);
         foreach (var property in VehicleUtility.GetCreateVehicleDescriptionMap(vehicleType))
         {
@@ -70,7 +69,6 @@ internal class GarageSubMenuController(
         var regNumberUpper = regNumber.ToUpper();
         var parkingLot = service.AddVehicleToGarage(
             addr, regNumberUpper, vehicleType, creationalMap);
-
         if (parkingLot != null)
         {
             view.PrintVehicleAddedToGarage(parkingLot, regNumberUpper, vehicleType);

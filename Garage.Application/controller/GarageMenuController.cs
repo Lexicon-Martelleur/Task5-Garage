@@ -1,5 +1,6 @@
 ﻿using Garage.Application.Constant;
 using Garage.Application.View;
+using System.Diagnostics;
 
 namespace Garage.Application.Controller;
 
@@ -76,8 +77,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartListAllGaragesMenu();
             _subMenuController.HandleListAllGarages();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -89,8 +91,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartListAllVehiclesMenu();
             _subMenuController.HandleListAllVehicles();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -102,8 +105,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartGroupedVehiclesByTypeMenu();
             _subMenuController.HandleListGroupedVehiclesByType();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -115,8 +119,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartAddVehicleMenu();
             _subMenuController.HandleAddVehicleToGarage();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -128,8 +133,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteRemoveAddVehicleMenu();
             _subMenuController.HandleRemoveVehicleFromGarage();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -141,8 +147,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartCreateGarageMenu();
             _subMenuController.HandleCreateGarage();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -154,8 +161,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartSearchVehicleByRegNrMenu();
             _subMenuController.HandleSearchVehicleByRegNumber();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }
@@ -167,8 +175,9 @@ internal class GarageMenuController : IGarageMenuController
             _view.WriteStartFilterMenu();
             _subMenuController.HandleFilterVehicle();
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             _view.PrintCorruptedData(menuSelection);
         }
     }

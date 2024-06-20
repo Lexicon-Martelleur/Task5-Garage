@@ -40,23 +40,56 @@ public class VehicleUtility
     public static Dictionary<string, string> GetCreateVehicleDescriptionMap(
         string vehicleType)
     {
-        var creationDescriptionMap = new Dictionary<string, string>()
+        var creationDescriptionMap = new Dictionary<string, string>();
+        AddGeneralCreationProperties(vehicleType, creationDescriptionMap);
+
+        if (vehicleType == VehicleTypeKeeper.AIRPLANE.ID)
         {
-            { $"{ColorKey}", $"Enter vehicle color or leave empty for unknown [" +
-                $"{VehicleColor.GREY.ToUpper()}, " +
-                $"{VehicleColor.WHITE.ToUpper()}, " +
-                $"{VehicleColor.BLACK.ToUpper()}, " +
-                $"{VehicleColor.BLUE.ToUpper()}, " +
-                $"{VehicleColor.RED.ToUpper()}, " +
-                $"{VehicleColor.MULTI.ToUpper()}, " +
-                $"{VehicleColor.UNKNOWN.ToUpper()}]"
-            },
-            { $"{VehicleWeightKey}", "Enter estimated vehicle weight (Number > 0)"},
-            { $"{VehicleDimensionKey}", "Enter estimated vehicle dimensions (x,y,z | x,y,z > 0)"},
-        };
+            AddBoatCreationProperties(creationDescriptionMap);
+        }
 
-        if (vehicleType != VehicleTypeKeeper.E_CAR.ID) {
+        if (vehicleType == VehicleTypeKeeper.BOAT.ID)
+        {
+            AddBoatCreationProperties(creationDescriptionMap);
+        }
 
+        if (vehicleType == VehicleTypeKeeper.BUS.ID)
+        {
+            AddBusCreationProperties(creationDescriptionMap);
+        }
+
+        if (vehicleType == VehicleTypeKeeper.CAR.ID ||
+            vehicleType == VehicleTypeKeeper.E_CAR.ID)
+        {
+            AddGeneralCarCreationProperties(creationDescriptionMap);
+        }
+
+        if (vehicleType == VehicleTypeKeeper.MOTORCYCLE.ID)
+        {
+            AddMotorcycleCreationProperties(creationDescriptionMap);
+        }
+
+        return creationDescriptionMap;
+    }
+
+    private static void AddGeneralCreationProperties(
+        string vehicleType,
+        Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[VehicleWeightKey] = $"Enter vehicle color or leave empty for unknown [" +
+            $"{VehicleColor.GREY.ToUpper()}, " +
+            $"{VehicleColor.WHITE.ToUpper()}, " +
+            $"{VehicleColor.BLACK.ToUpper()}, " +
+            $"{VehicleColor.BLUE.ToUpper()}, " +
+            $"{VehicleColor.RED.ToUpper()}, " +
+            $"{VehicleColor.MULTI.ToUpper()}, " +
+            $"{VehicleColor.UNKNOWN.ToUpper()}]";
+
+        creationDescriptionMap[VehicleWeightKey] = "Enter estimated vehicle weight (Number > 0)";
+        creationDescriptionMap[VehicleDimensionKey] = "Enter estimated vehicle dimensions (x,y,z | x,y,z > 0)";
+
+        if (vehicleType != VehicleTypeKeeper.E_CAR.ID)
+        {
             creationDescriptionMap[PowerSourceKey] = $"Enter vehicle power source or leave empty for unknown [" +
                 $"{PowerSourceKeeper.GASOLINE.ToUpper()}, " +
                 $"{PowerSourceKeeper.DIESEL.ToUpper()}, " +
@@ -66,33 +99,32 @@ public class VehicleUtility
                 $"{PowerSourceKeeper.NONE.ToUpper()}, " +
                 $"{PowerSourceKeeper.UNKNOWN.ToUpper()}]";
         }
+    }
 
-        if (vehicleType == VehicleTypeKeeper.AIRPLANE.ID)
-        {
-            creationDescriptionMap[WingSpanKey] = "Enter wingspan (Number > 0)";
-            creationDescriptionMap[PassengerCapacityKey] = "Enter passenger capacity (Number > 0)";
-        }
+    private static void AddAirplaneCreationProperties(Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[WingSpanKey] = "Enter wingspan (Number > 0)";
+        creationDescriptionMap[PassengerCapacityKey] = "Enter passenger capacity (Number > 0)";
+    }
 
-        if (vehicleType == VehicleTypeKeeper.BOAT.ID)
-        {
-            creationDescriptionMap[BoatSteeringMechanismKey] = $"Enter boat steering mechanism or leave empty for unknown [" +
-                $"{BoatSteeringMechanism.TILLER.ToUpper()}, " +
-                $"{BoatSteeringMechanism.WHEEL.ToUpper()}, " +
-                $"{BoatSteeringMechanism.JOYSTICK.ToUpper()}, " +
-                $"{BoatSteeringMechanism.OARS.ToUpper()}, " +
-                $"{BoatSteeringMechanism.UNKNOWN.ToUpper()}]";
-        }
+    private static void AddBoatCreationProperties(Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[BoatSteeringMechanismKey] = $"Enter boat steering mechanism or leave empty for unknown [" +
+            $"{BoatSteeringMechanism.TILLER.ToUpper()}, " +
+            $"{BoatSteeringMechanism.WHEEL.ToUpper()}, " +
+            $"{BoatSteeringMechanism.JOYSTICK.ToUpper()}, " +
+            $"{BoatSteeringMechanism.OARS.ToUpper()}, " +
+            $"{BoatSteeringMechanism.UNKNOWN.ToUpper()}]";
+    }
 
-        if (vehicleType == VehicleTypeKeeper.BUS.ID)
-        {
-            creationDescriptionMap[SittingPassengerCapacityKey] = "Enter sitting passenger capacity (Number > 0)";
-            creationDescriptionMap[StandingPassengerCapacityKey] = "Enter standing passenger capacity (Number > 0)";
-        }
+    private static void AddBusCreationProperties(Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[NoiseLevelKey] = "Enter noise level (Number > 0)";
+    }
 
-        if (vehicleType == VehicleTypeKeeper.CAR.ID ||
-            vehicleType == VehicleTypeKeeper.E_CAR.ID)
-        {
-            creationDescriptionMap[CarBrandKey] = $"Enter car brand or leave empty for unknown [" +
+    private static void AddGeneralCarCreationProperties(Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[CarBrandKey] = $"Enter car brand or leave empty for unknown [" +
                 $"{CarBrand.TOYOTA.ToUpper()}, " +
                 $"{CarBrand.VOLKSWAGEN.ToUpper()}, " +
                 $"{CarBrand.TESLA.ToUpper()}, " +
@@ -105,14 +137,11 @@ public class VehicleUtility
                 $"{CarBrand.SAAB.ToUpper()}, " +
                 $"{CarBrand.NONE.ToUpper()}, " +
                 $"{CarBrand.UNKNOWN.ToUpper()}]";
-        }
+    }
 
-        if (vehicleType == VehicleTypeKeeper.MOTORCYCLE.ID)
-        {
-            creationDescriptionMap[NoiseLevelKey] = "Enter noise level (Number > 0)";
-        }
-
-        return creationDescriptionMap;
+    private static void AddMotorcycleCreationProperties(Dictionary<string, string> creationDescriptionMap)
+    {
+        creationDescriptionMap[NoiseLevelKey] = "Enter noise level (Number > 0)";
     }
 
     public static Dictionary<string, string> GetFilterDescriptionMap()
