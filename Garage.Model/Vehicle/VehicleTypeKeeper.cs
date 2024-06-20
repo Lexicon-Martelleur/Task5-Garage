@@ -10,7 +10,7 @@ public static class VehicleTypeKeeper
     public readonly static VehicleTypeItem BOAT = new("2", "Boat");
     public readonly static VehicleTypeItem BUS = new("3", "Bus");
     public readonly static VehicleTypeItem CAR = new("4", "Car");
-    public readonly static VehicleTypeItem E_CAR = new("5", "E-Car");
+    public readonly static VehicleTypeItem E_CAR = new("5", "ECar");
     public readonly static VehicleTypeItem MOTORCYCLE = new("6", "Motorcycle");
     public readonly static VehicleTypeItem DEFAULT = new("-1", "Default");
 

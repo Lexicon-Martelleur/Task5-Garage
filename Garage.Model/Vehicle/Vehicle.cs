@@ -38,6 +38,14 @@ public abstract class Vehicle(
     {
         Dictionary<string, string> propertDescriptionMap = new()
         {
+            { $"{VehicleTypeKey}", $"Select vehicle type or leave empty for any type [" +
+                $"{VehicleTypeKeeper.AIRPLANE.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.BOAT.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.BUS.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.CAR.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.E_CAR.Description.ToUpper()}, " +
+                $"{VehicleTypeKeeper.MOTORCYCLE.Description.ToUpper()}]"
+            },
             { $"{ColorKey}", $"Select color or leave empty for any color [" +
                 $"{VehicleColor.GREY.ToUpper()}, " +
                 $"{VehicleColor.WHITE.ToUpper()}, " +
@@ -55,14 +63,6 @@ public abstract class Vehicle(
                 $"{PowerSourceKeeper.HYBRID.ToUpper()}, " +
                 $"{PowerSourceKeeper.NONE.ToUpper()}, " +
                 $"{PowerSourceKeeper.UNKNOWN.ToUpper()}]"},
-            { $"{VehicleTypeKey}", $"Select vehicle type or leave empty for any type [" +
-                $"{VehicleTypeKeeper.AIRPLANE.Description.ToUpper()}, " +
-                $"{VehicleTypeKeeper.BOAT.Description.ToUpper()}, " +
-                $"{VehicleTypeKeeper.BUS.Description.ToUpper()}, " +
-                $"{VehicleTypeKeeper.CAR.Description.ToUpper()}, " +
-                $"{VehicleTypeKeeper.E_CAR.Description.ToUpper()}, " +
-                $"{VehicleTypeKeeper.MOTORCYCLE.Description.ToUpper()}]"
-            },
             { $"{VehicleWeightKey}", "Enter exact weight (Number > 0) or leave empty for any weights"},
             { $"{VehicleDimensionKey}", "Enter exact dimensions (x, y, z | x, y, z > 0) or leave empty for any dimensions"},
         };

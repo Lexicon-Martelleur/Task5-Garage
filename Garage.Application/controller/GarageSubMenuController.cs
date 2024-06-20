@@ -142,6 +142,7 @@ internal class GarageSubMenuController(
         foreach (var property in vehiclePropertyDescriptionMap)
         {
             string filterInput = view.ReadFilterProperty(property.Value);
+            if (filterInput == String.Empty) { continue; }
             filterMap[property.Key] = SplitAndTrimInput(filterInput);
         }
 

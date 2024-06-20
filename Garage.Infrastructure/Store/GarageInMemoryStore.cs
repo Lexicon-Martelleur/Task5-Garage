@@ -171,24 +171,15 @@ public class GarageInMemoryStore : IGarageRepository
             .Where(lot =>
             {
                 if (filterMap == null) {  return true; }
-                foreach (var key in filterMap.Keys)
-                {
-                    if (key == "Color")
-                    {
-                        if (!filterMap[key].Contains(lot.CurrentVehicle?.Color))
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
+                return CheckFilterMap(lot, filterMap);
             })
             .Select(lot => new ParkingLotInfoWithAddress(garage.Address, lot));
     }
 
-    private bool CheckFilterMap(
-        IParkingLot<IVehicle> lot,
+    private bool CheckFilterMap<VehicleType>(
+        IParkingLot<VehicleType> lot,
         Dictionary<string, string[]> filterMap)
+        where VehicleType : IVehicle
     {
         foreach (var key in filterMap.Keys)
         {
@@ -199,21 +190,21 @@ public class GarageInMemoryStore : IGarageRepository
                     return false;
                 }
             }
-            if (key == Vehicle.PowerSourceKey)
+            else if (key == Vehicle.PowerSourceKey)
             {
                 if (!filterMap[key].Contains(lot.CurrentVehicle?.PowerSource))
                 {
                     return false;
                 }
             }
-            if (key == Vehicle.VehicleTypeKey)
+            else if (key == Vehicle.VehicleTypeKey)
             {
-                if (!filterMap[key].Contains(lot.CurrentVehicle?.Type))
+                if (!filterMap[key].Contains(lot.CurrentVehicle?.Type.ToUpper()))
                 {
                     return false;
                 }
             }
-            if (key == Vehicle.VehicleWeightKey)
+            else if (key == Vehicle.VehicleWeightKey)
             {
                 if (uint.TryParse(filterMap[key][0], out var result) &&
                     result != lot.CurrentVehicle?.Weight)
@@ -221,7 +212,7 @@ public class GarageInMemoryStore : IGarageRepository
                     return false;
                 }
             }
-            if (key == Vehicle.VehicleDimensionKey)
+            else if (key == Vehicle.VehicleDimensionKey)
             {
                 if (uint.TryParse(filterMap[key][0], out var X) &&
                     uint.TryParse(filterMap[key][0], out var Y) &&

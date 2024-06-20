@@ -2,6 +2,7 @@
 using Garage.Model.Garage;
 using Garage.Model.ParkingLot;
 using Garage.Model.Vehicle;
+using System.Text;
 
 namespace Garage.Application.View;
 
@@ -249,6 +250,28 @@ internal class GarageSubMenuView : IGarageSubMenuView
 
     public void PrintFilteredVehicles(Dictionary<string, string[]> filterMap)
     {
-        Console.WriteLine($"\nℹ️ Filtered vehicles [<FilterMap>]:");
+        Console.WriteLine($"\nℹ️ Filtered vehicles [{GetFilterMapValues(filterMap)}]:");
+    }
+
+    private string GetFilterMapValues(Dictionary<string, string[]> filterMap)
+    {
+        var text = new StringBuilder("{ ");
+        var counter = 0;
+        foreach (var key in filterMap.Keys)
+        {
+            counter++;
+            text.Append($"{key}: [");
+            text.Append(string.Join(", ", filterMap[key]));
+            if (counter == filterMap.Count)
+            {
+                text.Append("] ");
+            }
+            else
+            {
+                text.Append("], ");
+            }
+        }
+        text.Append("}");
+        return text.ToString();
     }
 }
