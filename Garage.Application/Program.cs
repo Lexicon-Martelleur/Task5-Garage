@@ -10,6 +10,6 @@ DebugUtility.StartDebug();
 #endif
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-IGarageControllerFactory factory = new GarageControllerFactory();
-var garageMenuController = factory.CreateGarageMenuController();
+var garageControllerFactory = new GarageControllerFactory();
+var garageMenuController = garageControllerFactory.CreateGarageMenuController();
 garageMenuController.StartGarageMenu();

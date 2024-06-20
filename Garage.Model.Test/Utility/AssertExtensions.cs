@@ -2,11 +2,11 @@
 
 public static class AssertExtensions
 {
-    public static void DoesNotThrow(Action testCode)
+    public static void DoesNotThrow(Action Act)
     {
         try
         {
-            testCode();
+            Act();
         }
         catch (Exception ex)
         {
