@@ -76,7 +76,7 @@ public class VehicleUtility
         string vehicleType,
         Dictionary<string, string> creationDescriptionMap)
     {
-        creationDescriptionMap[VehicleWeightKey] = $"Enter vehicle color or leave empty for unknown [" +
+        creationDescriptionMap[ColorKey] = $"Enter vehicle color or leave empty for unknown [" +
             $"{VehicleColor.GREY.ToUpper()}, " +
             $"{VehicleColor.WHITE.ToUpper()}, " +
             $"{VehicleColor.BLACK.ToUpper()}, " +
@@ -119,7 +119,8 @@ public class VehicleUtility
 
     private static void AddBusCreationProperties(Dictionary<string, string> creationDescriptionMap)
     {
-        creationDescriptionMap[NoiseLevelKey] = "Enter noise level (Number > 0)";
+        creationDescriptionMap[SittingPassengerCapacityKey] = "Enter sitting passenger capacity (Number > 0)";
+        creationDescriptionMap[StandingPassengerCapacityKey] = "Enter standing passenger capacity (Number > 0)";
     }
 
     private static void AddGeneralCarCreationProperties(Dictionary<string, string> creationDescriptionMap)
