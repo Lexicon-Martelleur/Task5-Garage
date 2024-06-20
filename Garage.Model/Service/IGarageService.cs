@@ -19,7 +19,8 @@ public interface IGarageService
     ParkingLotInfoWithAddress? AddVehicleToGarage(
         string address,
         string regNumber,
-        string vehicleType);
+        string vehicleType,
+        Dictionary<string, string> creationMap);
     RegistrationNumber? RemoveVehicleFromGarage(string addr, uint parkingLotId);
     IGarageInfo? CreateGarage(string addr, uint capacity, GarageDescriptionItem description);
     ParkingLotInfoWithAddress? FindVehicleInAllGarages(string regNumber);

@@ -35,6 +35,8 @@ public class VehicleUtility
 
     public const string NoiseLevelKey = "NoiseLevel";
 
+    public const string DefaultCreateValue = "DEFAULT";
+
     public static Dictionary<string, string> GetCreateVehicleDescriptionMap(
         string vehicleType)
     {
@@ -50,10 +52,10 @@ public class VehicleUtility
                 $"{VehicleColor.UNKNOWN.ToUpper()}]"
             },
             { $"{VehicleWeightKey}", "Enter estimated vehicle weight (Number > 0)"},
-            { $"{VehicleDimensionKey}", "Enter estimated vehicle dimensions (x, y, z | x, y, z > 0)"},
+            { $"{VehicleDimensionKey}", "Enter estimated vehicle dimensions (x,y,z | x,y,z > 0)"},
         };
 
-        if (vehicleType == VehicleTypeKeeper.E_CAR.ID) {
+        if (vehicleType != VehicleTypeKeeper.E_CAR.ID) {
 
             creationDescriptionMap[PowerSourceKey] = $"Enter vehicle power source or leave empty for unknown [" +
                 $"{PowerSourceKeeper.GASOLINE.ToUpper()}, " +
@@ -87,7 +89,8 @@ public class VehicleUtility
             creationDescriptionMap[StandingPassengerCapacityKey] = "Enter standing passenger capacity (Number > 0)";
         }
 
-        if (vehicleType == VehicleTypeKeeper.CAR.ID)
+        if (vehicleType == VehicleTypeKeeper.CAR.ID ||
+            vehicleType == VehicleTypeKeeper.E_CAR.ID)
         {
             creationDescriptionMap[CarBrandKey] = $"Enter car brand or leave empty for unknown [" +
                 $"{CarBrand.TOYOTA.ToUpper()}, " +

@@ -79,11 +79,14 @@ public class GarageService(
     }
 
     public ParkingLotInfoWithAddress? AddVehicleToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         Dictionary<
             string,
-            Func<string, string, string, ParkingLotInfoWithAddress?>
+            Func<string, string, string, Dictionary< string, string>, ParkingLotInfoWithAddress ?>
         > carFactoryMap = new()
         {
             { VehicleTypeKeeper.AIRPLANE.ID, AddAirplaneToGarage },
@@ -96,56 +99,74 @@ public class GarageService(
 
         if (carFactoryMap.TryGetValue(vehicleType, out var carFactory))
         {
-            return carFactory(addr, regNumber, vehicleType);
+            return carFactory(addr, regNumber, vehicleType, creationMap);
         }
         return null;
     }
 
     private ParkingLotInfoWithAddress? AddAirplaneToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateAirplane(
-            regNumber
+            regNumber, creationMap
         ));
     }
 
     private ParkingLotInfoWithAddress? AddBoatToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateBoat(
-            regNumber
+            regNumber, creationMap
         ));
     }
 
     private ParkingLotInfoWithAddress? AddBusToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateBus(
-            regNumber
+            regNumber, creationMap
         ));
     }
 
     private ParkingLotInfoWithAddress? AddGasolineCarToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateGasolineCar(
-            regNumber
+            regNumber, creationMap
         ));
     }
 
     private ParkingLotInfoWithAddress? AddECarToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateECar(
-            regNumber
+            regNumber, creationMap
         ));
     }
 
     private ParkingLotInfoWithAddress? AddMCToGarage(
-        string addr, string regNumber, string vehicleType)
+        string addr,
+        string regNumber,
+        string vehicleType,
+        Dictionary<string, string> creationMap)
     {
         return repository.AddVehicleToGarage(addr, vehicleFactory.CreateMC(
-            regNumber
+            regNumber, creationMap
         ));
     }
 

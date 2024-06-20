@@ -51,16 +51,24 @@ internal class GarageSubMenuController(
             return;
         }
 
-        Dictionary<string, string[]> creationalMap = [];
+        Dictionary<string, string> creationalMap = [];
 
         view.PrintSelectedVehicle(vehicleType);
         foreach (var property in VehicleUtility.GetCreateVehicleDescriptionMap(vehicleType))
         {
-            string creationalInput = view.ReadVehicleProperty(property.Value);
-            creationalMap[property.Key] = Utility.SplitAndTrimInput(creationalInput);
+            string creationInput = view.ReadVehicleProperty(property.Value);
+            if (creationInput == String.Empty)
+            { 
+                creationalMap[property.Key] = VehicleUtility.DefaultCreateValue;
+            }
+            else
+            {
+                creationalMap[property.Key] = creationInput;
+            }
         }
 
-        var parkingLot = service.AddVehicleToGarage(addr, regNumber, vehicleType);
+        var parkingLot = service.AddVehicleToGarage(
+            addr, regNumber, vehicleType, creationalMap);
         if (parkingLot != null)
         {
             view.PrintVehicleAddedToGarage(parkingLot, regNumber, vehicleType);
