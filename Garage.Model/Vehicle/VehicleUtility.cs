@@ -45,7 +45,7 @@ public class VehicleUtility
 
         if (vehicleType == VehicleTypeKeeper.AIRPLANE.ID)
         {
-            AddBoatCreationProperties(creationDescriptionMap);
+            AddAirplaneCreationProperties(creationDescriptionMap);
         }
 
         if (vehicleType == VehicleTypeKeeper.BOAT.ID)
