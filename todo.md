@@ -12,7 +12,13 @@
 
 ## Infrastructur layer 
 
-1. Implement SQLite in infrastructure layer as persistent data
+1. Implement persistent data with SQLite in infrastructure layer:
+    - Create GarageDB with Tables and Views
+    - Generate entity models using `dotnet ef` tool
+    - Create Entity models for Views
+    - Refine Entity models for Tables and Views
+    - Map entity models to domain layer garage repository when implementing persistent data.
+    - ... 
 
 2. Clean up `GarageInMemoryStore.cs`
 
