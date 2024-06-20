@@ -25,7 +25,7 @@ internal interface IGarageSubMenuView
     void PrintVehicleAddedToGarage(ParkingLotInfoWithAddress lot, string regNumber, string vehicleType);
     void PrintVehicleFind(ParkingLotInfoWithAddress parkingLotInfo);
     void PrintVehicleRemovedFromToGarage(RegistrationNumber regNumber);
-    string ReadFilterProperty(string value);
+    string ReadVehicleProperty(string value);
     string ReadGarageAddr();
     string ReadGarageCapacity();
     bool ReadGarageDescriptionOK(out GarageDescriptionItem garageDescription);
@@ -34,4 +34,5 @@ internal interface IGarageSubMenuView
     string ReadVehicleType();
     void WriteNotValidInput(string input);
     void PrintFilteredVehicles(Dictionary<string, string[]> filterMap);
+    void PrintSelectedVehicle(string vehicleType);
 }

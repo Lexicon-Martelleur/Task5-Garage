@@ -183,28 +183,28 @@ public class GarageInMemoryStore : IGarageRepository
     {
         foreach (var key in filterMap.Keys)
         {
-            if (key == Vehicle.ColorKey)
+            if (key == VehicleUtility.ColorKey)
             {
                 if (!filterMap[key].Contains(lot.CurrentVehicle?.Color))
                 {
                     return false;
                 }
             }
-            else if (key == Vehicle.PowerSourceKey)
+            else if (key == VehicleUtility.PowerSourceKey)
             {
                 if (!filterMap[key].Contains(lot.CurrentVehicle?.PowerSource))
                 {
                     return false;
                 }
             }
-            else if (key == Vehicle.VehicleTypeKey)
+            else if (key == VehicleUtility.VehicleTypeKey)
             {
                 if (!filterMap[key].Contains(lot.CurrentVehicle?.Type.ToUpper()))
                 {
                     return false;
                 }
             }
-            else if (key == Vehicle.VehicleWeightKey)
+            else if (key == VehicleUtility.VehicleWeightKey)
             {
                 if (uint.TryParse(filterMap[key][0], out var result) &&
                     result != lot.CurrentVehicle?.Weight)
@@ -212,7 +212,7 @@ public class GarageInMemoryStore : IGarageRepository
                     return false;
                 }
             }
-            else if (key == Vehicle.VehicleDimensionKey)
+            else if (key == VehicleUtility.VehicleDimensionKey)
             {
                 if (uint.TryParse(filterMap[key][0], out var X) &&
                     uint.TryParse(filterMap[key][0], out var Y) &&

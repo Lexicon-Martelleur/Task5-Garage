@@ -35,10 +35,10 @@ internal class GarageMenuView : IGarageMenuView
     {
         var text = new StringBuilder();
         var counter = 0;
-        foreach (var key in Vehicle.GetPropertyDescriptionMap().Keys)
+        foreach (var key in VehicleUtility.GetFilterDescriptionMap().Keys)
         {
             counter++;
-            if (counter == Vehicle.GetPropertyDescriptionMap().Keys.Count)
+            if (counter == VehicleUtility.GetFilterDescriptionMap().Keys.Count)
             {
                 text.Append(key.ToUpper());
             }

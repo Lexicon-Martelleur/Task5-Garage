@@ -2,11 +2,11 @@
 
 public class ECar : Vehicle, ICar
 {
-    private readonly CarBrand _brand;
+    private readonly string _brand;
 
     public ECar(
         RegistrationNumber registrationNumber,
-        CarBrand brand,
+        string brand,
         string color,
         uint weight,
         Dimension dimension
@@ -21,5 +21,5 @@ public class ECar : Vehicle, ICar
         _brand = brand;
     }
 
-    public CarBrand Brand => _brand;
+    public string Brand => _brand;
 }

@@ -51,6 +51,15 @@ internal class GarageSubMenuController(
             return;
         }
 
+        Dictionary<string, string[]> creationalMap = [];
+
+        view.PrintSelectedVehicle(vehicleType);
+        foreach (var property in VehicleUtility.GetCreateVehicleDescriptionMap(vehicleType))
+        {
+            string creationalInput = view.ReadVehicleProperty(property.Value);
+            creationalMap[property.Key] = Utility.SplitAndTrimInput(creationalInput);
+        }
+
         var parkingLot = service.AddVehicleToGarage(addr, regNumber, vehicleType);
         if (parkingLot != null)
         {
@@ -135,26 +144,19 @@ internal class GarageSubMenuController(
 
     public void HandleFilterVehicle()
     {
-        var vehiclePropertyDescriptionMap = Vehicle.GetPropertyDescriptionMap();
+        var vehiclePropertyDescriptionMap = VehicleUtility.GetFilterDescriptionMap();
 
-        Dictionary<string, string[]> filterMap = new();
+        Dictionary<string, string[]> filterMap = [];
 
         foreach (var property in vehiclePropertyDescriptionMap)
         {
-            string filterInput = view.ReadFilterProperty(property.Value);
+            string filterInput = view.ReadVehicleProperty(property.Value);
             if (filterInput == String.Empty) { continue; }
-            filterMap[property.Key] = SplitAndTrimInput(filterInput);
+            filterMap[property.Key] = Utility.SplitAndTrimInput(filterInput);
         }
 
         var parkingLotInfos = service.GetAllParkingLotsWithVehicles(filterMap);
         view.PrintFilteredVehicles(filterMap);
         view.PrintParkingLotsWithVehicles(parkingLotInfos);
-    }
-
-    private string[] SplitAndTrimInput(string input)
-    {
-        return input.Split(',')
-                    .Select(s => s.Trim().ToUpper())
-                    .ToArray();
     }
 }

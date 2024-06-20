@@ -2,5 +2,5 @@
 
 public interface ICar : IVehicle
 {
-    public CarBrand Brand { get; }
+    public string Brand { get; }
 }

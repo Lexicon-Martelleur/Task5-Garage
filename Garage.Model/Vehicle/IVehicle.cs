@@ -1,5 +1,8 @@
 ﻿namespace Garage.Model.Vehicle;
 
+/// <summary>
+/// An interface describing a domain vehicle.
+/// </summary>
 public interface IVehicle
 {
     string Type { get; }

@@ -7,4 +7,5 @@ public static class BoatSteeringMechanism
     public const string WHEEL = "WHEEL";
     public const string JOYSTICK = "JOYSTICK";
     public const string OARS = "OARS";
+    public const string UNKNOWN = "?";
 }

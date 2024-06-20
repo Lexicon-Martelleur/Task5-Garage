@@ -127,6 +127,13 @@ internal class GarageSubMenuView : IGarageSubMenuView
         : VehicleTypeKeeper.DEFAULT;
     }
 
+    public void PrintSelectedVehicle(string vehicleType)
+    {
+        Console.WriteLine($"\n\tℹ️ You selected vehicle of type " +
+            $"{GetSelectedVehicleType(vehicleType).Description}, " +
+            $"please fill in your vehicles properties.");
+    }
+
     public void PrintVehicleAddedToGarage(
         ParkingLotInfoWithAddress lot,
         string regNumber,
@@ -243,7 +250,7 @@ internal class GarageSubMenuView : IGarageSubMenuView
             $"in any garages");
     }
 
-    public string ReadFilterProperty(string value)
+    public string ReadVehicleProperty(string value)
     {
         Console.Write($"\n\t✏️ {value}: ");
         return Console.ReadLine()?.Trim() ?? String.Empty;

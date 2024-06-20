@@ -4,7 +4,8 @@ using Garage.Model.Vehicle;
 namespace Garage.Application.Controller;
 
 /// <summary>
-/// A utility class used for validating user input
+/// A utility class used for utility function 
+/// and validating user input
 /// </summary>
 internal static class Utility
 {
@@ -45,5 +46,12 @@ internal static class Utility
             return true;
         }
         return false;
+    }
+
+    internal static string[] SplitAndTrimInput(string input)
+    {
+        return input.Split(',')
+            .Select(s => s.Trim().ToUpper())
+            .ToArray();
     }
 }

@@ -2,11 +2,11 @@
 
 public class Car : Vehicle, ICar
 {
-    private readonly CarBrand _brand;
+    private readonly string _brand;
     
     public Car(
         RegistrationNumber registrationNumber,
-        CarBrand brand,
+        string brand,
         string color,
         string powerSource,
         uint weight,
@@ -21,5 +21,5 @@ public class Car : Vehicle, ICar
         _brand = brand;
     }
 
-    public CarBrand Brand => _brand;
+    public string Brand => _brand;
 }
