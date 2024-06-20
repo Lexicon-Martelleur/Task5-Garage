@@ -265,6 +265,46 @@ public class GarageInMemoryStore : IGarageRepository
         return null;
     }
 
+    public bool IsUniqueRegNumber(string regNumber)
+    {
+        var carGarage = _carGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();            
+        if (carGarage != null) { return false; }
+
+        var multiCargarage = _multiCarGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (multiCargarage != null) { return false; }
+
+        var mcGarage = _mcGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (mcGarage != null) { return false; }
+
+        var boatHarbor = _boatHarbors
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (boatHarbor != null) { return false; }
+
+        var eCarGarage = _eCarGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (eCarGarage != null) { return false; }
+
+        var airplaneHangar = _airplaneHangars
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (airplaneHangar != null) { return false; }
+
+        var multiGarage = _multiGarages
+            .Where(garage => garage.GetParkingLotWithVehicle(regNumber) != null)
+            .FirstOrDefault();
+        if (multiCargarage != null) { return false; }
+
+        return true;
+    }
+
     public ParkingLotInfoWithAddress? AddVehicleToGarage<VehicleType>(
         string addr,
         VehicleType vehicle

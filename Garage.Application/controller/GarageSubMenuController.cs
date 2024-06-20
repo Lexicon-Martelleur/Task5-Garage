@@ -67,15 +67,17 @@ internal class GarageSubMenuController(
             }
         }
 
+        var regNumberUpper = regNumber.ToUpper();
         var parkingLot = service.AddVehicleToGarage(
-            addr, regNumber, vehicleType, creationalMap);
+            addr, regNumberUpper, vehicleType, creationalMap);
+
         if (parkingLot != null)
         {
-            view.PrintVehicleAddedToGarage(parkingLot, regNumber, vehicleType);
+            view.PrintVehicleAddedToGarage(parkingLot, regNumberUpper, vehicleType);
         }
         else
         {
-            view.PrintCanNotAddVehicleToGarage(addr, regNumber, vehicleType);
+            view.PrintCanNotAddVehicleToGarage(addr, regNumberUpper, vehicleType);
         }
     }
 

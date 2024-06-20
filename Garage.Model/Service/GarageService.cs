@@ -84,6 +84,11 @@ public class GarageService(
         string vehicleType,
         Dictionary<string, string> creationMap)
     {
+        if (!repository.IsUniqueRegNumber(regNumber))
+        {
+            return null;
+        }
+
         Dictionary<
             string,
             Func<string, string, string, Dictionary< string, string>, ParkingLotInfoWithAddress ?>

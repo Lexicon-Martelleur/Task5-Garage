@@ -42,6 +42,12 @@ public class VehicleFactory
         uint X = uint.Parse(vehicleDimensionArray[0]);
         uint Y = uint.Parse(vehicleDimensionArray[1]);
         uint Z = uint.Parse(vehicleDimensionArray[2]);
+
+        if (X == 0 || Y == 0 || Z == 0)
+        {
+            throw new InvalidGarageStateException("Dimension values must be larger then 0.");
+        }
+
         return new(X, Y, Z);
     }
 
