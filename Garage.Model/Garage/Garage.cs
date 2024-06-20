@@ -39,6 +39,10 @@ public class Garage<VehicleType> :
 
     public uint Capacity => _capacity;
 
+    public uint FreeParkingLots => (uint)this
+        .Where(lot => lot.CurrentVehicle == null)
+        .Count();
+
     public Address Address => _address;
 
     public string Description => _garageDescription;

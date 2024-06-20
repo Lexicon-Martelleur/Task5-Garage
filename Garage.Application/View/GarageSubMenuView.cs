@@ -22,7 +22,8 @@ internal class GarageSubMenuView : IGarageSubMenuView
     {
         return $"\t➡️ Garage [{garage.GetAddress()}]: " +
             $"{garage.GetDescription()} " +
-            $"with capacity of {garage.GetCapacity()} vehicles";
+            $"with capacity of {garage.GetCapacity()} vehicles " +
+            $"have {garage.GetFreeParkingLots()} free parking lots";
     }
 
     public void PrintParkingLotsWithVehicles(

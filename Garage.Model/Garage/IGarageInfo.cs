@@ -10,6 +10,7 @@ namespace Garage.Model.Garage;
 public interface IGarageInfo
 {
     uint Capacity { get; }
+    uint FreeParkingLots { get; }
     string Description { get; }
     string DescriptionWithVehicleTypes { get; }
     Address Address { get; }

@@ -24,4 +24,9 @@ public record class GarageInfoWithVehicleTypeName(
     {
         return GarageInfo.Capacity;
     }
+
+    public uint GetFreeParkingLots()
+    {
+        return GarageInfo.FreeParkingLots;
+    }
 }
